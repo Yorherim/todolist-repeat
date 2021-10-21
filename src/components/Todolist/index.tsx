@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useState, KeyboardEvent, MouseEvent } from "react";
+import React, { MouseEvent } from "react";
 
 import styles from "./Todolist.module.scss";
 
 import { FilterValuesType, TaskType } from "./../../App";
+import { AddItemForm } from "../AddItemForm";
 
 type PropsType = {
     todolistId: string;
@@ -30,28 +31,7 @@ const Todolist: React.FC<PropsType> = ({
     todolistId,
     removeTodolist,
 }) => {
-    const [newTaskTitle, setNewTaskTitle] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value);
-    };
-
-    const addTaskAndShowErrorHandler = () => {
-        if (newTaskTitle.trim() !== "") {
-            addTask(newTaskTitle, todolistId);
-            setNewTaskTitle("");
-        } else {
-            setError("Title is required");
-            setTimeout(() => setError(null), 2500);
-        }
-    };
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            addTaskAndShowErrorHandler();
-        }
-    };
+    const addItem = (title: string) => addTask(title, todolistId);
 
     const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
         switch (e.currentTarget.innerText) {
@@ -72,16 +52,7 @@ const Todolist: React.FC<PropsType> = ({
                 <button onClick={() => removeTodolist(todolistId)}>x</button>
             </div>
 
-            <div className={styles.inputTitleTask}>
-                <input
-                    value={newTaskTitle}
-                    onChange={onChangeHandler}
-                    onKeyPress={onKeyPressHandler}
-                    className={error ? styles.error : ""}
-                />
-                <button onClick={addTaskAndShowErrorHandler}>+</button>
-                {error && <div className={styles.errorMessage}>{error}</div>}
-            </div>
+            <AddItemForm addItem={addItem} />
 
             <ul className={styles.tasksTodolist}>
                 {tasks.map((task) => (
