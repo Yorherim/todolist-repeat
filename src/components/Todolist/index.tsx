@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, MouseEvent } from "react";
 
 import { FilterValuesType, TaskType } from "./../../App";
 
@@ -6,7 +6,8 @@ type PropsType = {
     title: string;
     tasks: Array<TaskType>;
     changeTodoListFilter: (filterValue: FilterValuesType) => void;
-    removeTask: (id: number) => void;
+    removeTask: (id: string) => void;
+    addTask: (title: string) => void;
 };
 
 const Todolist: React.FC<PropsType> = ({
@@ -14,14 +15,50 @@ const Todolist: React.FC<PropsType> = ({
     tasks,
     changeTodoListFilter,
     removeTask,
+    addTask,
 }) => {
+    const [newTaskTitle, setNewTaskTitle] = useState<string>("");
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewTaskTitle(e.currentTarget.value);
+    };
+
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+            addTask(newTaskTitle);
+            setNewTaskTitle("");
+        }
+    };
+
+    const addTaskHandler = () => {
+        if (newTaskTitle.trim() !== "") {
+            addTask(newTaskTitle);
+            setNewTaskTitle("");
+        }
+    };
+
+    const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
+        switch (e.currentTarget.innerText) {
+            case "Active":
+                return changeTodoListFilter("active");
+            case "Completed":
+                return changeTodoListFilter("completed");
+            default:
+                return changeTodoListFilter("all");
+        }
+    };
+
     console.log("todolist rerender");
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input />
-                <button>+</button>
+                <input
+                    value={newTaskTitle}
+                    onChange={onChangeHandler}
+                    onKeyPress={onKeyPressHandler}
+                />
+                <button onClick={addTaskHandler}>+</button>
             </div>
 
             <ul>
@@ -35,13 +72,9 @@ const Todolist: React.FC<PropsType> = ({
             </ul>
 
             <div>
-                <button onClick={() => changeTodoListFilter("all")}>All</button>
-                <button onClick={() => changeTodoListFilter("active")}>
-                    Active
-                </button>
-                <button onClick={() => changeTodoListFilter("completed")}>
-                    Completed
-                </button>
+                <button onClick={filterTodoList}>All</button>
+                <button onClick={filterTodoList}>Active</button>
+                <button onClick={filterTodoList}>Completed</button>
             </div>
         </div>
     );
