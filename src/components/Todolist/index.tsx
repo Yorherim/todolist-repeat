@@ -1,13 +1,21 @@
 import React from "react";
 
-import { TaskType } from "./../../App";
+import { FilterValuesType, TaskType } from "./../../App";
 
 type PropsType = {
     title: string;
     tasks: Array<TaskType>;
+    changeTodoListFilter: (filterValue: FilterValuesType) => void;
+    removeTask: (id: number) => void;
 };
 
-const Todolist: React.FC<PropsType> = ({ title, tasks }) => {
+const Todolist: React.FC<PropsType> = ({
+    title,
+    tasks,
+    changeTodoListFilter,
+    removeTask,
+}) => {
+    console.log("todolist rerender");
     return (
         <div>
             <h3>{title}</h3>
@@ -17,24 +25,23 @@ const Todolist: React.FC<PropsType> = ({ title, tasks }) => {
             </div>
 
             <ul>
-                <li>
-                    <input type="checkbox" checked={tasks[0].isDone} />
-                    <span>{tasks[0].title}</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={tasks[1].isDone} />
-                    <span>{tasks[1].title}</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={tasks[2].isDone} />
-                    <span>{tasks[2].title}</span>
-                </li>
+                {tasks.map((task) => (
+                    <li key={task.id}>
+                        <input type="checkbox" checked={task.isDone} />
+                        <span>{task.title}</span>
+                        <button onClick={() => removeTask(task.id)}>x</button>
+                    </li>
+                ))}
             </ul>
 
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => changeTodoListFilter("all")}>All</button>
+                <button onClick={() => changeTodoListFilter("active")}>
+                    Active
+                </button>
+                <button onClick={() => changeTodoListFilter("completed")}>
+                    Completed
+                </button>
             </div>
         </div>
     );
