@@ -5,13 +5,17 @@ import styles from "./Todolist.module.scss";
 import { FilterValuesType, TaskType } from "./../../App";
 
 type PropsType = {
+    todolistId: string;
     title: string;
     tasks: Array<TaskType>;
-    changeTodoListFilter: (filterValue: FilterValuesType) => void;
+    todoListFilter: FilterValuesType;
+    changeTodoListFilter: (
+        filterValue: FilterValuesType,
+        todolistId: string
+    ) => void;
     removeTask: (id: string) => void;
     addTask: (title: string) => void;
     changeCheckStatus: (taskId: string) => void;
-    todoListFilter: FilterValuesType;
 };
 
 const Todolist: React.FC<PropsType> = ({
@@ -22,6 +26,7 @@ const Todolist: React.FC<PropsType> = ({
     addTask,
     changeCheckStatus,
     todoListFilter,
+    todolistId,
 }) => {
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
@@ -49,11 +54,11 @@ const Todolist: React.FC<PropsType> = ({
     const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
         switch (e.currentTarget.innerText) {
             case "Active":
-                return changeTodoListFilter("active");
+                return changeTodoListFilter("active", todolistId);
             case "Completed":
-                return changeTodoListFilter("completed");
+                return changeTodoListFilter("completed", todolistId);
             default:
-                return changeTodoListFilter("all");
+                return changeTodoListFilter("all", todolistId);
         }
     };
 
