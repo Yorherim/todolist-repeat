@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { v1 } from "uuid";
 
-import "./App.css";
+import "./App.scss";
 
 import Todolist from "./components/Todolist";
 
@@ -38,6 +38,12 @@ const App: React.FC = () => {
         setTasks(tasks.filter((t) => t.id !== id));
     };
 
+    const changeCheckStatus = (taskId: string) => {
+        const task = tasks.find((t) => t.id === taskId);
+        if (task) task.isDone = !task.isDone;
+        setTasks([...tasks]);
+    };
+
     const getTaskForTodoList = () => {
         switch (todoListFilter) {
             case "active":
@@ -57,6 +63,8 @@ const App: React.FC = () => {
                 changeTodoListFilter={changeTodoListFilter}
                 removeTask={removeTask}
                 addTask={addTask}
+                changeCheckStatus={changeCheckStatus}
+                todoListFilter={todoListFilter}
             />
         </div>
     );

@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useState, KeyboardEvent, MouseEvent } from "react";
 
+import styles from "./Todolist.module.scss";
+
 import { FilterValuesType, TaskType } from "./../../App";
 
 type PropsType = {
@@ -8,6 +10,8 @@ type PropsType = {
     changeTodoListFilter: (filterValue: FilterValuesType) => void;
     removeTask: (id: string) => void;
     addTask: (title: string) => void;
+    changeCheckStatus: (taskId: string) => void;
+    todoListFilter: FilterValuesType;
 };
 
 const Todolist: React.FC<PropsType> = ({
@@ -16,24 +20,29 @@ const Todolist: React.FC<PropsType> = ({
     changeTodoListFilter,
     removeTask,
     addTask,
+    changeCheckStatus,
+    todoListFilter,
 }) => {
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.currentTarget.value);
     };
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-            addTask(newTaskTitle);
-            setNewTaskTitle("");
-        }
-    };
-
-    const addTaskHandler = () => {
+    const addTaskAndShowErrorHandler = () => {
         if (newTaskTitle.trim() !== "") {
             addTask(newTaskTitle);
             setNewTaskTitle("");
+        } else {
+            setError("Title is required");
+            setTimeout(() => setError(null), 2500);
+        }
+    };
+
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            addTaskAndShowErrorHandler();
         }
     };
 
@@ -57,14 +66,23 @@ const Todolist: React.FC<PropsType> = ({
                     value={newTaskTitle}
                     onChange={onChangeHandler}
                     onKeyPress={onKeyPressHandler}
+                    className={error ? styles.error : ""}
                 />
-                <button onClick={addTaskHandler}>+</button>
+                <button onClick={addTaskAndShowErrorHandler}>+</button>
+                {error && <div className={styles.errorMessage}>{error}</div>}
             </div>
 
             <ul>
                 {tasks.map((task) => (
-                    <li key={task.id}>
-                        <input type="checkbox" checked={task.isDone} />
+                    <li
+                        key={task.id}
+                        className={task.isDone ? styles.isDone : ""}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={task.isDone}
+                            onChange={() => changeCheckStatus(task.id)}
+                        />
                         <span>{task.title}</span>
                         <button onClick={() => removeTask(task.id)}>x</button>
                     </li>
@@ -72,9 +90,32 @@ const Todolist: React.FC<PropsType> = ({
             </ul>
 
             <div>
-                <button onClick={filterTodoList}>All</button>
-                <button onClick={filterTodoList}>Active</button>
-                <button onClick={filterTodoList}>Completed</button>
+                <button
+                    className={
+                        todoListFilter === "all" ? styles.activeFilter : ""
+                    }
+                    onClick={filterTodoList}
+                >
+                    All
+                </button>
+                <button
+                    className={
+                        todoListFilter === "active" ? styles.activeFilter : ""
+                    }
+                    onClick={filterTodoList}
+                >
+                    Active
+                </button>
+                <button
+                    className={
+                        todoListFilter === "completed"
+                            ? styles.activeFilter
+                            : ""
+                    }
+                    onClick={filterTodoList}
+                >
+                    Completed
+                </button>
             </div>
         </div>
     );
