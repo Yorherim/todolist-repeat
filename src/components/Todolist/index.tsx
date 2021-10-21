@@ -4,6 +4,7 @@ import styles from "./Todolist.module.scss";
 
 import { FilterValuesType, TaskType } from "./../../App";
 import { AddItemForm } from "../AddItemForm";
+import { EditableSpan } from "../EditableSpan";
 
 type PropsType = {
     todolistId: string;
@@ -18,6 +19,12 @@ type PropsType = {
     addTask: (title: string, todolistId: string) => void;
     changeCheckStatus: (taskId: string, todolistId: string) => void;
     removeTodolist: (todolistId: string) => void;
+    changeTaskTitle: (
+        taskId: string,
+        todolistId: string,
+        newValue: string
+    ) => void;
+    changeTitleTodolist: (todolistId: string, newTitle: string) => void;
 };
 
 const Todolist: React.FC<PropsType> = ({
@@ -30,6 +37,8 @@ const Todolist: React.FC<PropsType> = ({
     todoListFilter,
     todolistId,
     removeTodolist,
+    changeTaskTitle,
+    changeTitleTodolist,
 }) => {
     const addItem = (title: string) => addTask(title, todolistId);
 
@@ -48,7 +57,14 @@ const Todolist: React.FC<PropsType> = ({
     return (
         <div>
             <div className={styles.titleTodolist}>
-                <h3>{title}</h3>
+                <h3>
+                    <EditableSpan
+                        title={title}
+                        onChangeTitle={(newValue) =>
+                            changeTitleTodolist(todolistId, newValue)
+                        }
+                    />
+                </h3>
                 <button onClick={() => removeTodolist(todolistId)}>x</button>
             </div>
 
@@ -67,7 +83,12 @@ const Todolist: React.FC<PropsType> = ({
                                 changeCheckStatus(task.id, todolistId)
                             }
                         />
-                        <span>{task.title}</span>
+                        <EditableSpan
+                            title={task.title}
+                            onChangeTitle={(newValue) =>
+                                changeTaskTitle(task.id, todolistId, newValue)
+                            }
+                        />
                         <button onClick={() => removeTask(task.id, todolistId)}>
                             x
                         </button>
