@@ -13,3 +13,22 @@
 .isDone {
     opacity: 0.5;
 }
+
+.titleTodolist {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.inputTitleTask {
+    margin-bottom: 20px;
+}
+
+.buttonsTodolist {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tasksTodolist {
+    margin-bottom: 10px;
+}

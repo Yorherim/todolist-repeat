@@ -13,9 +13,10 @@ type PropsType = {
         filterValue: FilterValuesType,
         todolistId: string
     ) => void;
-    removeTask: (id: string) => void;
-    addTask: (title: string) => void;
-    changeCheckStatus: (taskId: string) => void;
+    removeTask: (id: string, todolistId: string) => void;
+    addTask: (title: string, todolistId: string) => void;
+    changeCheckStatus: (taskId: string, todolistId: string) => void;
+    removeTodolist: (todolistId: string) => void;
 };
 
 const Todolist: React.FC<PropsType> = ({
@@ -27,6 +28,7 @@ const Todolist: React.FC<PropsType> = ({
     changeCheckStatus,
     todoListFilter,
     todolistId,
+    removeTodolist,
 }) => {
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
@@ -37,7 +39,7 @@ const Todolist: React.FC<PropsType> = ({
 
     const addTaskAndShowErrorHandler = () => {
         if (newTaskTitle.trim() !== "") {
-            addTask(newTaskTitle);
+            addTask(newTaskTitle, todolistId);
             setNewTaskTitle("");
         } else {
             setError("Title is required");
@@ -65,8 +67,12 @@ const Todolist: React.FC<PropsType> = ({
     console.log("todolist rerender");
     return (
         <div>
-            <h3>{title}</h3>
-            <div>
+            <div className={styles.titleTodolist}>
+                <h3>{title}</h3>
+                <button onClick={() => removeTodolist(todolistId)}>x</button>
+            </div>
+
+            <div className={styles.inputTitleTask}>
                 <input
                     value={newTaskTitle}
                     onChange={onChangeHandler}
@@ -77,7 +83,7 @@ const Todolist: React.FC<PropsType> = ({
                 {error && <div className={styles.errorMessage}>{error}</div>}
             </div>
 
-            <ul>
+            <ul className={styles.tasksTodolist}>
                 {tasks.map((task) => (
                     <li
                         key={task.id}
@@ -86,15 +92,19 @@ const Todolist: React.FC<PropsType> = ({
                         <input
                             type="checkbox"
                             checked={task.isDone}
-                            onChange={() => changeCheckStatus(task.id)}
+                            onChange={() =>
+                                changeCheckStatus(task.id, todolistId)
+                            }
                         />
                         <span>{task.title}</span>
-                        <button onClick={() => removeTask(task.id)}>x</button>
+                        <button onClick={() => removeTask(task.id, todolistId)}>
+                            x
+                        </button>
                     </li>
                 ))}
             </ul>
 
-            <div>
+            <div className={styles.buttonsTodolist}>
                 <button
                     className={
                         todoListFilter === "all" ? styles.activeFilter : ""
