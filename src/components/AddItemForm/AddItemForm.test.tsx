@@ -1,4 +1,5 @@
 import { render, fireEvent } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import { AddItemForm } from "./";
 
 // props
@@ -75,11 +76,13 @@ describe("AddItemForm component", () => {
             fireEvent.click(btn);
             expect(queryByText("Title is required")).toBeInTheDocument();
 
-            await new Promise<void>((resolve) => {
-                setTimeout(() => {
-                    expect(queryByText("Title is required")).toBeNull();
-                    resolve();
-                }, 2500);
+            await act(async () => {
+                await new Promise<void>((resolve) => {
+                    setTimeout(() => {
+                        expect(queryByText("Title is required")).toBeNull();
+                        resolve();
+                    }, 2500);
+                });
             });
         });
     });

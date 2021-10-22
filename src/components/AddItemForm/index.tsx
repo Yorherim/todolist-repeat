@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent } from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from "react";
 
 import styles from "./AddItemForm.module.scss";
 
@@ -10,6 +10,14 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({ addItem }) => {
     const [newTitle, setNewTitle] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setError(null);
+        }, 2500);
+
+        return () => clearTimeout(timer);
+    }, [error]);
+
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value);
     };
@@ -20,7 +28,6 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({ addItem }) => {
             setNewTitle("");
         } else {
             setError("Title is required");
-            setTimeout(() => setError(null), 2500);
         }
     };
 
