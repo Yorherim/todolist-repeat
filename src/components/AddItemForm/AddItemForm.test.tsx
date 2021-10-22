@@ -12,6 +12,12 @@ describe("AddItemForm component", () => {
         expect(getByRole("button", { name: "+" })).toBeInTheDocument();
     });
 
+    it("snapshot", () => {
+        const component = render(<AddItemForm addItem={addItem} />);
+
+        expect(component).toMatchSnapshot();
+    });
+
     describe("Input", () => {
         it("input change", () => {
             const { getByPlaceholderText } = render(
