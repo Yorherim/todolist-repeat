@@ -37,6 +37,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({ addItem }) => {
                 onChange={onChangeHandler}
                 onKeyPress={onKeyPressHandler}
                 className={error ? styles.error : ""}
+                placeholder={"Введите что-нибудь..."}
             />
             <button onClick={addItemAndShowErrorHandler}>+</button>
             {error && <div className={styles.errorMessage}>{error}</div>}
