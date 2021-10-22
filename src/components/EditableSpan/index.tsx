@@ -31,6 +31,8 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = ({
             onChange={onChangeHandler}
         />
     ) : (
-        <span onDoubleClick={activateEditMode}>{title}</span>
+        <span onDoubleClick={activateEditMode} data-testid="span-element">
+            {title}
+        </span>
     );
 };
