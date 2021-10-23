@@ -9,6 +9,12 @@ describe("App", () => {
         expect(linkElement).toBeInTheDocument();
     });
 
+    it("snapshot", () => {
+        const component = render(<App />);
+
+        expect(component).toMatchSnapshot();
+    });
+
     it("add new todolist is working", () => {
         const { getByText, queryByText, getByPlaceholderText, getByTestId } =
             render(<App />);
