@@ -1,9 +1,10 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
+
 import { AddItemForm } from "./";
 
 // props
-const addItem = (title: string) => {};
+const addItem = jest.fn();
 
 describe("AddItemForm component", () => {
     it("AddItemForm should render", () => {
@@ -13,10 +14,37 @@ describe("AddItemForm component", () => {
         expect(getByRole("button", { name: "+" })).toBeInTheDocument();
     });
 
-    it("snapshot", () => {
-        const component = render(<AddItemForm addItem={addItem} />);
+    describe("snapshots", () => {
+        it("snapshot component", () => {
+            const component = render(<AddItemForm addItem={addItem} />);
 
-        expect(component).toMatchSnapshot();
+            expect(component).toMatchSnapshot();
+        });
+
+        it("snapshot component with error", () => {
+            const component = render(<AddItemForm addItem={addItem} />);
+            const btn = screen.getByRole("button", { name: "+" });
+
+            fireEvent.click(btn);
+
+            expect(component).toMatchSnapshot();
+        });
+    });
+
+    it("AddItem works", () => {
+        const { getByPlaceholderText, getByRole } = render(
+            <AddItemForm addItem={addItem} />
+        );
+
+        const input = getByPlaceholderText(
+            "Введите что-нибудь..."
+        ) as HTMLInputElement;
+        fireEvent.change(input, { target: { value: "$23.0" } });
+
+        const btn = getByRole("button", { name: "+" });
+        fireEvent.click(btn);
+
+        expect(addItem).toHaveBeenCalledTimes(1);
     });
 
     describe("Input", () => {
@@ -28,8 +56,8 @@ describe("AddItemForm component", () => {
             const input = getByPlaceholderText(
                 "Введите что-нибудь..."
             ) as HTMLInputElement;
-
             fireEvent.change(input, { target: { value: "$23.0" } });
+
             expect(input.value).toBe("$23.0");
         });
 
@@ -84,6 +112,16 @@ describe("AddItemForm component", () => {
                     }, 2500);
                 });
             });
+        });
+
+        it("input change className when error", () => {
+            const { getByRole } = render(<AddItemForm addItem={addItem} />);
+
+            const input = getByRole("textbox") as HTMLInputElement;
+            const btn = getByRole("button", { name: "+" });
+
+            fireEvent.click(btn);
+            expect(input).toHaveClass("error");
         });
     });
 });

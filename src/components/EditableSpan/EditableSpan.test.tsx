@@ -1,7 +1,9 @@
 import { render, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import { EditableSpan } from "./";
 
-const onChangeTitle = (newValue: string) => {};
+const onChangeTitle = jest.fn();
 
 describe("EditableSpan component", () => {
     it("component should be render with span", () => {
@@ -74,5 +76,19 @@ describe("EditableSpan component", () => {
 
             expect(input.value).toBe("$23.0");
         });
+    });
+
+    it("onChangeTitle works", () => {
+        const { getByText, getByRole } = render(
+            <EditableSpan title={"hello"} onChangeTitle={onChangeTitle} />
+        );
+
+        const span = getByText("hello");
+        fireEvent.doubleClick(span);
+
+        const input = getByRole("textbox") as HTMLInputElement;
+        userEvent.type(input, "React");
+
+        expect(onChangeTitle).toHaveBeenCalledTimes(5);
     });
 });
