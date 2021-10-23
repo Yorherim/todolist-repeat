@@ -57,7 +57,6 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
                 helperText={error && "Title is empty"}
             />
             <IconButton
-                style={{ padding: "16px" }}
                 aria-label="delete"
                 onClick={addItemAndShowErrorHandler}
                 color={"primary"}

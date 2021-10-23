@@ -8,7 +8,7 @@ const addItem = jest.fn();
 
 describe("AddItemForm component", () => {
     it("AddItemForm should render", () => {
-        const { getByRole } = render(
+        const { getByRole, getByTestId } = render(
             <AddItemForm
                 addItem={addItem}
                 placeholder={"Введите что-нибудь..."}
@@ -16,7 +16,7 @@ describe("AddItemForm component", () => {
         );
 
         expect(getByRole("textbox")).toBeInTheDocument();
-        expect(getByRole("button", { name: "+" })).toBeInTheDocument();
+        expect(getByTestId("ControlPointIcon")).toBeInTheDocument();
     });
 
     describe("snapshots", () => {
@@ -38,7 +38,7 @@ describe("AddItemForm component", () => {
                     placeholder={"Введите что-нибудь..."}
                 />
             );
-            const btn = screen.getByRole("button", { name: "+" });
+            const btn = screen.getByTestId("ControlPointIcon");
 
             fireEvent.click(btn);
 
@@ -47,19 +47,17 @@ describe("AddItemForm component", () => {
     });
 
     it("AddItem works", () => {
-        const { getByPlaceholderText, getByRole } = render(
+        const { getByRole, getByTestId } = render(
             <AddItemForm
                 addItem={addItem}
                 placeholder={"Введите что-нибудь..."}
             />
         );
 
-        const input = getByPlaceholderText(
-            "Введите что-нибудь..."
-        ) as HTMLInputElement;
+        const input = getByRole("textbox", { name: "Введите что-нибудь..." });
         fireEvent.change(input, { target: { value: "$23.0" } });
 
-        const btn = getByRole("button", { name: "+" });
+        const btn = getByTestId("ControlPointIcon");
         fireEvent.click(btn);
 
         expect(addItem).toHaveBeenCalledTimes(1);
@@ -67,33 +65,33 @@ describe("AddItemForm component", () => {
 
     describe("Input", () => {
         it("input change", () => {
-            const { getByPlaceholderText } = render(
+            const { getByRole } = render(
                 <AddItemForm
                     addItem={addItem}
                     placeholder={"Введите что-нибудь..."}
                 />
             );
 
-            const input = getByPlaceholderText(
-                "Введите что-нибудь..."
-            ) as HTMLInputElement;
+            const input = getByRole("textbox", {
+                name: "Введите что-нибудь...",
+            }) as HTMLInputElement;
             fireEvent.change(input, { target: { value: "$23.0" } });
 
             expect(input.value).toBe("$23.0");
         });
 
         it("clear input", () => {
-            const { getByPlaceholderText, getByRole } = render(
+            const { getByRole, getByTestId } = render(
                 <AddItemForm
                     addItem={addItem}
                     placeholder={"Введите что-нибудь..."}
                 />
             );
 
-            const btn = getByRole("button", { name: "+" });
-            const input = getByPlaceholderText(
-                "Введите что-нибудь..."
-            ) as HTMLInputElement;
+            const btn = getByTestId("ControlPointIcon");
+            const input = getByRole("textbox", {
+                name: "Введите что-нибудь...",
+            }) as HTMLInputElement;
 
             fireEvent.change(input, { target: { value: "$23.0" } });
             expect(input.value).toBe("$23.0");
@@ -104,59 +102,44 @@ describe("AddItemForm component", () => {
 
     describe("Error", () => {
         it("show error", () => {
-            const { getByRole, queryByText } = render(
+            const { getByTestId, queryByText } = render(
                 <AddItemForm
                     addItem={addItem}
                     placeholder={"Введите что-нибудь..."}
                 />
             );
 
-            const btn = getByRole("button", { name: "+" });
+            const btn = getByTestId("ControlPointIcon");
 
-            expect(queryByText("Title is required")).toBeNull();
+            expect(queryByText("Title is empty")).toBeNull();
 
             fireEvent.click(btn);
-            expect(queryByText("Title is required")).toBeInTheDocument();
+            expect(queryByText("Title is empty")).toBeInTheDocument();
         });
 
         it("error disappears after a while", async () => {
-            const { getByRole, queryByText } = render(
+            const { getByTestId, queryByText } = render(
                 <AddItemForm
                     addItem={addItem}
                     placeholder={"Введите что-нибудь..."}
                 />
             );
 
-            const btn = getByRole("button", { name: "+" });
+            const btn = getByTestId("ControlPointIcon");
 
-            expect(queryByText("Title is required")).toBeNull();
+            expect(queryByText("Title is empty")).toBeNull();
 
             fireEvent.click(btn);
-            expect(queryByText("Title is required")).toBeInTheDocument();
+            expect(queryByText("Title is empty")).toBeInTheDocument();
 
             await act(async () => {
                 await new Promise<void>((resolve) => {
                     setTimeout(() => {
-                        expect(queryByText("Title is required")).toBeNull();
+                        expect(queryByText("Title is empty")).toBeNull();
                         resolve();
                     }, 2500);
                 });
             });
-        });
-
-        it("input change className when error", () => {
-            const { getByRole } = render(
-                <AddItemForm
-                    addItem={addItem}
-                    placeholder={"Введите что-нибудь..."}
-                />
-            );
-
-            const input = getByRole("textbox") as HTMLInputElement;
-            const btn = getByRole("button", { name: "+" });
-
-            fireEvent.click(btn);
-            expect(input).toHaveClass("error");
         });
     });
 });

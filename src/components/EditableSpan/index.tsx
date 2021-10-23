@@ -31,6 +31,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = ({
     return editMode ? (
         <TextField
             value={stateTitle}
+            size="small"
             onBlur={deactivateEditMode}
             onChange={onChangeHandler}
             autoFocus

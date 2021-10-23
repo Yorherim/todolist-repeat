@@ -167,7 +167,9 @@ const App: React.FC = () => {
             <Container fixed>
                 <Grid container>
                     <Grid item style={{ padding: "20px 0px" }}>
-                        <h2>Add new todolist</h2>
+                        <h2 style={{ paddingBottom: "15px" }}>
+                            Add new todolist
+                        </h2>
                         <AddItemForm
                             addItem={addTodolist}
                             placeholder="Add new todolist"

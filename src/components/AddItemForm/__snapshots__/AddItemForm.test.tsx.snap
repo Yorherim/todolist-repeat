@@ -8,15 +8,62 @@ Object {
       <div
         class="inputTitleTask"
       >
-        <input
-          class=""
-          placeholder="Введите что-нибудь..."
-          value=""
-        />
-        <button
-          data-testid=""
+        <div
+          class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
-          +
+          <label
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+            data-shrink="false"
+            for="outlined-basic"
+            id="outlined-basic-label"
+          >
+            Введите что-нибудь...
+          </label>
+          <div
+            class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+          >
+            <input
+              aria-invalid="false"
+              class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="outlined-basic"
+              type="text"
+              value=""
+            />
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-dhh0px"
+              >
+                <span>
+                  Введите что-нибудь...
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+        <button
+          aria-label="delete"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
+          data-testid=""
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            data-testid="ControlPointIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+            />
+          </svg>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
         </button>
       </div>
     </div>
@@ -25,15 +72,62 @@ Object {
     <div
       class="inputTitleTask"
     >
-      <input
-        class=""
-        placeholder="Введите что-нибудь..."
-        value=""
-      />
-      <button
-        data-testid=""
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
       >
-        +
+        <label
+          class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for="outlined-basic"
+          id="outlined-basic-label"
+        >
+          Введите что-нибудь...
+        </label>
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="outlined-basic"
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-dhh0px"
+            >
+              <span>
+                Введите что-нибудь...
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <button
+        aria-label="delete"
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
+        data-testid=""
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          data-testid="ControlPointIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+          />
+        </svg>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
       </button>
     </div>
   </div>,
@@ -99,21 +193,70 @@ Object {
       <div
         class="inputTitleTask"
       >
-        <input
-          class="error"
-          placeholder="Введите что-нибудь..."
-          value=""
-        />
-        <button
-          data-testid=""
-        >
-          +
-        </button>
         <div
-          class="errorMessage"
+          class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
         >
-          Title is required
+          <label
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-error css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+            data-shrink="false"
+            for="outlined-basic"
+            id="outlined-basic-label"
+          >
+            Введите что-нибудь...
+          </label>
+          <div
+            class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+          >
+            <input
+              aria-describedby="outlined-basic-helper-text"
+              aria-invalid="true"
+              class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="outlined-basic"
+              type="text"
+              value=""
+            />
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-dhh0px"
+              >
+                <span>
+                  Введите что-нибудь...
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+          <p
+            class="MuiFormHelperText-root Mui-error MuiFormHelperText-sizeMedium MuiFormHelperText-contained css-1wc848c-MuiFormHelperText-root"
+            id="outlined-basic-helper-text"
+          >
+            Title is empty
+          </p>
         </div>
+        <button
+          aria-label="delete"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
+          data-testid=""
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            data-testid="ControlPointIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+            />
+          </svg>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
       </div>
     </div>
   </body>,
@@ -121,21 +264,70 @@ Object {
     <div
       class="inputTitleTask"
     >
-      <input
-        class="error"
-        placeholder="Введите что-нибудь..."
-        value=""
-      />
-      <button
-        data-testid=""
-      >
-        +
-      </button>
       <div
-        class="errorMessage"
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
       >
-        Title is required
+        <label
+          class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-error css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for="outlined-basic"
+          id="outlined-basic-label"
+        >
+          Введите что-нибудь...
+        </label>
+        <div
+          class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-describedby="outlined-basic-helper-text"
+            aria-invalid="true"
+            class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+            id="outlined-basic"
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-dhh0px"
+            >
+              <span>
+                Введите что-нибудь...
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+        <p
+          class="MuiFormHelperText-root Mui-error MuiFormHelperText-sizeMedium MuiFormHelperText-contained css-1wc848c-MuiFormHelperText-root"
+          id="outlined-basic-helper-text"
+        >
+          Title is empty
+        </p>
       </div>
+      <button
+        aria-label="delete"
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
+        data-testid=""
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          data-testid="ControlPointIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+          />
+        </svg>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
     </div>
   </div>,
   "debug": [Function],
