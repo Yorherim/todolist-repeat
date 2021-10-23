@@ -1,5 +1,8 @@
 import React, { MouseEvent } from "react";
 
+import { Button, Checkbox, IconButton } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+
 import styles from "./Todolist.module.scss";
 
 import { FilterValuesType, TaskType } from "../app";
@@ -43,7 +46,7 @@ export const Todolist: React.FC<TodolistPropsType> = ({
     const addItem = (title: string) => addTask(title, todolistId);
 
     const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
-        switch (e.currentTarget.innerText) {
+        switch (e.currentTarget.childNodes[0].textContent) {
             case "Active":
                 return changeTodoListFilter("active", todolistId);
             case "Completed":
@@ -57,21 +60,23 @@ export const Todolist: React.FC<TodolistPropsType> = ({
     return (
         <div>
             <div className={styles.titleTodolist}>
-                <h3>
+                <h2>
                     <EditableSpan
                         title={title}
                         onChangeTitle={(newValue) =>
                             changeTitleTodolist(todolistId, newValue)
                         }
                     />
-                </h3>
-                <button onClick={() => removeTodolist(todolistId)}>x</button>
+                </h2>
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => removeTodolist(todolistId)}
+                >
+                    <Delete />
+                </IconButton>
             </div>
 
-            <AddItemForm
-                addItem={addItem}
-                placeholder={"Введите название задачи"}
-            />
+            <AddItemForm addItem={addItem} placeholder={"Add new task"} />
 
             <ul className={styles.tasksTodolist}>
                 {tasks.map((task) => (
@@ -79,8 +84,7 @@ export const Todolist: React.FC<TodolistPropsType> = ({
                         key={task.id}
                         className={task.isDone ? styles.isDone : ""}
                     >
-                        <input
-                            type="checkbox"
+                        <Checkbox
                             checked={task.isDone}
                             onChange={() =>
                                 changeCheckStatus(task.id, todolistId)
@@ -92,40 +96,39 @@ export const Todolist: React.FC<TodolistPropsType> = ({
                                 changeTaskTitle(task.id, todolistId, newValue)
                             }
                         />
-                        <button onClick={() => removeTask(task.id, todolistId)}>
-                            x
-                        </button>
+                        <IconButton
+                            aria-label="delete"
+                            onClick={() => removeTask(task.id, todolistId)}
+                        >
+                            <Delete />
+                        </IconButton>
                     </li>
                 ))}
             </ul>
 
             <div className={styles.buttonsTodolist}>
-                <button
-                    className={
-                        todoListFilter === "all" ? styles.activeFilter : ""
-                    }
+                <Button
+                    variant={todoListFilter === "all" ? "contained" : "text"}
                     onClick={filterTodoList}
                 >
                     All
-                </button>
-                <button
-                    className={
-                        todoListFilter === "active" ? styles.activeFilter : ""
-                    }
+                </Button>
+                <Button
+                    color={"primary"}
+                    variant={todoListFilter === "active" ? "contained" : "text"}
                     onClick={filterTodoList}
                 >
                     Active
-                </button>
-                <button
-                    className={
-                        todoListFilter === "completed"
-                            ? styles.activeFilter
-                            : ""
+                </Button>
+                <Button
+                    color={"secondary"}
+                    variant={
+                        todoListFilter === "completed" ? "contained" : "text"
                     }
                     onClick={filterTodoList}
                 >
                     Completed
-                </button>
+                </Button>
             </div>
         </div>
     );

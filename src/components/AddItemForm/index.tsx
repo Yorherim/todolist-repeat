@@ -1,5 +1,8 @@
 import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from "react";
 
+import { IconButton, TextField } from "@mui/material";
+import { ControlPoint } from "@mui/icons-material";
+
 import styles from "./AddItemForm.module.scss";
 
 type AddItemFormPropsType = {
@@ -12,11 +15,11 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
     placeholder,
 }) => {
     const [newTitle, setNewTitle] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean>(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setError(null);
+            setError(false);
         }, 2500);
 
         return () => clearTimeout(timer);
@@ -31,7 +34,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
             addItem(newTitle);
             setNewTitle("");
         } else {
-            setError("Title is required");
+            setError(true);
         }
     };
 
@@ -43,24 +46,29 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
 
     return (
         <div className={styles.inputTitleTask}>
-            <input
+            <TextField
+                id="outlined-basic"
+                label={placeholder ? placeholder : "Writing some..."}
+                variant={"outlined"}
+                error={error}
                 value={newTitle}
                 onChange={onChangeHandler}
                 onKeyPress={onKeyPressHandler}
-                className={error ? styles.error : ""}
-                placeholder={placeholder && placeholder}
+                helperText={error && "Title is empty"}
             />
-            <button
+            <IconButton
+                style={{ padding: "16px" }}
+                aria-label="delete"
                 onClick={addItemAndShowErrorHandler}
+                color={"primary"}
                 data-testid={
                     placeholder === "Введите название тудулиста"
                         ? "btn-todolist"
                         : ""
                 }
             >
-                +
-            </button>
-            {error && <div className={styles.errorMessage}>{error}</div>}
+                <ControlPoint />
+            </IconButton>
         </div>
     );
 };
