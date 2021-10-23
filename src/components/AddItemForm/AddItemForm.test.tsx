@@ -8,7 +8,12 @@ const addItem = jest.fn();
 
 describe("AddItemForm component", () => {
     it("AddItemForm should render", () => {
-        const { getByRole } = render(<AddItemForm addItem={addItem} />);
+        const { getByRole } = render(
+            <AddItemForm
+                addItem={addItem}
+                placeholder={"Введите что-нибудь..."}
+            />
+        );
 
         expect(getByRole("textbox")).toBeInTheDocument();
         expect(getByRole("button", { name: "+" })).toBeInTheDocument();
@@ -16,13 +21,23 @@ describe("AddItemForm component", () => {
 
     describe("snapshots", () => {
         it("snapshot component", () => {
-            const component = render(<AddItemForm addItem={addItem} />);
+            const component = render(
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
+            );
 
             expect(component).toMatchSnapshot();
         });
 
         it("snapshot component with error", () => {
-            const component = render(<AddItemForm addItem={addItem} />);
+            const component = render(
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
+            );
             const btn = screen.getByRole("button", { name: "+" });
 
             fireEvent.click(btn);
@@ -33,7 +48,10 @@ describe("AddItemForm component", () => {
 
     it("AddItem works", () => {
         const { getByPlaceholderText, getByRole } = render(
-            <AddItemForm addItem={addItem} />
+            <AddItemForm
+                addItem={addItem}
+                placeholder={"Введите что-нибудь..."}
+            />
         );
 
         const input = getByPlaceholderText(
@@ -50,7 +68,10 @@ describe("AddItemForm component", () => {
     describe("Input", () => {
         it("input change", () => {
             const { getByPlaceholderText } = render(
-                <AddItemForm addItem={addItem} />
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
             );
 
             const input = getByPlaceholderText(
@@ -63,7 +84,10 @@ describe("AddItemForm component", () => {
 
         it("clear input", () => {
             const { getByPlaceholderText, getByRole } = render(
-                <AddItemForm addItem={addItem} />
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
             );
 
             const btn = getByRole("button", { name: "+" });
@@ -81,7 +105,10 @@ describe("AddItemForm component", () => {
     describe("Error", () => {
         it("show error", () => {
             const { getByRole, queryByText } = render(
-                <AddItemForm addItem={addItem} />
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
             );
 
             const btn = getByRole("button", { name: "+" });
@@ -94,7 +121,10 @@ describe("AddItemForm component", () => {
 
         it("error disappears after a while", async () => {
             const { getByRole, queryByText } = render(
-                <AddItemForm addItem={addItem} />
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
             );
 
             const btn = getByRole("button", { name: "+" });
@@ -115,7 +145,12 @@ describe("AddItemForm component", () => {
         });
 
         it("input change className when error", () => {
-            const { getByRole } = render(<AddItemForm addItem={addItem} />);
+            const { getByRole } = render(
+                <AddItemForm
+                    addItem={addItem}
+                    placeholder={"Введите что-нибудь..."}
+                />
+            );
 
             const input = getByRole("textbox") as HTMLInputElement;
             const btn = getByRole("button", { name: "+" });

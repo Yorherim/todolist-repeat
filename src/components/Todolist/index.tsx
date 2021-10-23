@@ -2,11 +2,11 @@ import React, { MouseEvent } from "react";
 
 import styles from "./Todolist.module.scss";
 
-import { FilterValuesType, TaskType } from "./../../App";
+import { FilterValuesType, TaskType } from "../app";
 import { AddItemForm } from "../AddItemForm";
 import { EditableSpan } from "../EditableSpan";
 
-type PropsType = {
+export type TodolistPropsType = {
     todolistId: string;
     title: string;
     tasks: Array<TaskType>;
@@ -27,7 +27,7 @@ type PropsType = {
     changeTitleTodolist: (todolistId: string, newTitle: string) => void;
 };
 
-const Todolist: React.FC<PropsType> = ({
+export const Todolist: React.FC<TodolistPropsType> = ({
     title,
     tasks,
     changeTodoListFilter,
@@ -68,7 +68,10 @@ const Todolist: React.FC<PropsType> = ({
                 <button onClick={() => removeTodolist(todolistId)}>x</button>
             </div>
 
-            <AddItemForm addItem={addItem} />
+            <AddItemForm
+                addItem={addItem}
+                placeholder={"Введите название задачи"}
+            />
 
             <ul className={styles.tasksTodolist}>
                 {tasks.map((task) => (

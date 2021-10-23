@@ -13,7 +13,9 @@ Object {
           placeholder="Введите что-нибудь..."
           value=""
         />
-        <button>
+        <button
+          data-testid=""
+        >
           +
         </button>
       </div>
@@ -28,7 +30,9 @@ Object {
         placeholder="Введите что-нибудь..."
         value=""
       />
-      <button>
+      <button
+        data-testid=""
+      >
         +
       </button>
     </div>
@@ -100,7 +104,9 @@ Object {
           placeholder="Введите что-нибудь..."
           value=""
         />
-        <button>
+        <button
+          data-testid=""
+        >
           +
         </button>
         <div
@@ -120,7 +126,9 @@ Object {
         placeholder="Введите что-нибудь..."
         value=""
       />
-      <button>
+      <button
+        data-testid=""
+      >
         +
       </button>
       <div

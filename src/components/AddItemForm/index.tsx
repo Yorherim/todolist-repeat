@@ -4,9 +4,13 @@ import styles from "./AddItemForm.module.scss";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void;
+    placeholder?: string;
 };
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = ({ addItem }) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = ({
+    addItem,
+    placeholder,
+}) => {
     const [newTitle, setNewTitle] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
@@ -44,9 +48,18 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({ addItem }) => {
                 onChange={onChangeHandler}
                 onKeyPress={onKeyPressHandler}
                 className={error ? styles.error : ""}
-                placeholder={"Введите что-нибудь..."}
+                placeholder={placeholder && placeholder}
             />
-            <button onClick={addItemAndShowErrorHandler}>+</button>
+            <button
+                onClick={addItemAndShowErrorHandler}
+                data-testid={
+                    placeholder === "Введите название тудулиста"
+                        ? "btn-todolist"
+                        : ""
+                }
+            >
+                +
+            </button>
             {error && <div className={styles.errorMessage}>{error}</div>}
         </div>
     );

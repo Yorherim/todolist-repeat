@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { v1 } from "uuid";
 
 import "./App.scss";
-import { AddItemForm } from "./components/AddItemForm";
+import { AddItemForm } from "../AddItemForm";
 
-import Todolist from "./components/Todolist";
+import Todolist from "../Todolist";
 
 export type TaskType = {
     id: string;
@@ -18,7 +18,7 @@ type TodolistsType = {
     filter: FilterValuesType;
 };
 
-type TaskStateType = {
+export type TaskStateType = {
     [key: string]: Array<TaskType>;
 };
 
@@ -129,7 +129,10 @@ const App: React.FC = () => {
         <div className="App">
             <div>
                 <h3>Add new todolist</h3>
-                <AddItemForm addItem={addTodolist} />
+                <AddItemForm
+                    addItem={addTodolist}
+                    placeholder={"Введите название тудулиста"}
+                />
             </div>
 
             {todolists.map((tl) => {
