@@ -173,6 +173,7 @@ const App: React.FC = () => {
                         <AddItemForm
                             addItem={addTodolist}
                             placeholder="Add new todolist"
+                            data-testid={"input-todolist"}
                         />
                     </Grid>
                 </Grid>

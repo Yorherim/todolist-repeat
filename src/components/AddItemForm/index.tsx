@@ -7,7 +7,7 @@ import styles from "./AddItemForm.module.scss";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void;
-    placeholder?: string;
+    placeholder: string;
 };
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = ({
@@ -47,8 +47,9 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
     return (
         <div className={styles.inputTitleTask}>
             <TextField
+                type="text"
                 id="outlined-basic"
-                label={placeholder ? placeholder : "Writing some..."}
+                label={placeholder}
                 variant={"outlined"}
                 error={error}
                 value={newTitle}
@@ -61,9 +62,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
                 onClick={addItemAndShowErrorHandler}
                 color={"primary"}
                 data-testid={
-                    placeholder === "Введите название тудулиста"
-                        ? "btn-todolist"
-                        : ""
+                    placeholder === "Add new todolist" ? "btn-todolist" : ""
                 }
             >
                 <ControlPoint />
