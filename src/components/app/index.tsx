@@ -25,7 +25,7 @@ export type TaskType = {
     isDone: boolean;
 };
 
-type TodolistsType = {
+export type TodolistsType = {
     id: string;
     title: string;
     filter: FilterValuesType;
