@@ -2,7 +2,7 @@ import { v1 } from "uuid";
 
 import { FilterValuesType, TodolistsType } from "../components/app";
 
-enum TODOLIST_ACTIONS_TYPE {
+export enum TODOLISTS_ACTIONS_TYPE {
     REMOVE_TODOLIST = "REMOVE-TODOLIST",
     ADD_TODOLIST = "ADD-TODOLIST",
     CHANGE_TODOLIST_TITLE = "CHANGE-TODOLIST-TITLE",
@@ -19,21 +19,25 @@ export const todolistsReducer = (
     action: TodolistsActionsTypes
 ): TodolistsType[] => {
     switch (action.type) {
-        case "REMOVE-TODOLIST":
+        case TODOLISTS_ACTIONS_TYPE.REMOVE_TODOLIST:
             return state.filter((tl) => tl.id !== action.payload.todolistId);
-        case "ADD-TODOLIST":
+        case TODOLISTS_ACTIONS_TYPE.ADD_TODOLIST:
             return [
                 ...state,
-                { id: v1(), title: action.payload.title, filter: "all" },
+                {
+                    id: action.payload.todolistId,
+                    title: action.payload.title,
+                    filter: "all",
+                },
             ];
-        case "CHANGE-TODOLIST-TITLE": {
+        case TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_TITLE: {
             const todolist = state.find(
                 (t) => t.id === action.payload.todolistId
             );
             if (todolist) todolist.title = action.payload.newTitle;
             return [...state];
         }
-        case "CHANGE-TODOLIST-FILTER": {
+        case TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_FILTER: {
             const todolist = state.find(
                 (t) => t.id === action.payload.todolistId
             );
@@ -47,19 +51,20 @@ export const todolistsReducer = (
 
 export const todolistsActions = {
     removeTodolist: (todolistId: string) => ({
-        type: TODOLIST_ACTIONS_TYPE.REMOVE_TODOLIST as const,
+        type: TODOLISTS_ACTIONS_TYPE.REMOVE_TODOLIST as const,
         payload: {
             todolistId,
         },
     }),
     addTodolist: (title: string) => ({
-        type: TODOLIST_ACTIONS_TYPE.ADD_TODOLIST as const,
+        type: TODOLISTS_ACTIONS_TYPE.ADD_TODOLIST as const,
         payload: {
             title,
+            todolistId: v1(),
         },
     }),
     changeTodolistTitle: (todolistId: string, newTitle: string) => ({
-        type: TODOLIST_ACTIONS_TYPE.CHANGE_TODOLIST_TITLE as const,
+        type: TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_TITLE as const,
         payload: {
             todolistId,
             newTitle,
@@ -69,7 +74,7 @@ export const todolistsActions = {
         filterValue: FilterValuesType,
         todolistId: string
     ) => ({
-        type: TODOLIST_ACTIONS_TYPE.CHANGE_TODOLIST_FILTER as const,
+        type: TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_FILTER as const,
         payload: {
             filterValue,
             todolistId,
