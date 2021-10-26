@@ -45,18 +45,18 @@ export const todolistsReducer = (
                 },
             ];
         case TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_TITLE: {
-            const todolist = state.find(
-                (t) => t.id === action.payload.todolistId
+            return state.map((tl) =>
+                tl.id === action.payload.todolistId
+                    ? { ...tl, title: action.payload.newTitle }
+                    : tl
             );
-            if (todolist) todolist.title = action.payload.newTitle;
-            return [...state];
         }
         case TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_FILTER: {
-            const todolist = state.find(
-                (t) => t.id === action.payload.todolistId
+            return state.map((tl) =>
+                tl.id === action.payload.todolistId
+                    ? { ...tl, filter: action.payload.filterValue }
+                    : tl
             );
-            if (todolist) todolist.filter = action.payload.filterValue;
-            return [...state];
         }
         default:
             return state;

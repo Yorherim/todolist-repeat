@@ -29,6 +29,7 @@ it("correct todolist should be removed", () => {
 
     expect(endState.length).toBe(1);
     expect(endState[0].id).toBe(todolistId2);
+    expect(endState !== startState).toBeTruthy();
 });
 
 it("correct todolist should be added", () => {
@@ -38,6 +39,7 @@ it("correct todolist should be added", () => {
     expect(endState[2].title).toBe("New Todolist");
     expect(endState[2].filter).toBe("all");
     expect(endState[2].id).toBeDefined();
+    expect(endState !== startState).toBeTruthy();
 });
 
 it("correct todolist should change it's name", () => {
@@ -48,6 +50,7 @@ it("correct todolist should change it's name", () => {
 
     expect(endState[0].title).toBe("What to learn");
     expect(endState[1].title).toBe("New Todolist");
+    expect(endState[1] !== startState[1]).toBeTruthy();
 });
 
 it("correct filter of todolist should be changed", () => {
@@ -58,4 +61,5 @@ it("correct filter of todolist should be changed", () => {
 
     expect(endState[0].filter).toBe("all");
     expect(endState[1].filter).toBe("completed");
+    expect(endState[1] !== startState[1]).toBeTruthy();
 });

@@ -37,6 +37,7 @@ describe("tasks-reducer", () => {
         expect(endState[todolistId2]).toHaveLength(4);
         expect(endState[todolistId1]).toHaveLength(3);
         expect(endState[todolistId2][3].title).toBe("new task");
+        expect(endState[todolistId2] !== startState[todolistId2]).toBeTruthy();
     });
 
     it("correct task should be removed", () => {
@@ -50,6 +51,7 @@ describe("tasks-reducer", () => {
         expect(
             endState[todolistId1].find((task) => task.id === taskId)
         ).toBeFalsy();
+        expect(endState[todolistId1] !== startState[todolistId1]).toBeTruthy();
     });
 
     it("correct task should be changed checkbox", () => {
@@ -58,12 +60,18 @@ describe("tasks-reducer", () => {
             changeCheckStatus(taskId, todolistId1)
         );
         expect(endState[todolistId1][0].isDone).toBeFalsy();
+        expect(
+            endState[todolistId1][0] !== startState[todolistId1][0]
+        ).toBeTruthy();
 
         const endState1 = tasksReducer(
             endState,
             changeCheckStatus(taskId, todolistId1)
         );
         expect(endState1[todolistId1][0].isDone).toBeTruthy();
+        expect(
+            endState1[todolistId1][0] !== startState[todolistId1][0]
+        ).toBeTruthy();
     });
 
     it("correct task title should be changed", () => {
@@ -73,6 +81,9 @@ describe("tasks-reducer", () => {
         );
 
         expect(endState[todolistId1][0].title).toBe("new title task");
+        expect(
+            endState[todolistId1][0] !== startState[todolistId1][0]
+        ).toBeTruthy();
     });
 });
 

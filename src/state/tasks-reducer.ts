@@ -76,12 +76,11 @@ export const tasksReducer = (
                 ...state,
                 [action.payload.todolistId]: state[
                     action.payload.todolistId
-                ].map((task) => {
-                    if (task.id === action.payload.taskId) {
-                        task.isDone = !task.isDone;
-                    }
-                    return task;
-                }),
+                ].map((task) =>
+                    task.id === action.payload.taskId
+                        ? { ...task, isDone: !task.isDone }
+                        : task
+                ),
             };
         }
         case TASKS_ACTIONS_TYPE.CHANGE_TASK_TITLE: {
@@ -89,12 +88,11 @@ export const tasksReducer = (
                 ...state,
                 [action.payload.todolistId]: state[
                     action.payload.todolistId
-                ].map((task) => {
-                    if (task.id === action.payload.taskId) {
-                        task.title = action.payload.newTitle;
-                    }
-                    return task;
-                }),
+                ].map((task) =>
+                    task.id === action.payload.taskId
+                        ? { ...task, title: action.payload.newTitle }
+                        : task
+                ),
             };
         }
         case TODOLISTS_ACTIONS_TYPE.ADD_TODOLIST: {

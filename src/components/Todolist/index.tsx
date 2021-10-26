@@ -1,6 +1,6 @@
 import React, { MouseEvent, useCallback } from "react";
 
-import { Button, Checkbox, IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
 import styles from "./Todolist.module.scss";
@@ -9,6 +9,7 @@ import { AddItemForm } from "../AddItemForm";
 import { EditableSpan } from "../EditableSpan";
 import { TaskType } from "../../state/tasks-reducer";
 import { FilterValuesType } from "../../state/todolists-reducer";
+import { Task } from "../Task";
 
 export type TodolistPropsType = {
     todolistId: string;
@@ -62,7 +63,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
         );
 
         const onChangeTitle = useCallback(
-            (newValue) => changeTitleTodolist(todolistId, newValue),
+            (newValue: string) => changeTitleTodolist(todolistId, newValue),
             [changeTitleTodolist, todolistId]
         );
 
@@ -103,33 +104,14 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
 
                 <ul className={styles.tasksTodolist}>
                     {taskForTodolists.map((task) => (
-                        <li
+                        <Task
                             key={task.id}
-                            className={task.isDone ? styles.isDone : ""}
-                        >
-                            <Checkbox
-                                checked={task.isDone}
-                                onChange={() =>
-                                    changeCheckStatus(task.id, todolistId)
-                                }
-                            />
-                            <EditableSpan
-                                title={task.title}
-                                onChangeTitle={(newValue) =>
-                                    changeTaskTitle(
-                                        task.id,
-                                        todolistId,
-                                        newValue
-                                    )
-                                }
-                            />
-                            <IconButton
-                                aria-label="delete"
-                                onClick={() => removeTask(task.id, todolistId)}
-                            >
-                                <Delete />
-                            </IconButton>
-                        </li>
+                            task={task}
+                            changeCheckStatus={changeCheckStatus}
+                            removeTask={removeTask}
+                            todolistId={todolistId}
+                            changeTaskTitle={changeTaskTitle}
+                        />
                     ))}
                 </ul>
 
