@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useCallback } from "react";
 
 import { Button, Checkbox, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
@@ -31,108 +31,140 @@ export type TodolistPropsType = {
     changeTitleTodolist: (todolistId: string, newTitle: string) => void;
 };
 
-export const Todolist: React.FC<TodolistPropsType> = ({
-    title,
-    tasks,
-    changeTodoListFilter,
-    removeTask,
-    addTask,
-    changeCheckStatus,
-    todoListFilter,
-    todolistId,
-    removeTodolist,
-    changeTaskTitle,
-    changeTitleTodolist,
-}) => {
-    const addItem = (title: string) => addTask(title, todolistId);
+export const Todolist: React.FC<TodolistPropsType> = React.memo(
+    ({
+        title,
+        tasks,
+        changeTodoListFilter,
+        removeTask,
+        addTask,
+        changeCheckStatus,
+        todoListFilter,
+        todolistId,
+        removeTodolist,
+        changeTaskTitle,
+        changeTitleTodolist,
+    }) => {
+        console.log("todolist rerender");
 
-    const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
-        switch (e.currentTarget.childNodes[0].textContent) {
-            case "Active":
-                return changeTodoListFilter("active", todolistId);
-            case "Completed":
-                return changeTodoListFilter("completed", todolistId);
-            default:
-                return changeTodoListFilter("all", todolistId);
+        let taskForTodolists = tasks;
+
+        if (todoListFilter === "active") {
+            taskForTodolists = taskForTodolists.filter((t) => !t.isDone);
         }
-    };
+        if (todoListFilter === "completed") {
+            taskForTodolists = taskForTodolists.filter((t) => t.isDone);
+        }
 
-    console.log("todolist rerender");
-    return (
-        <div>
-            <div className={styles.titleTodolist}>
-                <h2>
-                    <EditableSpan
-                        title={title}
-                        onChangeTitle={(newValue) =>
-                            changeTitleTodolist(todolistId, newValue)
-                        }
-                    />
-                </h2>
-                <IconButton
-                    aria-label="delete"
-                    onClick={() => removeTodolist(todolistId)}
-                >
-                    <Delete />
-                </IconButton>
-            </div>
+        const addItem = useCallback(
+            (title: string) => addTask(title, todolistId),
+            [addTask, todolistId]
+        );
 
-            <AddItemForm addItem={addItem} placeholder={"Add new task"} />
+        const onChangeTitle = useCallback(
+            (newValue) => changeTitleTodolist(todolistId, newValue),
+            [changeTitleTodolist, todolistId]
+        );
 
-            <ul className={styles.tasksTodolist}>
-                {tasks.map((task) => (
-                    <li
-                        key={task.id}
-                        className={task.isDone ? styles.isDone : ""}
-                    >
-                        <Checkbox
-                            checked={task.isDone}
-                            onChange={() =>
-                                changeCheckStatus(task.id, todolistId)
-                            }
-                        />
+        const onRemoveTodolist = useCallback(
+            () => removeTodolist(todolistId),
+            [removeTodolist, todolistId]
+        );
+
+        const filterTodoList = useCallback(
+            (e: MouseEvent<HTMLButtonElement>) => {
+                switch (e.currentTarget.childNodes[0].textContent) {
+                    case "Active":
+                        return changeTodoListFilter("active", todolistId);
+                    case "Completed":
+                        return changeTodoListFilter("completed", todolistId);
+                    default:
+                        return changeTodoListFilter("all", todolistId);
+                }
+            },
+            [changeTodoListFilter, todolistId]
+        );
+
+        return (
+            <div>
+                <div className={styles.titleTodolist}>
+                    <h2>
                         <EditableSpan
-                            title={task.title}
-                            onChangeTitle={(newValue) =>
-                                changeTaskTitle(task.id, todolistId, newValue)
-                            }
+                            title={title}
+                            onChangeTitle={onChangeTitle}
                         />
-                        <IconButton
-                            aria-label="delete"
-                            onClick={() => removeTask(task.id, todolistId)}
+                    </h2>
+                    <IconButton aria-label="delete" onClick={onRemoveTodolist}>
+                        <Delete />
+                    </IconButton>
+                </div>
+
+                <AddItemForm addItem={addItem} placeholder={"Add new task"} />
+
+                <ul className={styles.tasksTodolist}>
+                    {taskForTodolists.map((task) => (
+                        <li
+                            key={task.id}
+                            className={task.isDone ? styles.isDone : ""}
                         >
-                            <Delete />
-                        </IconButton>
-                    </li>
-                ))}
-            </ul>
+                            <Checkbox
+                                checked={task.isDone}
+                                onChange={() =>
+                                    changeCheckStatus(task.id, todolistId)
+                                }
+                            />
+                            <EditableSpan
+                                title={task.title}
+                                onChangeTitle={(newValue) =>
+                                    changeTaskTitle(
+                                        task.id,
+                                        todolistId,
+                                        newValue
+                                    )
+                                }
+                            />
+                            <IconButton
+                                aria-label="delete"
+                                onClick={() => removeTask(task.id, todolistId)}
+                            >
+                                <Delete />
+                            </IconButton>
+                        </li>
+                    ))}
+                </ul>
 
-            <div className={styles.buttonsTodolist}>
-                <Button
-                    variant={todoListFilter === "all" ? "contained" : "text"}
-                    onClick={filterTodoList}
-                >
-                    All
-                </Button>
-                <Button
-                    color={"primary"}
-                    variant={todoListFilter === "active" ? "contained" : "text"}
-                    onClick={filterTodoList}
-                >
-                    Active
-                </Button>
-                <Button
-                    color={"secondary"}
-                    variant={
-                        todoListFilter === "completed" ? "contained" : "text"
-                    }
-                    onClick={filterTodoList}
-                >
-                    Completed
-                </Button>
+                <div className={styles.buttonsTodolist}>
+                    <Button
+                        variant={
+                            todoListFilter === "all" ? "contained" : "text"
+                        }
+                        onClick={filterTodoList}
+                    >
+                        All
+                    </Button>
+                    <Button
+                        color={"primary"}
+                        variant={
+                            todoListFilter === "active" ? "contained" : "text"
+                        }
+                        onClick={filterTodoList}
+                    >
+                        Active
+                    </Button>
+                    <Button
+                        color={"secondary"}
+                        variant={
+                            todoListFilter === "completed"
+                                ? "contained"
+                                : "text"
+                        }
+                        onClick={filterTodoList}
+                    >
+                        Completed
+                    </Button>
+                </div>
             </div>
-        </div>
-    );
-};
-
+        );
+    }
+);
 export default Todolist;

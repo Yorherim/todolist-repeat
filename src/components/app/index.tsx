@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -27,6 +27,8 @@ import { tasksActions, TaskStateType } from "../../state/tasks-reducer";
 import { AppStateType } from "../../state/store";
 
 const App: React.FC = () => {
+    console.log("app render");
+
     const dispatch = useDispatch();
     const todolists = useSelector<AppStateType, Array<TodolistsType>>(
         (state) => state.todolists
@@ -35,46 +37,67 @@ const App: React.FC = () => {
         (state) => state.tasks
     );
 
-    const changeTodoListFilter = (
-        filterValue: FilterValuesType,
-        todolistId: string
-    ) => {
-        dispatch(
-            todolistsActions.changeTodolistFilter(filterValue, todolistId)
-        );
-    };
+    const changeTodoListFilter = useCallback(
+        (filterValue: FilterValuesType, todolistId: string) => {
+            dispatch(
+                todolistsActions.changeTodolistFilter(filterValue, todolistId)
+            );
+        },
+        [dispatch]
+    );
 
-    const addTask = (title: string, todolistId: string) => {
-        dispatch(tasksActions.addTask(title, todolistId));
-    };
+    const addTask = useCallback(
+        (title: string, todolistId: string) => {
+            dispatch(tasksActions.addTask(title, todolistId));
+        },
+        [dispatch]
+    );
 
-    const removeTask = (id: string, todolistId: string) => {
-        dispatch(tasksActions.removeTask(id, todolistId));
-    };
+    const removeTask = useCallback(
+        (id: string, todolistId: string) => {
+            dispatch(tasksActions.removeTask(id, todolistId));
+        },
+        [dispatch]
+    );
 
-    const changeCheckStatus = (taskId: string, todolistId: string) => {
-        dispatch(tasksActions.changeCheckStatus(taskId, todolistId));
-    };
+    const changeCheckStatus = useCallback(
+        (taskId: string, todolistId: string) => {
+            dispatch(tasksActions.changeCheckStatus(taskId, todolistId));
+        },
+        [dispatch]
+    );
 
-    const removeTodolist = (todolistId: string) => {
-        dispatch(todolistsActions.removeTodolist(todolistId));
-    };
+    const removeTodolist = useCallback(
+        (todolistId: string) => {
+            dispatch(todolistsActions.removeTodolist(todolistId));
+        },
+        [dispatch]
+    );
 
-    const addTodolist = (title: string) => {
-        dispatch(todolistsActions.addTodolist(title));
-    };
+    const addTodolist = useCallback(
+        (title: string) => {
+            dispatch(todolistsActions.addTodolist(title));
+        },
+        [dispatch]
+    );
 
-    const changeTaskTitle = (
-        taskId: string,
-        todolistId: string,
-        newTitle: string
-    ) => {
-        dispatch(tasksActions.changeTaskTitle(taskId, todolistId, newTitle));
-    };
+    const changeTaskTitle = useCallback(
+        (taskId: string, todolistId: string, newTitle: string) => {
+            dispatch(
+                tasksActions.changeTaskTitle(taskId, todolistId, newTitle)
+            );
+        },
+        [dispatch]
+    );
 
-    const changeTitleTodolist = (todolistId: string, newTitle: string) => {
-        dispatch(todolistsActions.changeTodolistTitle(todolistId, newTitle));
-    };
+    const changeTitleTodolist = useCallback(
+        (todolistId: string, newTitle: string) => {
+            dispatch(
+                todolistsActions.changeTodolistTitle(todolistId, newTitle)
+            );
+        },
+        [dispatch]
+    );
 
     return (
         <div className="App">
@@ -118,19 +141,6 @@ const App: React.FC = () => {
 
                 <Grid container spacing={3}>
                     {todolists.map((tl) => {
-                        let tasksForTodoList = tasks[tl.id];
-
-                        if (tl.filter === "active") {
-                            tasksForTodoList = tasksForTodoList.filter(
-                                (t) => !t.isDone
-                            );
-                        }
-                        if (tl.filter === "completed") {
-                            tasksForTodoList = tasksForTodoList.filter(
-                                (t) => t.isDone
-                            );
-                        }
-
                         return (
                             <Grid item key={tl.id}>
                                 <Paper
@@ -140,7 +150,7 @@ const App: React.FC = () => {
                                     <Todolist
                                         todolistId={tl.id}
                                         title={tl.title}
-                                        tasks={tasksForTodoList}
+                                        tasks={tasks[tl.id]}
                                         changeTodoListFilter={
                                             changeTodoListFilter
                                         }
