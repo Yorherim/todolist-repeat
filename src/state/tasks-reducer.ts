@@ -1,7 +1,8 @@
 import { v1 } from "uuid";
 
-import { TaskStateType } from "../components/app";
 import {
+    todolistId1,
+    todolistId2,
     TodolistsActionsTypes,
     TODOLISTS_ACTIONS_TYPE,
 } from "./todolists-reducer";
@@ -13,13 +14,36 @@ enum TASKS_ACTIONS_TYPE {
     CHANGE_TASK_TITLE = "CHANGE-TASK-TITLE",
 }
 
+export type TaskType = {
+    id: string;
+    title: string;
+    isDone: boolean;
+};
+
+export type TaskStateType = {
+    [key: string]: Array<TaskType>;
+};
+
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
 export type TasksActionsTypes = ReturnType<
     InferValueTypes<typeof tasksActions>
 >;
 
+export const initialState: TaskStateType = {
+    [todolistId1]: [
+        { id: v1(), title: "HTML", isDone: true },
+        { id: v1(), title: "CSS", isDone: true },
+        { id: v1(), title: "React", isDone: false },
+    ],
+    [todolistId2]: [
+        { id: v1(), title: "Milk", isDone: true },
+        { id: v1(), title: "book", isDone: true },
+        { id: v1(), title: "salt", isDone: false },
+    ],
+};
+
 export const tasksReducer = (
-    state: TaskStateType,
+    state: TaskStateType = initialState,
     action:
         | TasksActionsTypes
         | Extract<
@@ -84,9 +108,8 @@ export const tasksReducer = (
             delete newState[action.payload.todolistId];
             return newState;
         }
-
         default:
-            throw new Error("I don't understand this type");
+            return state;
     }
 };
 

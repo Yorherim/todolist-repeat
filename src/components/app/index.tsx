@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-import { v1 } from "uuid";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
     AppBar,
@@ -19,84 +19,51 @@ import "./App.scss";
 import { AddItemForm } from "../AddItemForm";
 import Todolist from "../Todolist";
 import {
+    FilterValuesType,
     todolistsActions,
-    todolistsReducer,
+    TodolistsType,
 } from "../../state/todolists-reducer";
-import { tasksActions, tasksReducer } from "../../state/tasks-reducer";
-
-export type TaskType = {
-    id: string;
-    title: string;
-    isDone: boolean;
-};
-
-export type TodolistsType = {
-    id: string;
-    title: string;
-    filter: FilterValuesType;
-};
-
-export type TaskStateType = {
-    [key: string]: Array<TaskType>;
-};
-
-export type FilterValuesType = "all" | "active" | "completed";
+import { tasksActions, TaskStateType } from "../../state/tasks-reducer";
+import { AppStateType } from "../../state/store";
 
 const App: React.FC = () => {
     console.log("app rerender");
 
-    const todolistId1 = v1();
-    const todolistId2 = v1();
-
-    const [todolists, dispatchToTodolistsReducer] = useReducer(
-        todolistsReducer,
-        [
-            { id: todolistId1, title: "1st", filter: "all" },
-            { id: todolistId2, title: "2nd", filter: "all" },
-        ]
+    const dispatch = useDispatch();
+    const todolists = useSelector<AppStateType, Array<TodolistsType>>(
+        (state) => state.todolists
     );
-    const [tasksObj, dispatchToTasksReducer] = useReducer(tasksReducer, {
-        [todolistId1]: [
-            { id: v1(), title: "HTML", isDone: true },
-            { id: v1(), title: "CSS", isDone: true },
-            { id: v1(), title: "React", isDone: false },
-        ],
-        [todolistId2]: [
-            { id: v1(), title: "Milk", isDone: true },
-            { id: v1(), title: "book", isDone: true },
-            { id: v1(), title: "salt", isDone: false },
-        ],
-    });
+    const tasks = useSelector<AppStateType, TaskStateType>(
+        (state) => state.tasks
+    );
 
     const changeTodoListFilter = (
         filterValue: FilterValuesType,
         todolistId: string
     ) => {
-        dispatchToTodolistsReducer(
-            todolistsActions.changeTodolistTitle(todolistId, filterValue)
+        dispatch(
+            todolistsActions.changeTodolistFilter(filterValue, todolistId)
         );
     };
 
     const addTask = (title: string, todolistId: string) => {
-        dispatchToTasksReducer(tasksActions.addTask(title, todolistId));
+        dispatch(tasksActions.addTask(title, todolistId));
     };
 
     const removeTask = (id: string, todolistId: string) => {
-        dispatchToTasksReducer(tasksActions.removeTask(id, todolistId));
+        dispatch(tasksActions.removeTask(id, todolistId));
     };
 
     const changeCheckStatus = (taskId: string, todolistId: string) => {
-        dispatchToTasksReducer(
-            tasksActions.changeCheckStatus(taskId, todolistId)
-        );
+        dispatch(tasksActions.changeCheckStatus(taskId, todolistId));
     };
 
     const removeTodolist = (todolistId: string) => {
-        dispatchToTodolistsReducer(todolistsActions.removeTodolist(todolistId));
+        dispatch(todolistsActions.removeTodolist(todolistId));
     };
 
     const addTodolist = (title: string) => {
-        dispatchToTodolistsReducer(todolistsActions.addTodolist(title));
+        dispatch(todolistsActions.addTodolist(title));
     };
 
     const changeTaskTitle = (
@@ -104,15 +71,11 @@ const App: React.FC = () => {
         todolistId: string,
         newTitle: string
     ) => {
-        dispatchToTasksReducer(
-            tasksActions.changeTaskTitle(taskId, todolistId, newTitle)
-        );
+        dispatch(tasksActions.changeTaskTitle(taskId, todolistId, newTitle));
     };
 
     const changeTitleTodolist = (todolistId: string, newTitle: string) => {
-        dispatchToTodolistsReducer(
-            todolistsActions.changeTodolistTitle(todolistId, newTitle)
-        );
+        dispatch(todolistsActions.changeTodolistTitle(todolistId, newTitle));
     };
 
     return (
@@ -157,7 +120,7 @@ const App: React.FC = () => {
 
                 <Grid container spacing={3}>
                     {todolists.map((tl) => {
-                        let tasksForTodoList = tasksObj[tl.id];
+                        let tasksForTodoList = tasks[tl.id];
 
                         if (tl.filter === "active") {
                             tasksForTodoList = tasksForTodoList.filter(

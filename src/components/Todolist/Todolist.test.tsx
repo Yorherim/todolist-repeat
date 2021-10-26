@@ -129,4 +129,10 @@ describe("Todolist component", () => {
             expect(mockProps.addTask).toHaveBeenCalledTimes(1);
         });
     });
+
+    // describe("buttons", () => {
+    //     it("component should show active tasks", () => {
+
+    //     })
+    // })
 });

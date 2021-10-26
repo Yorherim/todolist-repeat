@@ -5,9 +5,10 @@ import { Delete } from "@mui/icons-material";
 
 import styles from "./Todolist.module.scss";
 
-import { FilterValuesType, TaskType } from "../app";
 import { AddItemForm } from "../AddItemForm";
 import { EditableSpan } from "../EditableSpan";
+import { TaskType } from "../../state/tasks-reducer";
+import { FilterValuesType } from "../../state/todolists-reducer";
 
 export type TodolistPropsType = {
     todolistId: string;
@@ -46,6 +47,7 @@ export const Todolist: React.FC<TodolistPropsType> = ({
     const addItem = (title: string) => addTask(title, todolistId);
 
     const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
+        console.log(e.currentTarget.childNodes[0].textContent);
         switch (e.currentTarget.childNodes[0].textContent) {
             case "Active":
                 return changeTodoListFilter("active", todolistId);

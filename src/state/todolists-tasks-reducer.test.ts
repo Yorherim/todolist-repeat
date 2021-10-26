@@ -1,6 +1,9 @@
-import { TaskStateType, TodolistsType } from "../components/app";
-import { todolistsReducer, todolistsActions } from "./todolists-reducer";
-import { tasksReducer } from "./tasks-reducer";
+import {
+    todolistsReducer,
+    todolistsActions,
+    TodolistsType,
+} from "./todolists-reducer";
+import { tasksReducer, TaskStateType } from "./tasks-reducer";
 
 const { addTodolist, removeTodolist } = todolistsActions;
 

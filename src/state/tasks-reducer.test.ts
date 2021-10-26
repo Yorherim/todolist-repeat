@@ -1,7 +1,6 @@
 import { v1 } from "uuid";
 
-import { TaskStateType } from "../components/app";
-import { tasksActions, tasksReducer } from "./tasks-reducer";
+import { tasksActions, tasksReducer, TaskStateType } from "./tasks-reducer";
 import { todolistsActions } from "./todolists-reducer";
 
 const todolistId1 = v1();

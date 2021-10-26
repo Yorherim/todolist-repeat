@@ -1,7 +1,5 @@
 import { v1 } from "uuid";
 
-import { FilterValuesType, TodolistsType } from "../components/app";
-
 export enum TODOLISTS_ACTIONS_TYPE {
     REMOVE_TODOLIST = "REMOVE-TODOLIST",
     ADD_TODOLIST = "ADD-TODOLIST",
@@ -9,13 +7,29 @@ export enum TODOLISTS_ACTIONS_TYPE {
     CHANGE_TODOLIST_FILTER = "CHANGE-TODOLIST-FILTER",
 }
 
+export type TodolistsType = {
+    id: string;
+    title: string;
+    filter: FilterValuesType;
+};
+
+export type FilterValuesType = "all" | "active" | "completed";
+
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
 export type TodolistsActionsTypes = ReturnType<
     InferValueTypes<typeof todolistsActions>
 >;
 
+export const todolistId1 = v1();
+export const todolistId2 = v1();
+
+export const initialState: Array<TodolistsType> = [
+    { id: todolistId1, title: "1st", filter: "all" },
+    { id: todolistId2, title: "2nd", filter: "all" },
+];
+
 export const todolistsReducer = (
-    state: TodolistsType[],
+    state: TodolistsType[] = initialState,
     action: TodolistsActionsTypes
 ): TodolistsType[] => {
     switch (action.type) {
@@ -45,7 +59,7 @@ export const todolistsReducer = (
             return [...state];
         }
         default:
-            throw new Error("I don't understand this type");
+            return state;
     }
 };
 

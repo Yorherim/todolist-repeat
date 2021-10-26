@@ -1,7 +1,10 @@
 import { v1 } from "uuid";
 
-import { todolistsActions, todolistsReducer } from "./todolists-reducer";
-import { TodolistsType } from "../components/app";
+import {
+    todolistsActions,
+    todolistsReducer,
+    TodolistsType,
+} from "./todolists-reducer";
 
 const todolistId1 = v1();
 const todolistId2 = v1();
