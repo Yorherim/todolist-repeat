@@ -47,7 +47,6 @@ export const Todolist: React.FC<TodolistPropsType> = ({
     const addItem = (title: string) => addTask(title, todolistId);
 
     const filterTodoList = (e: MouseEvent<HTMLButtonElement>) => {
-        console.log(e.currentTarget.childNodes[0].textContent);
         switch (e.currentTarget.childNodes[0].textContent) {
             case "Active":
                 return changeTodoListFilter("active", todolistId);

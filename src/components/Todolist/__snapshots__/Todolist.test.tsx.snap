@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Todolist component todolist snapshot 1`] = `
+exports[`Todolist component snapshots todolist snapshot with all tasks 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>

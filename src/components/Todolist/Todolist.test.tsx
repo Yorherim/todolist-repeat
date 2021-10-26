@@ -1,4 +1,5 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { v1 } from "uuid";
 
 import { Todolist, TodolistPropsType } from ".";
@@ -57,24 +58,29 @@ describe("Todolist component", () => {
         expect(getByRole("button", { name: /completed/i })).toBeInTheDocument();
     });
 
-    it("todolist snapshot", () => {
-        const component = render(
-            <Todolist
-                todolistId={mockProps.todolistId}
-                title={mockProps.title}
-                tasks={mockProps.tasks}
-                changeTodoListFilter={mockProps.changeTodoListFilter}
-                addTask={mockProps.addTask}
-                removeTask={mockProps.removeTask}
-                changeCheckStatus={mockProps.changeCheckStatus}
-                todoListFilter={mockProps.todoListFilter}
-                removeTodolist={mockProps.removeTodolist}
-                changeTaskTitle={mockProps.changeTaskTitle}
-                changeTitleTodolist={mockProps.changeTitleTodolist}
-            />
-        );
+    describe("snapshots", () => {
+        it("todolist snapshot with all tasks", () => {
+            const component = render(
+                <Todolist
+                    todolistId={mockProps.todolistId}
+                    title={mockProps.title}
+                    tasks={mockProps.tasks}
+                    changeTodoListFilter={mockProps.changeTodoListFilter}
+                    addTask={mockProps.addTask}
+                    removeTask={mockProps.removeTask}
+                    changeCheckStatus={mockProps.changeCheckStatus}
+                    todoListFilter={mockProps.todoListFilter}
+                    removeTodolist={mockProps.removeTodolist}
+                    changeTaskTitle={mockProps.changeTaskTitle}
+                    changeTitleTodolist={mockProps.changeTitleTodolist}
+                />
+            );
 
-        expect(component).toMatchSnapshot();
+            const btnAll = screen.getByRole("button", { name: "All" });
+            fireEvent.click(btnAll);
+
+            expect(component).toMatchSnapshot();
+        });
     });
 
     describe("tasks", () => {
@@ -130,9 +136,33 @@ describe("Todolist component", () => {
         });
     });
 
-    // describe("buttons", () => {
-    //     it("component should show active tasks", () => {
+    it("buttons (all, active, complited) should call changeTodoListFilter", () => {
+        const { getByRole } = render(
+            <Todolist
+                todolistId={mockProps.todolistId}
+                title={mockProps.title}
+                tasks={mockProps.tasks}
+                changeTodoListFilter={mockProps.changeTodoListFilter}
+                addTask={mockProps.addTask}
+                removeTask={mockProps.removeTask}
+                changeCheckStatus={mockProps.changeCheckStatus}
+                todoListFilter={mockProps.todoListFilter}
+                removeTodolist={mockProps.removeTodolist}
+                changeTaskTitle={mockProps.changeTaskTitle}
+                changeTitleTodolist={mockProps.changeTitleTodolist}
+            />
+        );
 
-    //     })
-    // })
+        const btnAll = getByRole("button", { name: "All" });
+        fireEvent.click(btnAll);
+        expect(mockProps.changeTodoListFilter).toHaveBeenCalledTimes(1);
+
+        const btnActive = getByRole("button", { name: "Active" });
+        userEvent.click(btnActive);
+        expect(mockProps.changeTodoListFilter).toHaveBeenCalledTimes(2);
+
+        const btnCompleted = getByRole("button", { name: "Completed" });
+        fireEvent.click(btnCompleted);
+        expect(mockProps.changeTodoListFilter).toHaveBeenCalledTimes(3);
+    });
 });

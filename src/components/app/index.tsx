@@ -27,8 +27,6 @@ import { tasksActions, TaskStateType } from "../../state/tasks-reducer";
 import { AppStateType } from "../../state/store";
 
 const App: React.FC = () => {
-    console.log("app rerender");
-
     const dispatch = useDispatch();
     const todolists = useSelector<AppStateType, Array<TodolistsType>>(
         (state) => state.todolists
