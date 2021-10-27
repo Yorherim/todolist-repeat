@@ -18,7 +18,7 @@ Object {
           </h2>
           <button
             aria-label="delete"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium removeIcon css-78trlr-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
@@ -39,7 +39,7 @@ Object {
           </button>
         </div>
         <div
-          class="inputTitleTask"
+          class="inputTitle"
         >
           <div
             class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
@@ -78,7 +78,7 @@ Object {
           </div>
           <button
             aria-label="delete"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium btnAdd css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
             data-testid=""
             tabindex="0"
             type="button"
@@ -315,7 +315,7 @@ Object {
         </h2>
         <button
           aria-label="delete"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium removeIcon css-78trlr-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -336,7 +336,7 @@ Object {
         </button>
       </div>
       <div
-        class="inputTitleTask"
+        class="inputTitle"
       >
         <div
           class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
@@ -375,7 +375,7 @@ Object {
         </div>
         <button
           aria-label="delete"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium btnAdd css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
           data-testid=""
           tabindex="0"
           type="button"

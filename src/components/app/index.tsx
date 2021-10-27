@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -25,9 +25,18 @@ import {
 } from "../../state/todolists-reducer";
 import { tasksActions, TaskStateType } from "../../state/tasks-reducer";
 import { AppStateType } from "../../state/store";
+import { todolistsAPI } from "../../api/api";
 
 const App: React.FC = () => {
     console.log("app render");
+
+    useEffect(() => {
+        async function l() {
+            const res = await todolistsAPI.getTodolists();
+            console.log(res);
+        }
+        l();
+    }, []);
 
     const dispatch = useDispatch();
     const todolists = useSelector<AppStateType, Array<TodolistsType>>(

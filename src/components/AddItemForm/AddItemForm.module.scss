@@ -1,6 +1,10 @@
-.inputTitleTask {
-    margin-bottom: 20px;
+.inputTitle {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    height: 80px;
+
+    .btnAdd {
+        padding: 16px;
+    }
 }

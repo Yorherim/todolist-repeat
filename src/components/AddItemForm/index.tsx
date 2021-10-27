@@ -5,7 +5,7 @@ import { ControlPoint } from "@mui/icons-material";
 
 import styles from "./AddItemForm.module.scss";
 
-type AddItemFormPropsType = {
+export type AddItemFormPropsType = {
     addItem: (title: string) => void;
     placeholder: string;
 };
@@ -44,7 +44,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
         };
 
         return (
-            <div className={styles.inputTitleTask}>
+            <div className={styles.inputTitle}>
                 <TextField
                     type="text"
                     id="outlined-basic"
@@ -63,6 +63,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
                     data-testid={
                         placeholder === "Add new todolist" ? "btn-todolist" : ""
                     }
+                    className={styles.btnAdd}
                 >
                     <ControlPoint />
                 </IconButton>

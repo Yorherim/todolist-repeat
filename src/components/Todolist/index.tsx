@@ -67,10 +67,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
             [changeTitleTodolist, todolistId]
         );
 
-        const onRemoveTodolist = useCallback(
-            () => removeTodolist(todolistId),
-            [removeTodolist, todolistId]
-        );
+        const onRemoveTodolist = useCallback(() => removeTodolist(todolistId), [
+            removeTodolist,
+            todolistId,
+        ]);
 
         const filterTodoList = useCallback(
             (e: MouseEvent<HTMLButtonElement>) => {
@@ -95,7 +95,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
                             onChangeTitle={onChangeTitle}
                         />
                     </h2>
-                    <IconButton aria-label="delete" onClick={onRemoveTodolist}>
+                    <IconButton
+                        className={styles.removeIcon}
+                        aria-label="delete"
+                        onClick={onRemoveTodolist}
+                    >
                         <Delete />
                     </IconButton>
                 </div>
