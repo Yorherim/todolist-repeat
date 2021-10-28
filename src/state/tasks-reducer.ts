@@ -1,5 +1,9 @@
-import { v1 } from "uuid";
-import { TaskPriorities, tasksAPI, TaskStatuses, TaskType } from "../api/api";
+import {
+    tasksAPI,
+    TaskStatuses,
+    TaskType,
+    UpdateTaskModelType,
+} from "../api/api";
 import { ThunkType } from "./store";
 
 import {
@@ -44,20 +48,9 @@ export const tasksReducer = (
         case TASKS_ACTIONS_TYPE.ADD_TASK:
             return {
                 ...state,
-                [action.payload.todolistId]: [
-                    ...state[action.payload.todolistId],
-                    {
-                        id: v1(),
-                        title: action.payload.title,
-                        status: TaskStatuses.New,
-                        addedDate: "",
-                        deadline: null,
-                        description: null,
-                        order: 0,
-                        priority: TaskPriorities.Low,
-                        startDate: null,
-                        todoListId: action.payload.todolistId,
-                    },
+                [action.payload.task.todoListId]: [
+                    action.payload.task,
+                    ...state[action.payload.task.todoListId],
                 ],
             };
         case TASKS_ACTIONS_TYPE.REMOVE_TASK:
@@ -125,11 +118,10 @@ export const tasksReducer = (
 };
 
 export const tasksActions = {
-    addTask: (title: string, todolistId: string) => ({
+    addTask: (task: TaskType) => ({
         type: TASKS_ACTIONS_TYPE.ADD_TASK as const,
         payload: {
-            title,
-            todolistId,
+            task,
         },
     }),
     removeTask: (taskId: string, todolistId: string) => ({
@@ -179,3 +171,44 @@ export const fetchTasksTC =
             throw new Error(u);
         }
     };
+export const deleteTaskTC =
+    (todolistId: string, taskId: string): ThunkType =>
+    async (dispatch) => {
+        try {
+            await tasksAPI.deleteTask(todolistId, taskId);
+            dispatch(tasksActions.removeTask(taskId, todolistId));
+        } catch (err) {
+            const u = err as string;
+            throw new Error(u);
+        }
+    };
+export const addTaskTC =
+    (todolistId: string, title: string): ThunkType =>
+    async (dispatch) => {
+        try {
+            const {
+                data: { item },
+            } = await tasksAPI.createTask(todolistId, title);
+            dispatch(tasksActions.addTask(item));
+        } catch (err) {
+            const u = err as string;
+            throw new Error(u);
+        }
+    };
+// export const updateTaskTC =
+//     (
+//         todolistId: string,
+//         taskId: string,
+//         model: UpdateTaskModelType
+//     ): ThunkType =>
+//     async (dispatch) => {
+//         try {
+//             // await tasksAPI.updateTask(todolistId, taskId, model);
+//             // dispatch(changeTaskTitleAC(taskId, todolistId, model.title));
+//             // dispatch(changeCheckTaskStatusAC(taskId, todolistId));
+//             console.log("update task");
+//         } catch (err) {
+//             const u = err as string;
+//             throw new Error(u);
+//         }
+//     };

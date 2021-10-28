@@ -69,25 +69,24 @@ export const instance = axios.create({
 
 export const todolistsAPI = {
     async getTodolists(): Promise<TodolistsType[]> {
-        const res = await instance.get<TodolistsType[]>(``);
+        const res = await instance.get(``);
         return res.data;
     },
-    async createTodolist(title: string) {
-        const res = await instance.post<ResponseType<{ item: TodolistsType }>>(
-            ``,
-            { title }
-        );
+    async createTodolist(
+        title: string
+    ): Promise<ResponseType<{ item: TodolistsType }>> {
+        const res = await instance.post(``, { title });
         return res.data;
     },
     async deleteTodolist(todolistId: string): Promise<ResponseType<{}>> {
-        const res = await instance.delete<ResponseType<{}>>(`${todolistId}`);
+        const res = await instance.delete(`${todolistId}`);
         return res.data;
     },
     async updateTodolist(
         todolistId: string,
         title: string
     ): Promise<ResponseType<{}>> {
-        const res = await instance.put<ResponseType<{}>>(`${todolistId}`, {
+        const res = await instance.put(`${todolistId}`, {
             title,
         });
         return res.data;
@@ -96,26 +95,21 @@ export const todolistsAPI = {
 
 export const tasksAPI = {
     async getTasks(todolistId: string): Promise<GetTasksType> {
-        const res = await instance.get<GetTasksType>(`${todolistId}/tasks`);
+        const res = await instance.get(`${todolistId}/tasks`);
         return res.data;
     },
     async createTask(
         todolistId: string,
         title: string
     ): Promise<ResponseType<{ item: TaskType }>> {
-        const res = await instance.post<ResponseType<{ item: TaskType }>>(
-            `${todolistId}/tasks`,
-            { title }
-        );
+        const res = await instance.post(`${todolistId}/tasks`, { title });
         return res.data;
     },
     async deleteTask(
         todolistId: string,
         taskId: string
     ): Promise<ResponseType<{}>> {
-        const res = await instance.delete<ResponseType<{}>>(
-            `${todolistId}/tasks/${taskId}`
-        );
+        const res = await instance.delete(`${todolistId}/tasks/${taskId}`);
         return res.data;
     },
     async updateTask(
@@ -123,10 +117,7 @@ export const tasksAPI = {
         taskId: string,
         model: UpdateTaskModelType
     ): Promise<ResponseType<{ item: TaskType }>> {
-        const res = await instance.put<ResponseType<{ item: TaskType }>>(
-            `${todolistId}/tasks/${taskId}`,
-            model
-        );
+        const res = await instance.put(`${todolistId}/tasks/${taskId}`, model);
         return res.data;
     },
 };

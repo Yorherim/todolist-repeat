@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { TaskPriorities, TaskStatuses } from "../api/api";
+import { TaskPriorities, TaskStatuses, TaskType } from "../api/api";
 
 import { tasksActions, tasksReducer, TaskStateType } from "./tasks-reducer";
 import { todolistsActions } from "./todolists-reducer";
@@ -25,7 +25,7 @@ beforeEach(() => {
                 order: 0,
                 priority: TaskPriorities.Low,
                 startDate: null,
-                todoListId: "1",
+                todoListId: todolistId1,
             },
             {
                 id: "2",
@@ -37,7 +37,7 @@ beforeEach(() => {
                 order: 0,
                 priority: TaskPriorities.Low,
                 startDate: null,
-                todoListId: "2",
+                todoListId: todolistId1,
             },
             {
                 id: "3",
@@ -49,7 +49,7 @@ beforeEach(() => {
                 order: 0,
                 priority: TaskPriorities.Low,
                 startDate: null,
-                todoListId: "3",
+                todoListId: todolistId1,
             },
         ],
         [todolistId2]: [
@@ -63,7 +63,7 @@ beforeEach(() => {
                 order: 0,
                 priority: TaskPriorities.Low,
                 startDate: null,
-                todoListId: "1",
+                todoListId: todolistId2,
             },
             {
                 id: "2",
@@ -75,7 +75,7 @@ beforeEach(() => {
                 order: 0,
                 priority: TaskPriorities.Low,
                 startDate: null,
-                todoListId: "2",
+                todoListId: todolistId2,
             },
             {
                 id: "3",
@@ -87,7 +87,7 @@ beforeEach(() => {
                 order: 0,
                 priority: TaskPriorities.Low,
                 startDate: null,
-                todoListId: "3",
+                todoListId: todolistId2,
             },
         ],
     };
@@ -96,14 +96,23 @@ beforeEach(() => {
 
 describe("tasks-reducer", () => {
     it("task should be added", () => {
-        const endState = tasksReducer(
-            startState,
-            addTask("new task", todolistId2)
-        );
+        const newTask: TaskType = {
+            id: "4",
+            title: "new task",
+            status: TaskStatuses.New,
+            addedDate: "",
+            deadline: null,
+            description: null,
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: null,
+            todoListId: todolistId2,
+        };
+        const endState = tasksReducer(startState, addTask(newTask));
 
         expect(endState[todolistId2]).toHaveLength(4);
         expect(endState[todolistId1]).toHaveLength(3);
-        expect(endState[todolistId2][3].title).toBe("new task");
+        expect(endState[todolistId2][0].title).toBe("new task");
         expect(endState[todolistId2] !== startState[todolistId2]).toBeTruthy();
     });
 

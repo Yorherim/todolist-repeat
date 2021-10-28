@@ -24,7 +24,12 @@ import {
     todolistsActions,
     TodolistsDomainType,
 } from "../../state/todolists-reducer";
-import { tasksActions, TaskStateType } from "../../state/tasks-reducer";
+import {
+    addTaskTC,
+    deleteTaskTC,
+    tasksActions,
+    TaskStateType,
+} from "../../state/tasks-reducer";
 import { AppStateType } from "../../state/store";
 
 const App: React.FC = () => {
@@ -51,14 +56,14 @@ const App: React.FC = () => {
 
     const addTask = useCallback(
         (title: string, todolistId: string) => {
-            dispatch(tasksActions.addTask(title, todolistId));
+            dispatch(addTaskTC(todolistId, title));
         },
         [dispatch]
     );
 
     const removeTask = useCallback(
-        (id: string, todolistId: string) => {
-            dispatch(tasksActions.removeTask(id, todolistId));
+        (taskId: string, todolistId: string) => {
+            dispatch(deleteTaskTC(todolistId, taskId));
         },
         [dispatch]
     );
