@@ -35,7 +35,8 @@ export const tasksReducer = (
               {
                   type:
                       | TODOLISTS_ACTIONS_TYPE.ADD_TODOLIST
-                      | TODOLISTS_ACTIONS_TYPE.REMOVE_TODOLIST;
+                      | TODOLISTS_ACTIONS_TYPE.REMOVE_TODOLIST
+                      | TODOLISTS_ACTIONS_TYPE.SET_TODOLISTS;
               }
           >
 ): TaskStateType => {
@@ -107,6 +108,12 @@ export const tasksReducer = (
             delete newState[action.payload.todolistId];
             return newState;
         }
+        case TODOLISTS_ACTIONS_TYPE.SET_TODOLISTS:
+            const newState = { ...state };
+            action.payload.todolists.forEach((tl) => {
+                newState[tl.id] = [];
+            });
+            return newState;
         case TASKS_ACTIONS_TYPE.SET_TASKS:
             return {
                 ...state,
@@ -151,7 +158,7 @@ export const tasksActions = {
             newTitle,
         },
     }),
-    setTasksAC: (tasks: TaskType[], todolistId: string) => ({
+    setTasks: (tasks: TaskType[], todolistId: string) => ({
         type: TASKS_ACTIONS_TYPE.SET_TASKS as const,
         payload: {
             tasks,
@@ -166,7 +173,7 @@ export const fetchTasksTC =
     async (dispatch) => {
         try {
             const { items } = await tasksAPI.getTasks(todolistId);
-            dispatch(tasksActions.setTasksAC(items, todolistId));
+            dispatch(tasksActions.setTasks(items, todolistId));
         } catch (err) {
             const u = err as string;
             throw new Error(u);

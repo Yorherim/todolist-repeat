@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { todolistsAPI } from "../api/api";
+import { todolistsAPI, TodolistsType } from "../api/api";
 import { ThunkType } from "./store";
 import { fetchTasksTC } from "./tasks-reducer";
 
@@ -10,11 +10,6 @@ export enum TODOLISTS_ACTIONS_TYPE {
     CHANGE_TODOLIST_FILTER = "CHANGE-TODOLIST-FILTER",
     SET_TODOLISTS = "SET-TODOLISTS",
 }
-
-export type TodolistsType = {
-    id: string;
-    title: string;
-};
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -46,6 +41,8 @@ export const todolistsReducer = (
                     id: action.payload.todolistId,
                     title: action.payload.title,
                     filter: "all",
+                    addedDate: "",
+                    order: 0,
                 },
             ];
         case TODOLISTS_ACTIONS_TYPE.CHANGE_TODOLIST_TITLE: {
@@ -114,12 +111,12 @@ export const todolistsActions = {
 // thunk creators
 export const fetchTodolistsTC = (): ThunkType => async (dispatch) => {
     try {
-        console.log("uraaaaa");
         const todolists = await todolistsAPI.getTodolists();
+        dispatch(todolistsActions.setTodolists(todolists));
+
         todolists.forEach((tl) => {
             dispatch(fetchTasksTC(tl.id));
         });
-        dispatch(todolistsActions.setTodolists(todolists));
     } catch (err) {
         const u = err as string;
         throw new Error(u);

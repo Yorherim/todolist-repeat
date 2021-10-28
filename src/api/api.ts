@@ -10,7 +10,7 @@ type ResponseType<T> = {
 // --------------------
 
 // ----- Todolists types -----
-type TodolistsType = {
+export type TodolistsType = {
     id: string;
     title: string;
     addedDate: string;

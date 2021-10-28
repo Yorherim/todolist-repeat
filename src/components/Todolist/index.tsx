@@ -47,8 +47,6 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
         changeTaskTitle,
         changeTitleTodolist,
     }) => {
-        console.log("todolist rerender");
-
         let taskForTodolists = tasks;
 
         if (todoListFilter === "active") {

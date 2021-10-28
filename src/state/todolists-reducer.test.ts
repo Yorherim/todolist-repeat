@@ -2,13 +2,13 @@ import { v1 } from "uuid";
 
 import {
     todolistsActions,
+    TodolistsDomainType,
     todolistsReducer,
-    TodolistsType,
 } from "./todolists-reducer";
 
 const todolistId1 = v1();
 const todolistId2 = v1();
-let startState: TodolistsType[];
+let startState: TodolistsDomainType[];
 
 const {
     addTodolist,
@@ -19,8 +19,20 @@ const {
 
 beforeEach(() => {
     startState = [
-        { id: todolistId1, title: "What to learn", filter: "all" },
-        { id: todolistId2, title: "What to buy", filter: "all" },
+        {
+            id: todolistId1,
+            title: "What to learn",
+            addedDate: "",
+            order: 0,
+            filter: "all",
+        },
+        {
+            id: todolistId2,
+            title: "What to buy",
+            addedDate: "",
+            order: 0,
+            filter: "all",
+        },
     ];
 });
 
