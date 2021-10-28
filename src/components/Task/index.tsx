@@ -5,8 +5,8 @@ import { Delete } from "@mui/icons-material";
 
 import styles from "./Task.module.scss";
 
-import { TaskType } from "../../state/tasks-reducer";
 import { EditableSpan } from "../EditableSpan";
+import { TaskStatuses, TaskType } from "../../api/api";
 
 type TaskPropsType = {
     task: TaskType;
@@ -38,8 +38,16 @@ export const Task: React.FC<TaskPropsType> = React.memo(
         );
 
         return (
-            <li key={task.id} className={task.isDone ? styles.isDone : ""}>
-                <Checkbox checked={task.isDone} onChange={onChangeTaskStatus} />
+            <li
+                key={task.id}
+                className={
+                    task.status === TaskStatuses.Completed ? styles.isDone : ""
+                }
+            >
+                <Checkbox
+                    checked={task.status === TaskStatuses.New ? false : true}
+                    onChange={onChangeTaskStatus}
+                />
                 <EditableSpan
                     title={task.title}
                     onChangeTitle={onChangeTaskTitle}

@@ -7,9 +7,10 @@ import styles from "./Todolist.module.scss";
 
 import { AddItemForm } from "../AddItemForm";
 import { EditableSpan } from "../EditableSpan";
-import { TaskType } from "../../state/tasks-reducer";
+
 import { FilterValuesType } from "../../state/todolists-reducer";
 import { Task } from "../Task";
+import { TaskStatuses, TaskType } from "../../api/api";
 
 export type TodolistPropsType = {
     todolistId: string;
@@ -51,10 +52,14 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
         let taskForTodolists = tasks;
 
         if (todoListFilter === "active") {
-            taskForTodolists = taskForTodolists.filter((t) => !t.isDone);
+            taskForTodolists = taskForTodolists.filter(
+                (t) => t.status !== TaskStatuses.New
+            );
         }
         if (todoListFilter === "completed") {
-            taskForTodolists = taskForTodolists.filter((t) => t.isDone);
+            taskForTodolists = taskForTodolists.filter(
+                (t) => t.status === TaskStatuses.Completed
+            );
         }
 
         const addItem = useCallback(
@@ -67,10 +72,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
             [changeTitleTodolist, todolistId]
         );
 
-        const onRemoveTodolist = useCallback(() => removeTodolist(todolistId), [
-            removeTodolist,
-            todolistId,
-        ]);
+        const onRemoveTodolist = useCallback(
+            () => removeTodolist(todolistId),
+            [removeTodolist, todolistId]
+        );
 
         const filterTodoList = useCallback(
             (e: MouseEvent<HTMLButtonElement>) => {
@@ -107,7 +112,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(
                 <AddItemForm addItem={addItem} placeholder={"Add new task"} />
 
                 <ul className={styles.tasksTodolist}>
-                    {taskForTodolists.map((task) => (
+                    {taskForTodolists?.map((task) => (
                         <Task
                             key={task.id}
                             task={task}

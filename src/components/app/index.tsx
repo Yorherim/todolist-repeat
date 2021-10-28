@@ -19,32 +19,28 @@ import "./App.scss";
 import { AddItemForm } from "../AddItemForm";
 import Todolist from "../Todolist";
 import {
+    fetchTodolistsTC,
     FilterValuesType,
     todolistsActions,
-    TodolistsType,
+    TodolistsDomainType,
 } from "../../state/todolists-reducer";
 import { tasksActions, TaskStateType } from "../../state/tasks-reducer";
 import { AppStateType } from "../../state/store";
-import { todolistsAPI } from "../../api/api";
 
 const App: React.FC = () => {
     console.log("app render");
 
-    useEffect(() => {
-        async function l() {
-            const res = await todolistsAPI.getTodolists();
-            console.log(res);
-        }
-        l();
-    }, []);
-
     const dispatch = useDispatch();
-    const todolists = useSelector<AppStateType, Array<TodolistsType>>(
+    const todolists = useSelector<AppStateType, Array<TodolistsDomainType>>(
         (state) => state.todolists
     );
     const tasks = useSelector<AppStateType, TaskStateType>(
         (state) => state.tasks
     );
+
+    useEffect(() => {
+        dispatch(fetchTodolistsTC());
+    }, [dispatch]);
 
     const changeTodoListFilter = useCallback(
         (filterValue: FilterValuesType, todolistId: string) => {
@@ -149,7 +145,7 @@ const App: React.FC = () => {
                 </Grid>
 
                 <Grid container spacing={3}>
-                    {todolists.map((tl) => {
+                    {todolists?.map((tl) => {
                         return (
                             <Grid item key={tl.id}>
                                 <Paper

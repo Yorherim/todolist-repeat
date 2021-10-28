@@ -1,16 +1,19 @@
 import { v1 } from "uuid";
+import { todolistsAPI } from "../api/api";
+import { ThunkType } from "./store";
+import { fetchTasksTC } from "./tasks-reducer";
 
 export enum TODOLISTS_ACTIONS_TYPE {
     REMOVE_TODOLIST = "REMOVE-TODOLIST",
     ADD_TODOLIST = "ADD-TODOLIST",
     CHANGE_TODOLIST_TITLE = "CHANGE-TODOLIST-TITLE",
     CHANGE_TODOLIST_FILTER = "CHANGE-TODOLIST-FILTER",
+    SET_TODOLISTS = "SET-TODOLISTS",
 }
 
 export type TodolistsType = {
     id: string;
     title: string;
-    filter: FilterValuesType;
 };
 
 export type FilterValuesType = "all" | "active" | "completed";
@@ -20,18 +23,19 @@ export type TodolistsActionsTypes = ReturnType<
     InferValueTypes<typeof todolistsActions>
 >;
 
+export type TodolistsDomainType = TodolistsType & {
+    filter: FilterValuesType;
+};
+
 export const todolistId1 = v1();
 export const todolistId2 = v1();
 
-export const initialState: Array<TodolistsType> = [
-    { id: todolistId1, title: "1st", filter: "all" },
-    { id: todolistId2, title: "2nd", filter: "all" },
-];
+export const initialState: Array<TodolistsDomainType> = [];
 
 export const todolistsReducer = (
-    state: TodolistsType[] = initialState,
+    state: TodolistsDomainType[] = initialState,
     action: TodolistsActionsTypes
-): TodolistsType[] => {
+): TodolistsDomainType[] => {
     switch (action.type) {
         case TODOLISTS_ACTIONS_TYPE.REMOVE_TODOLIST:
             return state.filter((tl) => tl.id !== action.payload.todolistId);
@@ -58,6 +62,11 @@ export const todolistsReducer = (
                     : tl
             );
         }
+        case TODOLISTS_ACTIONS_TYPE.SET_TODOLISTS:
+            return action.payload.todolists.map((tl) => ({
+                ...tl,
+                filter: "all",
+            }));
         default:
             return state;
     }
@@ -94,4 +103,25 @@ export const todolistsActions = {
             todolistId,
         },
     }),
+    setTodolists: (todolists: TodolistsType[]) => ({
+        type: TODOLISTS_ACTIONS_TYPE.SET_TODOLISTS as const,
+        payload: {
+            todolists,
+        },
+    }),
+};
+
+// thunk creators
+export const fetchTodolistsTC = (): ThunkType => async (dispatch) => {
+    try {
+        console.log("uraaaaa");
+        const todolists = await todolistsAPI.getTodolists();
+        todolists.forEach((tl) => {
+            dispatch(fetchTasksTC(tl.id));
+        });
+        dispatch(todolistsActions.setTodolists(todolists));
+    } catch (err) {
+        const u = err as string;
+        throw new Error(u);
+    }
 };

@@ -1,8 +1,8 @@
 import { v1 } from "uuid";
+import { TaskPriorities, tasksAPI, TaskStatuses, TaskType } from "../api/api";
+import { ThunkType } from "./store";
 
 import {
-    todolistId1,
-    todolistId2,
     TodolistsActionsTypes,
     TODOLISTS_ACTIONS_TYPE,
 } from "./todolists-reducer";
@@ -12,13 +12,8 @@ enum TASKS_ACTIONS_TYPE {
     REMOVE_TASK = "REMOVE-TASK",
     CHANGE_CHECK_STATUS = "CHANGE-CHECK-STATUS",
     CHANGE_TASK_TITLE = "CHANGE-TASK-TITLE",
+    SET_TASKS = "SET-TASKS",
 }
-
-export type TaskType = {
-    id: string;
-    title: string;
-    isDone: boolean;
-};
 
 export type TaskStateType = {
     [key: string]: Array<TaskType>;
@@ -29,18 +24,7 @@ export type TasksActionsTypes = ReturnType<
     InferValueTypes<typeof tasksActions>
 >;
 
-export const initialState: TaskStateType = {
-    [todolistId1]: [
-        { id: v1(), title: "HTML", isDone: true },
-        { id: v1(), title: "CSS", isDone: true },
-        { id: v1(), title: "React", isDone: false },
-    ],
-    [todolistId2]: [
-        { id: v1(), title: "Milk", isDone: true },
-        { id: v1(), title: "book", isDone: true },
-        { id: v1(), title: "salt", isDone: false },
-    ],
-};
+export const initialState: TaskStateType = {};
 
 export const tasksReducer = (
     state: TaskStateType = initialState,
@@ -61,7 +45,18 @@ export const tasksReducer = (
                 ...state,
                 [action.payload.todolistId]: [
                     ...state[action.payload.todolistId],
-                    { id: v1(), title: action.payload.title, isDone: false },
+                    {
+                        id: v1(),
+                        title: action.payload.title,
+                        status: TaskStatuses.New,
+                        addedDate: "",
+                        deadline: null,
+                        description: null,
+                        order: 0,
+                        priority: TaskPriorities.Low,
+                        startDate: null,
+                        todoListId: action.payload.todolistId,
+                    },
                 ],
             };
         case TASKS_ACTIONS_TYPE.REMOVE_TASK:
@@ -78,7 +73,13 @@ export const tasksReducer = (
                     action.payload.todolistId
                 ].map((task) =>
                     task.id === action.payload.taskId
-                        ? { ...task, isDone: !task.isDone }
+                        ? {
+                              ...task,
+                              status:
+                                  task.status === TaskStatuses.New
+                                      ? TaskStatuses.Completed
+                                      : TaskStatuses.New,
+                          }
                         : task
                 ),
             };
@@ -106,6 +107,11 @@ export const tasksReducer = (
             delete newState[action.payload.todolistId];
             return newState;
         }
+        case TASKS_ACTIONS_TYPE.SET_TASKS:
+            return {
+                ...state,
+                [action.payload.todolistId]: action.payload.tasks,
+            };
         default:
             return state;
     }
@@ -145,4 +151,24 @@ export const tasksActions = {
             newTitle,
         },
     }),
+    setTasksAC: (tasks: TaskType[], todolistId: string) => ({
+        type: TASKS_ACTIONS_TYPE.SET_TASKS as const,
+        payload: {
+            tasks,
+            todolistId,
+        },
+    }),
 };
+
+// thunk creators
+export const fetchTasksTC =
+    (todolistId: string): ThunkType =>
+    async (dispatch) => {
+        try {
+            const { items } = await tasksAPI.getTasks(todolistId);
+            dispatch(tasksActions.setTasksAC(items, todolistId));
+        } catch (err) {
+            const u = err as string;
+            throw new Error(u);
+        }
+    };
