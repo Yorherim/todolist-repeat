@@ -9,8 +9,7 @@ const todolistId2 = v1();
 let startState: TaskStateType;
 let taskId: string;
 
-const { addTask, removeTask, changeCheckStatus, changeTaskTitle, setTasks } =
-    tasksActions;
+const { addTask, removeTask, updateTask, setTasks } = tasksActions;
 
 beforeEach(() => {
     startState = {
@@ -133,7 +132,9 @@ describe("tasks-reducer", () => {
     it("correct task should be changed checkbox", () => {
         const endState = tasksReducer(
             startState,
-            changeCheckStatus(taskId, todolistId1)
+            updateTask(taskId, todolistId1, {
+                status: TaskStatuses.Completed,
+            })
         );
         expect(endState[todolistId1][0].status).toBe(TaskStatuses.Completed);
         expect(
@@ -142,7 +143,9 @@ describe("tasks-reducer", () => {
 
         const endState1 = tasksReducer(
             endState,
-            changeCheckStatus(taskId, todolistId1)
+            updateTask(taskId, todolistId1, {
+                status: TaskStatuses.New,
+            })
         );
         expect(endState1[todolistId1][0].status).toBe(TaskStatuses.New);
         expect(
@@ -153,7 +156,9 @@ describe("tasks-reducer", () => {
     it("correct task title should be changed", () => {
         const endState = tasksReducer(
             startState,
-            changeTaskTitle(taskId, todolistId1, "new title task")
+            updateTask(taskId, todolistId1, {
+                title: "new title task",
+            })
         );
 
         expect(endState[todolistId1][0].title).toBe("new title task");

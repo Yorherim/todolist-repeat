@@ -50,12 +50,12 @@ type GetTasksType = {
     totalCount: number;
 };
 export type UpdateTaskModelType = {
-    title: string;
-    description: string | null;
-    status: number;
-    priority: number;
-    startDate: string | null;
-    deadline: string | null;
+    title?: string;
+    description?: string | null;
+    status?: number;
+    priority?: number;
+    startDate?: string | null;
+    deadline?: string | null;
 };
 // --------------------
 

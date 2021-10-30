@@ -4,7 +4,7 @@ import {
     TaskType,
     UpdateTaskModelType,
 } from "../api/api";
-import { ThunkType } from "./store";
+import { AppStateType, ThunkType } from "./store";
 
 import {
     TodolistsActionsTypes,
@@ -14,8 +14,7 @@ import {
 enum TASKS_ACTIONS_TYPE {
     ADD_TASK = "ADD-TASK",
     REMOVE_TASK = "REMOVE-TASK",
-    CHANGE_CHECK_STATUS = "CHANGE-CHECK-STATUS",
-    CHANGE_TASK_TITLE = "CHANGE-TASK-TITLE",
+    UPDATE_TASK = "UPDATE-TASK",
     SET_TASKS = "SET-TASKS",
 }
 
@@ -60,36 +59,20 @@ export const tasksReducer = (
                     action.payload.todolistId
                 ].filter((task) => task.id !== action.payload.taskId),
             };
-        case TASKS_ACTIONS_TYPE.CHANGE_CHECK_STATUS: {
+        case TASKS_ACTIONS_TYPE.UPDATE_TASK:
             return {
                 ...state,
                 [action.payload.todolistId]: state[
                     action.payload.todolistId
-                ].map((task) =>
-                    task.id === action.payload.taskId
+                ].map((task) => {
+                    return task.id === action.payload.taskId
                         ? {
                               ...task,
-                              status:
-                                  task.status === TaskStatuses.New
-                                      ? TaskStatuses.Completed
-                                      : TaskStatuses.New,
+                              ...action.payload.model,
                           }
-                        : task
-                ),
+                        : task;
+                }),
             };
-        }
-        case TASKS_ACTIONS_TYPE.CHANGE_TASK_TITLE: {
-            return {
-                ...state,
-                [action.payload.todolistId]: state[
-                    action.payload.todolistId
-                ].map((task) =>
-                    task.id === action.payload.taskId
-                        ? { ...task, title: action.payload.newTitle }
-                        : task
-                ),
-            };
-        }
         case TODOLISTS_ACTIONS_TYPE.ADD_TODOLIST: {
             return {
                 ...state,
@@ -131,23 +114,16 @@ export const tasksActions = {
             todolistId,
         },
     }),
-    changeCheckStatus: (taskId: string, todolistId: string) => ({
-        type: TASKS_ACTIONS_TYPE.CHANGE_CHECK_STATUS as const,
-        payload: {
-            taskId,
-            todolistId,
-        },
-    }),
-    changeTaskTitle: (
+    updateTask: (
         taskId: string,
         todolistId: string,
-        newTitle: string
+        model: UpdateTaskModelType
     ) => ({
-        type: TASKS_ACTIONS_TYPE.CHANGE_TASK_TITLE as const,
+        type: TASKS_ACTIONS_TYPE.UPDATE_TASK as const,
         payload: {
             taskId,
             todolistId,
-            newTitle,
+            model,
         },
     }),
     setTasks: (tasks: TaskType[], todolistId: string) => ({
@@ -195,20 +171,28 @@ export const addTaskTC =
             throw new Error(u);
         }
     };
-// export const updateTaskTC =
-//     (
-//         todolistId: string,
-//         taskId: string,
-//         model: UpdateTaskModelType
-//     ): ThunkType =>
-//     async (dispatch) => {
-//         try {
-//             // await tasksAPI.updateTask(todolistId, taskId, model);
-//             // dispatch(changeTaskTitleAC(taskId, todolistId, model.title));
-//             // dispatch(changeCheckTaskStatusAC(taskId, todolistId));
-//             console.log("update task");
-//         } catch (err) {
-//             const u = err as string;
-//             throw new Error(u);
-//         }
-//     };
+export const updateTaskTC =
+    (
+        todolistId: string,
+        taskId: string,
+        model: UpdateTaskModelType
+    ): ThunkType =>
+    async (dispatch, getState: () => AppStateType) => {
+        try {
+            const state = getState();
+
+            const task = state.tasks[todolistId].find(
+                (task) => task.id === taskId
+            );
+
+            if (task) {
+                const apiModel = { ...task, ...model };
+
+                await tasksAPI.updateTask(todolistId, taskId, apiModel);
+                dispatch(tasksActions.updateTask(taskId, todolistId, apiModel));
+            }
+        } catch (err) {
+            const u = err as string;
+            throw new Error(u);
+        }
+    };

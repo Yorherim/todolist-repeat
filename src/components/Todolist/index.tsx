@@ -23,7 +23,11 @@ export type TodolistPropsType = {
     ) => void;
     removeTask: (id: string, todolistId: string) => void;
     addTask: (title: string, todolistId: string) => void;
-    changeCheckStatus: (taskId: string, todolistId: string) => void;
+    changeCheckStatus: (
+        taskId: string,
+        todolistId: string,
+        taskStatus: TaskStatuses
+    ) => void;
     removeTodolist: (todolistId: string) => void;
     changeTaskTitle: (
         taskId: string,

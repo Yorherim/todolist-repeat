@@ -11,7 +11,11 @@ import { TaskStatuses, TaskType } from "../../api/api";
 type TaskPropsType = {
     task: TaskType;
     todolistId: string;
-    changeCheckStatus: (taskId: string, todolistId: string) => void;
+    changeCheckStatus: (
+        taskId: string,
+        todolistId: string,
+        taskStatus: TaskStatuses
+    ) => void;
     changeTaskTitle: (
         taskId: string,
         todolistId: string,
@@ -23,8 +27,8 @@ type TaskPropsType = {
 export const Task: React.FC<TaskPropsType> = React.memo(
     ({ task, changeCheckStatus, todolistId, changeTaskTitle, removeTask }) => {
         const onChangeTaskStatus = useCallback(
-            () => changeCheckStatus(task.id, todolistId),
-            [changeCheckStatus, todolistId, task.id]
+            () => changeCheckStatus(task.id, todolistId, task.status),
+            [changeCheckStatus, todolistId, task.id, task.status]
         );
 
         const onChangeTaskTitle = useCallback(

@@ -27,10 +27,11 @@ import {
 import {
     addTaskTC,
     deleteTaskTC,
-    tasksActions,
     TaskStateType,
+    updateTaskTC,
 } from "../../state/tasks-reducer";
 import { AppStateType } from "../../state/store";
+import { TaskStatuses } from "../../api/api";
 
 const App: React.FC = () => {
     const dispatch = useDispatch();
@@ -69,8 +70,15 @@ const App: React.FC = () => {
     );
 
     const changeCheckStatus = useCallback(
-        (taskId: string, todolistId: string) => {
-            dispatch(tasksActions.changeCheckStatus(taskId, todolistId));
+        (taskId: string, todolistId: string, taskStatus: TaskStatuses) => {
+            dispatch(
+                updateTaskTC(todolistId, taskId, {
+                    status:
+                        taskStatus === TaskStatuses.New
+                            ? TaskStatuses.Completed
+                            : TaskStatuses.New,
+                })
+            );
         },
         [dispatch]
     );
@@ -91,9 +99,7 @@ const App: React.FC = () => {
 
     const changeTaskTitle = useCallback(
         (taskId: string, todolistId: string, newTitle: string) => {
-            dispatch(
-                tasksActions.changeTaskTitle(taskId, todolistId, newTitle)
-            );
+            dispatch(updateTaskTC(todolistId, taskId, { title: newTitle }));
         },
         [dispatch]
     );
