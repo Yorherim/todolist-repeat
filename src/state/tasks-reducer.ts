@@ -1,9 +1,4 @@
-import {
-    tasksAPI,
-    TaskStatuses,
-    TaskType,
-    UpdateTaskModelType,
-} from "../api/api";
+import { tasksAPI, TaskType, UpdateTaskModelType } from "../api/api";
 import { AppStateType, ThunkType } from "./store";
 
 import {
@@ -76,7 +71,7 @@ export const tasksReducer = (
         case TODOLISTS_ACTIONS_TYPE.ADD_TODOLIST: {
             return {
                 ...state,
-                [action.payload.todolistId]: [],
+                [action.payload.todolist.id]: [],
             };
         }
         case TODOLISTS_ACTIONS_TYPE.REMOVE_TODOLIST: {

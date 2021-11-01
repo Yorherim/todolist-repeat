@@ -19,6 +19,9 @@ import "./App.scss";
 import { AddItemForm } from "../AddItemForm";
 import Todolist from "../Todolist";
 import {
+    changeTodolistTitleTC,
+    createTodolistTC,
+    deleteTodolistTC,
     fetchTodolistsTC,
     FilterValuesType,
     todolistsActions,
@@ -85,14 +88,14 @@ const App: React.FC = () => {
 
     const removeTodolist = useCallback(
         (todolistId: string) => {
-            dispatch(todolistsActions.removeTodolist(todolistId));
+            dispatch(deleteTodolistTC(todolistId));
         },
         [dispatch]
     );
 
     const addTodolist = useCallback(
         (title: string) => {
-            dispatch(todolistsActions.addTodolist(title));
+            dispatch(createTodolistTC(title));
         },
         [dispatch]
     );
@@ -106,9 +109,7 @@ const App: React.FC = () => {
 
     const changeTitleTodolist = useCallback(
         (todolistId: string, newTitle: string) => {
-            dispatch(
-                todolistsActions.changeTodolistTitle(todolistId, newTitle)
-            );
+            dispatch(changeTodolistTitleTC(todolistId, newTitle));
         },
         [dispatch]
     );

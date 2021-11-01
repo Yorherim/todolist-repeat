@@ -1,4 +1,5 @@
 import { v1 } from "uuid";
+import { TodolistsType } from "../api/api";
 
 import {
     todolistsActions,
@@ -45,12 +46,18 @@ it("correct todolist should be removed", () => {
 });
 
 it("correct todolist should be added", () => {
-    const endState = todolistsReducer(startState, addTodolist("New Todolist"));
+    const newTodolist: TodolistsType = {
+        id: "123",
+        addedDate: "",
+        order: 0,
+        title: "New Todolist",
+    };
+    const endState = todolistsReducer(startState, addTodolist(newTodolist));
 
     expect(endState.length).toBe(3);
-    expect(endState[2].title).toBe("New Todolist");
-    expect(endState[2].filter).toBe("all");
-    expect(endState[2].id).toBeDefined();
+    expect(endState[0].title).toBe("New Todolist");
+    expect(endState[0].filter).toBe("all");
+    expect(endState[0].id).toBeDefined();
     expect(endState !== startState).toBeTruthy();
 });
 
