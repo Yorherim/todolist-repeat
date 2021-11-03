@@ -20,7 +20,7 @@ import {
     TaskStateType,
     updateTaskTC,
 } from "../../state/tasks-reducer";
-import { AppStateType } from "../../state/store";
+import { AppRootStateType } from "../../state/store";
 import { TaskStatuses } from "../../api/api";
 
 export const TodolistList: React.FC = () => {
@@ -30,10 +30,10 @@ export const TodolistList: React.FC = () => {
         dispatch(fetchTodolistsTC());
     }, [dispatch]);
 
-    const todolists = useSelector<AppStateType, Array<TodolistsDomainType>>(
+    const todolists = useSelector<AppRootStateType, Array<TodolistsDomainType>>(
         (state) => state.todolists
     );
-    const tasks = useSelector<AppStateType, TaskStateType>(
+    const tasks = useSelector<AppRootStateType, TaskStateType>(
         (state) => state.tasks
     );
 

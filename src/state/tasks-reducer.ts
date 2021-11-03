@@ -1,5 +1,6 @@
 import { tasksAPI, TaskType, UpdateTaskModelType } from "../api/api";
-import { AppStateType, ThunkType } from "./store";
+import { appActions } from "./app-reducer";
+import { AppRootStateType, ThunkType } from "./store";
 
 import {
     TodolistsActionsTypes,
@@ -137,6 +138,7 @@ export const fetchTasksTC =
         try {
             const { items } = await tasksAPI.getTasks(todolistId);
             dispatch(tasksActions.setTasks(items, todolistId));
+            dispatch(appActions.setStatus("succeeded"));
         } catch (err) {
             const u = err as string;
             throw new Error(u);
@@ -146,8 +148,10 @@ export const deleteTaskTC =
     (todolistId: string, taskId: string): ThunkType =>
     async (dispatch) => {
         try {
+            dispatch(appActions.setStatus("loading"));
             await tasksAPI.deleteTask(todolistId, taskId);
             dispatch(tasksActions.removeTask(taskId, todolistId));
+            dispatch(appActions.setStatus("succeeded"));
         } catch (err) {
             const u = err as string;
             throw new Error(u);
@@ -157,10 +161,25 @@ export const addTaskTC =
     (todolistId: string, title: string): ThunkType =>
     async (dispatch) => {
         try {
+            dispatch(appActions.setStatus("loading"));
+
             const {
                 data: { item },
+                resultCode,
+                messages,
             } = await tasksAPI.createTask(todolistId, title);
-            dispatch(tasksActions.addTask(item));
+
+            if (resultCode === 0) {
+                dispatch(tasksActions.addTask(item));
+            } else {
+                if (messages.length) {
+                    dispatch(appActions.setError(messages[0]));
+                } else {
+                    dispatch(appActions.setError("Some error occurred"));
+                }
+            }
+
+            dispatch(appActions.setStatus("succeeded"));
         } catch (err) {
             const u = err as string;
             throw new Error(u);
@@ -172,8 +191,10 @@ export const updateTaskTC =
         taskId: string,
         model: UpdateTaskModelType
     ): ThunkType =>
-    async (dispatch, getState: () => AppStateType) => {
+    async (dispatch, getState: () => AppRootStateType) => {
         try {
+            dispatch(appActions.setStatus("loading"));
+
             const state = getState();
 
             const task = state.tasks[todolistId].find(
@@ -186,6 +207,8 @@ export const updateTaskTC =
                 await tasksAPI.updateTask(todolistId, taskId, apiModel);
                 dispatch(tasksActions.updateTask(taskId, todolistId, apiModel));
             }
+
+            dispatch(appActions.setStatus("succeeded"));
         } catch (err) {
             const u = err as string;
             throw new Error(u);

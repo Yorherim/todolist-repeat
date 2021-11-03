@@ -1,8 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import { Menu } from "@mui/icons-material";
 import {
     AppBar,
+    LinearProgress,
     Box,
     Button,
     Container,
@@ -10,13 +12,22 @@ import {
     Toolbar,
     Typography,
 } from "@mui/material";
+
 import "./App.scss";
 
 import { TodolistList } from "../TodolistList";
+import { ErrorSnackbar } from "../assets/ErrorSnackbar";
+import { AppRootStateType } from "../../state/store";
+import { RequestStatusType } from "../../state/app-reducer";
 
 const App: React.FC = () => {
+    const status = useSelector<AppRootStateType, RequestStatusType>(
+        (state) => state.app.status
+    );
+
     return (
         <div className="App">
+            <ErrorSnackbar />
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar>
@@ -38,6 +49,17 @@ const App: React.FC = () => {
                         </Typography>
                         <Button color="inherit">Login</Button>
                     </Toolbar>
+                    {status === "loading" && (
+                        <Box sx={{ width: "100%" }}>
+                            <LinearProgress
+                                style={{
+                                    position: "absolute",
+                                    width: "100%",
+                                    top: 64,
+                                }}
+                            />
+                        </Box>
+                    )}
                 </AppBar>
             </Box>
 

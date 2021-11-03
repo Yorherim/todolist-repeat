@@ -3,6 +3,7 @@ import thunkMiddleware, { ThunkAction } from "redux-thunk";
 
 import { TodolistsActionsTypes, todolistsReducer } from "./todolists-reducer";
 import { TasksActionsTypes, tasksReducer } from "./tasks-reducer";
+import { AppActionsType, appReducer } from "./app-reducer";
 
 declare global {
     interface Window {
@@ -14,15 +15,19 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
     todolists: todolistsReducer,
     tasks: tasksReducer,
+    app: appReducer,
 });
 
-export type AppStateType = ReturnType<typeof rootReducer>;
-export type AppActionsType = TodolistsActionsTypes | TasksActionsTypes;
+export type AppRootStateType = ReturnType<typeof rootReducer>;
+export type AppRootActionsType =
+    | TodolistsActionsTypes
+    | TasksActionsTypes
+    | AppActionsType;
 export type ThunkType = ThunkAction<
     void,
-    AppStateType,
+    AppRootStateType,
     unknown,
-    AppActionsType
+    AppRootActionsType
 >;
 
 export const store = createStore(
