@@ -1,4 +1,5 @@
 import React from "react";
+import { FilterType } from "./App";
 
 export interface TaskType {
     id: number;
@@ -9,9 +10,18 @@ export interface TaskType {
 interface TodolistPropsType {
     title: string;
     tasks: TaskType[];
+    removeTask: (taskId: number) => void;
+    filterTasks: (filter: FilterType) => void;
 }
 
-export const Todolist: React.FC<TodolistPropsType> = ({ title, tasks }) => {
+export const Todolist: React.FC<TodolistPropsType> = ({
+    title,
+    tasks,
+    removeTask,
+    filterTasks,
+}) => {
+    console.log("rerender");
+
     return (
         <div>
             <h3>{title}</h3>
@@ -23,14 +33,17 @@ export const Todolist: React.FC<TodolistPropsType> = ({ title, tasks }) => {
                 {tasks.map((task) => (
                     <li key={task.id}>
                         <input type="checkbox" checked={task.isDone} />{" "}
-                        <span>{task.title}</span>
+                        <span>{task.title}</span>{" "}
+                        <button onClick={() => removeTask(task.id)}>x</button>
                     </li>
                 ))}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => filterTasks("all")}>All</button>
+                <button onClick={() => filterTasks("active")}>Active</button>
+                <button onClick={() => filterTasks("completed")}>
+                    Completed
+                </button>
             </div>
         </div>
     );
