@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { FilterType } from "./App";
 
 export interface TaskType {
-    id: number;
+    id: string;
     title: string;
     isDone: boolean;
 }
@@ -10,8 +10,9 @@ export interface TaskType {
 interface TodolistPropsType {
     title: string;
     tasks: TaskType[];
-    removeTask: (taskId: number) => void;
+    removeTask: (taskId: string) => void;
     filterTasks: (filter: FilterType) => void;
+    addTask: (title: string) => void;
 }
 
 export const Todolist: React.FC<TodolistPropsType> = ({
@@ -19,15 +20,31 @@ export const Todolist: React.FC<TodolistPropsType> = ({
     tasks,
     removeTask,
     filterTasks,
+    addTask,
 }) => {
-    console.log("rerender");
+    const [inputValue, setInputValue] = useState<string>("");
+
+    const onClickAddTaskHandler = () => {
+        addTask(inputValue);
+        setInputValue("");
+    };
+
+    const onKeyPressAddTaskHandler = (key: string) => {
+        if (key === "Enter") {
+            onClickAddTaskHandler();
+        }
+    };
 
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input />
-                <button>+</button>
+                <input
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.currentTarget.value)}
+                    onKeyPress={(e) => onKeyPressAddTaskHandler(e.key)}
+                />
+                <button onClick={onClickAddTaskHandler}>+</button>
             </div>
             <ul>
                 {tasks.map((task) => (
