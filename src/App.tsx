@@ -33,6 +33,20 @@ function App() {
         setTasks([...tasks, { id: v1(), title, isDone: false }]);
     };
 
+    const changeCheckStatus = (taskId: string) => {
+        const taskIndex = tasks.findIndex((task) => task.id === taskId);
+        if (taskIndex !== -1) {
+            setTasks(
+                tasks.map((task, i) => {
+                    if (i === taskIndex) {
+                        task.isDone = !task.isDone;
+                    }
+                    return task;
+                })
+            );
+        }
+    };
+
     let newTasks = tasks;
     if (filter === "active") {
         newTasks = newTasks.filter((task) => !task.isDone);
@@ -46,9 +60,11 @@ function App() {
             <Todolist
                 title="tasks 1"
                 tasks={newTasks}
+                filter={filter}
                 removeTask={removeTask}
                 filterTasks={filterTasks}
                 addTask={addTask}
+                changeCheckStatus={changeCheckStatus}
             />
         </div>
     );
