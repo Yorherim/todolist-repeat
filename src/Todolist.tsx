@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { FilterType } from "./App";
-
-export interface TaskType {
-    id: string;
-    title: string;
-    isDone: boolean;
-}
+import { FilterType, TaskType } from "./App";
 
 interface TodolistPropsType {
     title: string;
     tasks: TaskType[];
     filter: FilterType;
-    removeTask: (taskId: string) => void;
-    filterTasks: (filter: FilterType) => void;
-    addTask: (title: string) => void;
-    changeCheckStatus: (taskId: string) => void;
+    todolistId: string;
+    removeTask: (taskId: string, todolistId: string) => void;
+    changeFilter: (filter: FilterType, todolistId: string) => void;
+    addTask: (title: string, todolistId: string) => void;
+    changeCheckStatus: (taskId: string, todolistId: string) => void;
+    removeTodolist: (todolistId: string) => void;
 }
 
 export const Todolist: React.FC<TodolistPropsType> = ({
     title,
     tasks,
     filter,
+    todolistId,
     removeTask,
-    filterTasks,
+    changeFilter,
     addTask,
     changeCheckStatus,
+    removeTodolist,
 }) => {
+    console.log("render td");
+
     const [inputValue, setInputValue] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
 
@@ -39,7 +39,7 @@ export const Todolist: React.FC<TodolistPropsType> = ({
 
     const onClickAddTaskHandler = () => {
         if (inputValue.trim() !== "") {
-            addTask(inputValue.trim());
+            addTask(inputValue.trim(), todolistId);
             setInputValue("");
         } else {
             setError(true);
@@ -54,7 +54,11 @@ export const Todolist: React.FC<TodolistPropsType> = ({
 
     return (
         <div>
-            <h3>{title}</h3>
+            <div className="d-flex">
+                <h3>{title}</h3>
+                <button onClick={() => removeTodolist(todolistId)}>x</button>
+            </div>
+
             <div>
                 <input
                     value={inputValue}
@@ -71,28 +75,32 @@ export const Todolist: React.FC<TodolistPropsType> = ({
                         <input
                             type="checkbox"
                             checked={task.isDone}
-                            onChange={() => changeCheckStatus(task.id)}
+                            onChange={() =>
+                                changeCheckStatus(task.id, todolistId)
+                            }
                         />{" "}
                         <span>{task.title}</span>{" "}
-                        <button onClick={() => removeTask(task.id)}>x</button>
+                        <button onClick={() => removeTask(task.id, todolistId)}>
+                            x
+                        </button>
                     </li>
                 ))}
             </ul>
             <div>
                 <button
-                    onClick={() => filterTasks("all")}
+                    onClick={() => changeFilter("all", todolistId)}
                     className={filter === "all" ? "active-filter" : ""}
                 >
                     All
                 </button>
                 <button
-                    onClick={() => filterTasks("active")}
+                    onClick={() => changeFilter("active", todolistId)}
                     className={filter === "active" ? "active-filter" : ""}
                 >
                     Active
                 </button>
                 <button
-                    onClick={() => filterTasks("completed")}
+                    onClick={() => changeFilter("completed", todolistId)}
                     className={filter === "completed" ? "active-filter" : ""}
                 >
                     Completed

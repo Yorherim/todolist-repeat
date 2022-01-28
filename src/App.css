@@ -22,3 +22,7 @@
 .error-input {
     border-color: red;
 }
+
+.d-flex {
+    display: flex;
+}
