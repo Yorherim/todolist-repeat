@@ -1,0 +1,16 @@
+.input {
+    display: flex;
+    align-items: center;
+
+    button {
+        margin-left: 5px;
+        border-radius: 100%;
+
+        // mui button change size method
+        max-width: 32px;
+        max-height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+        // mui button change size method
+    }
+}

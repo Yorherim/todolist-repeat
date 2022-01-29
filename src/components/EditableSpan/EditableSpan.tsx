@@ -1,4 +1,7 @@
+import { TextField } from "@mui/material";
 import React, { useState } from "react";
+
+import styles from "./EditableSpan.module.scss";
 
 interface EditableSpanPropsType {
     value: string;
@@ -20,17 +23,21 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = ({
     };
 
     return (
-        <>
+        <div className={styles.wrapper}>
             {editMode ? (
-                <input
+                <TextField
+                    label="Write some..."
+                    variant="outlined"
                     value={valueInput}
                     onChange={(e) => setValueInput(e.currentTarget.value)}
                     onBlur={changeItemValue}
+                    multiline
+                    inputProps={{ maxLength: 100 }}
                     autoFocus
                 />
             ) : (
                 <span onDoubleClick={() => setEditMode(true)}>{value}</span>
             )}
-        </>
+        </div>
     );
 };

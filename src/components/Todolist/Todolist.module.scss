@@ -1,0 +1,21 @@
+.todolist {
+    &_title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+
+        .button {
+            margin-left: 3px;
+        }
+    }
+
+    .trash {
+        &:hover {
+            color: red;
+        }
+    }
+
+    .tasks {
+        margin-top: 20px;
+    }
+}

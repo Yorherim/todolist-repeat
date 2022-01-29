@@ -1,0 +1,19 @@
+.app-bar {
+    margin-bottom: 20px;
+}
+
+.trash {
+    transition: 0.3s !important;
+
+    &:hover {
+        color: red;
+    }
+}
+
+.paper {
+    padding: 10px;
+}
+
+.MuiFormControl-root {
+    height: 56px;
+}

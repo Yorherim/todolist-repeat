@@ -5,6 +5,11 @@ import React, {
     useState,
 } from "react";
 
+import styles from "./AddItemForm.module.scss";
+import { Button, TextField } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import clsx from "clsx";
+
 interface AddItemFormPropsType
     extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     addItem: (title: string) => void;
@@ -41,15 +46,25 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({
     };
 
     return (
-        <div className={className}>
-            <input
+        <div className={clsx(className, styles.input)}>
+            <TextField
+                label="Write some..."
+                variant="outlined"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.currentTarget.value)}
                 onKeyPress={(e) => onKeyPressAddTaskHandler(e.key)}
-                className={error ? "error-input" : ""}
+                error={error}
+                helperText={error && "Field is required"}
+                inputProps={{ maxLength: 30 }}
             />
-            <button onClick={onClickAddItemHandler}>+</button>
-            {error && <div className={"error"}>Field is required</div>}
+
+            <Button
+                onClick={onClickAddItemHandler}
+                className={styles.button}
+                variant={"contained"}
+            >
+                <Add />
+            </Button>
         </div>
     );
 };
