@@ -1,6 +1,5 @@
 .App {
     padding: 30px;
-    display: flex;
 }
 
 .App > div {
@@ -25,4 +24,12 @@
 
 .d-flex {
     display: flex;
+}
+
+.input-todolist {
+    margin-bottom: 30px;
+}
+
+.todolist {
+    margin-right: 20px;
 }
