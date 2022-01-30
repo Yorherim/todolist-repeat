@@ -1,11 +1,11 @@
 import { v1 } from "uuid";
 
 export type FilterType = "all" | "active" | "completed";
-export interface TodolistType {
+export type TodolistType = {
     id: string;
     title: string;
     filter: FilterType;
-}
+};
 
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
 export type TodolistsActionsTypes = ReturnType<
@@ -20,7 +20,11 @@ export const todolistsReducer = (
         case "REMOVE-TODOLIST":
             return state.filter((td) => td.id !== action.todolistId);
         case "ADD-TODOLIST":
-            return [...state, { id: v1(), title: action.title, filter: "all" }];
+            return state.concat({
+                id: action.todolistId,
+                title: action.title,
+                filter: "all",
+            });
         case "CHANGE-TODOLIST-TITLE":
             return state.map((td) =>
                 td.id === action.todolistId
@@ -46,6 +50,7 @@ export const todolistsActions = {
     addTodolist: (title: string) => ({
         type: "ADD-TODOLIST" as const,
         title,
+        todolistId: v1(),
     }),
     changeTodolistTitle: (newTitle: string, todolistId: string) => ({
         type: "CHANGE-TODOLIST-TITLE" as const,

@@ -1,4 +1,5 @@
 import { v1 } from "uuid";
+import { TodolistsActionsTypes } from "./todolists-reducer";
 
 interface TaskType {
     id: string;
@@ -10,9 +11,14 @@ export interface TasksType {
 }
 
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
-export type TasksActionsTypes = ReturnType<
-    InferValueTypes<typeof tasksActions>
->;
+export type TasksActionsTypes =
+    | ReturnType<InferValueTypes<typeof tasksActions>>
+    | Extract<
+          TodolistsActionsTypes,
+          {
+              type: "ADD-TODOLIST" | "REMOVE-TODOLIST";
+          }
+      >;
 
 export const tasksReducer = (state: TasksType, action: TasksActionsTypes) => {
     switch (action.type) {
@@ -47,6 +53,14 @@ export const tasksReducer = (state: TasksType, action: TasksActionsTypes) => {
                     td.id === action.taskId ? { ...td, isDone: !td.isDone } : td
                 ),
             };
+        case "REMOVE-TODOLIST": {
+            const newState = { ...state };
+            delete newState[action.todolistId];
+            return newState;
+        }
+        case "ADD-TODOLIST": {
+            return { ...state, [action.todolistId]: [] };
+        }
         default:
             return state;
     }

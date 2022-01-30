@@ -58,7 +58,7 @@ export const Todolist: React.FC<TodolistPropsType> = ({
             <AddItemForm addItem={onClickAddTaskHandler} />
 
             <ul className={styles.tasks}>
-                {tasks.map((task) => (
+                {tasks?.map((task) => (
                     <Task
                         key={task.id}
                         task={task}
