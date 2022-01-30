@@ -12,8 +12,10 @@ export type TodolistsActionsTypes = ReturnType<
     InferValueTypes<typeof todolistsActions>
 >;
 
+const initialState = [] as TodolistType[];
+
 export const todolistsReducer = (
-    state: TodolistType[],
+    state: TodolistType[] = initialState,
     action: TodolistsActionsTypes
 ) => {
     switch (action.type) {
