@@ -3,7 +3,8 @@ import { Checkbox, IconButton } from "@mui/material";
 
 import clsx from "clsx";
 import React from "react";
-import { TaskType } from "../../App";
+import { TaskType } from "../../state/tasks-reducer";
+
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 
 import styles from "./Task.module.scss";

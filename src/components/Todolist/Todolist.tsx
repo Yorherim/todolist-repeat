@@ -4,43 +4,63 @@ import React from "react";
 
 import styles from "./Todolist.module.scss";
 
-import { FilterType, TaskType } from "../../App";
 import { AddItemForm } from "../AddItemForm/AddItemForm";
 import { Task } from "../Task/Task";
 import clsx from "clsx";
+import { useDispatch, useSelector } from "react-redux";
+import { AppRootStateType } from "../../state/store";
+import { tasksActions, TaskType } from "../../state/tasks-reducer";
+import { FilterType } from "../../state/todolists-reducer";
 
 interface TodolistPropsType {
     title: string;
-    tasks: TaskType[];
     filter: FilterType;
     todolistId: string;
-    removeTask: (taskId: string, todolistId: string) => void;
     changeFilter: (filter: FilterType, todolistId: string) => void;
-    addTask: (title: string, todolistId: string) => void;
-    changeCheckStatus: (taskId: string, todolistId: string) => void;
     removeTodolist: (todolistId: string) => void;
-    changeTaskTitle: (
-        newTitle: string,
-        taskId: string,
-        todolistId: string
-    ) => void;
 }
 
 export const Todolist: React.FC<TodolistPropsType> = ({
     title,
-    tasks,
     filter,
     todolistId,
-    removeTask,
     changeFilter,
-    addTask,
-    changeCheckStatus,
     removeTodolist,
-    changeTaskTitle,
 }) => {
-    const onClickAddTaskHandler = (title: string) => {
-        addTask(title, todolistId);
+    console.log("rerender todolist");
+
+    const dispatch = useDispatch();
+    const tasks = useSelector<AppRootStateType, TaskType[]>(
+        (state) => state.tasks[todolistId]
+    );
+
+    const removeTask = (taskId: string, todolistId: string) => {
+        dispatch(tasksActions.removeTask(taskId, todolistId));
     };
+
+    const addTask = (title: string, todolistId: string) => {
+        dispatch(tasksActions.addTask(title, todolistId));
+    };
+
+    const changeCheckStatus = (taskId: string, todolistId: string) => {
+        dispatch(tasksActions.changeTaskStatus(taskId, todolistId));
+    };
+
+    const changeTaskTitle = (
+        newTitle: string,
+        taskId: string,
+        todolistId: string
+    ) => {
+        dispatch(tasksActions.changeTaskTitle(newTitle, taskId, todolistId));
+    };
+
+    let newTasks = tasks;
+    if (filter === "active") {
+        newTasks = newTasks.filter((task) => !task.isDone);
+    }
+    if (filter === "completed") {
+        newTasks = newTasks.filter((task) => task.isDone);
+    }
 
     return (
         <div className={styles.todolist}>
@@ -55,10 +75,10 @@ export const Todolist: React.FC<TodolistPropsType> = ({
                 </IconButton>
             </div>
 
-            <AddItemForm addItem={onClickAddTaskHandler} />
+            <AddItemForm addItem={(title) => addTask(title, todolistId)} />
 
             <ul className={styles.tasks}>
-                {tasks?.map((task) => (
+                {newTasks?.map((task) => (
                     <Task
                         key={task.id}
                         task={task}

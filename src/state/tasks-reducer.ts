@@ -1,7 +1,7 @@
 import { v1 } from "uuid";
 import { TodolistsActionsTypes } from "./todolists-reducer";
 
-interface TaskType {
+export interface TaskType {
     id: string;
     title: string;
     isDone: boolean;
