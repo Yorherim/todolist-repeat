@@ -15,56 +15,57 @@ interface AddItemFormPropsType
     addItem: (title: string) => void;
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = ({
-    addItem,
-    className,
-}) => {
-    const [inputValue, setInputValue] = useState<string>("");
-    const [error, setError] = useState<boolean>(false);
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
+    function ({ addItem, className }) {
+        console.log("AddItemForm called");
 
-    useEffect(() => {
-        if (error) {
-            setTimeout(() => {
-                setError(false);
-            }, 3000);
-        }
-    }, [error]);
+        const [inputValue, setInputValue] = useState<string>("");
+        const [error, setError] = useState<boolean>(false);
 
-    const onClickAddItemHandler = () => {
-        if (inputValue.trim() !== "") {
-            addItem(inputValue.trim());
-            setInputValue("");
-        } else {
-            setError(true);
-        }
-    };
+        useEffect(() => {
+            if (error) {
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+            }
+        }, [error]);
 
-    const onKeyPressAddTaskHandler = (key: string) => {
-        if (key === "Enter") {
-            onClickAddItemHandler();
-        }
-    };
+        const onClickAddItemHandler = () => {
+            if (inputValue.trim() !== "") {
+                addItem(inputValue.trim());
+                setInputValue("");
+            } else {
+                setError(true);
+            }
+        };
 
-    return (
-        <div className={clsx(className, styles.input)}>
-            <TextField
-                label="Write some..."
-                variant="outlined"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.currentTarget.value)}
-                onKeyPress={(e) => onKeyPressAddTaskHandler(e.key)}
-                error={error}
-                helperText={error && "Field is required"}
-                inputProps={{ maxLength: 30 }}
-            />
+        const onKeyPressAddTaskHandler = (key: string) => {
+            if (key === "Enter") {
+                onClickAddItemHandler();
+            }
+        };
 
-            <Button
-                onClick={onClickAddItemHandler}
-                className={styles.button}
-                variant={"contained"}
-            >
-                <Add />
-            </Button>
-        </div>
-    );
-};
+        return (
+            <div className={clsx(className, styles.input)}>
+                <TextField
+                    label="Write some..."
+                    variant="outlined"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.currentTarget.value)}
+                    onKeyPress={(e) => onKeyPressAddTaskHandler(e.key)}
+                    error={error}
+                    helperText={error && "Field is required"}
+                    inputProps={{ maxLength: 30 }}
+                />
+
+                <Button
+                    onClick={onClickAddItemHandler}
+                    className={styles.button}
+                    variant={"contained"}
+                >
+                    <Add />
+                </Button>
+            </div>
+        );
+    }
+);

@@ -1,5 +1,15 @@
 import { v1 } from "uuid";
-import { TodolistsActionsTypes } from "./todolists-reducer";
+import {
+    TodolistsActionsTypes,
+    TypesOfTodolistsActions,
+} from "./todolists-reducer";
+
+enum TypesOfTasksActions {
+    ADD_TASK = "ADD_TASK",
+    REMOVE_TASK = "REMOVE_TASK",
+    CHANGE_TASK_TITLE = "CHANGE_TASK_TITLE",
+    CHANGE_TASK_STATUS = "CHANGE_TASK_STATUS",
+}
 
 export interface TaskType {
     id: string;
@@ -16,25 +26,27 @@ export type TasksActionsTypes =
     | Extract<
           TodolistsActionsTypes,
           {
-              type: "ADD-TODOLIST" | "REMOVE-TODOLIST";
+              type:
+                  | TypesOfTodolistsActions.ADD_TODOLIST
+                  | TypesOfTodolistsActions.REMOVE_TODOLIST;
           }
       >;
 
-const initialState = {};
+const initialState = {} as TasksType;
 
 export const tasksReducer = (
     state: TasksType = initialState,
     action: TasksActionsTypes
-) => {
+): TasksType => {
     switch (action.type) {
-        case "REMOVE-TASK":
+        case TypesOfTasksActions.REMOVE_TASK:
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].filter(
                     (task) => task.id !== action.taskId
                 ),
             };
-        case "ADD-TASK":
+        case TypesOfTasksActions.ADD_TASK:
             return {
                 ...state,
                 [action.todolistId]: [
@@ -42,7 +54,7 @@ export const tasksReducer = (
                     { id: v1(), title: action.title, isDone: false },
                 ],
             };
-        case "CHANGE-TASK-TITLE":
+        case TypesOfTasksActions.CHANGE_TASK_TITLE:
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map((td) =>
@@ -51,19 +63,19 @@ export const tasksReducer = (
                         : td
                 ),
             };
-        case "CHANGE-TASK-STATUS":
+        case TypesOfTasksActions.CHANGE_TASK_STATUS:
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map((td) =>
                     td.id === action.taskId ? { ...td, isDone: !td.isDone } : td
                 ),
             };
-        case "REMOVE-TODOLIST": {
+        case TypesOfTodolistsActions.REMOVE_TODOLIST: {
             const newState = { ...state };
             delete newState[action.todolistId];
             return newState;
         }
-        case "ADD-TODOLIST": {
+        case TypesOfTodolistsActions.ADD_TODOLIST: {
             return { ...state, [action.todolistId]: [] };
         }
         default:
@@ -73,12 +85,12 @@ export const tasksReducer = (
 
 export const tasksActions = {
     removeTask: (taskId: string, todolistId: string) => ({
-        type: "REMOVE-TASK" as const,
+        type: TypesOfTasksActions.REMOVE_TASK as const,
         taskId,
         todolistId,
     }),
     addTask: (title: string, todolistId: string) => ({
-        type: "ADD-TASK" as const,
+        type: TypesOfTasksActions.ADD_TASK as const,
         title,
         todolistId,
     }),
@@ -87,13 +99,13 @@ export const tasksActions = {
         taskId: string,
         todolistId: string
     ) => ({
-        type: "CHANGE-TASK-TITLE" as const,
+        type: TypesOfTasksActions.CHANGE_TASK_TITLE as const,
         newTitle,
         taskId,
         todolistId,
     }),
     changeTaskStatus: (taskId: string, todolistId: string) => ({
-        type: "CHANGE-TASK-STATUS" as const,
+        type: TypesOfTasksActions.CHANGE_TASK_STATUS as const,
         taskId,
         todolistId,
     }),

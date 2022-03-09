@@ -1,6 +1,6 @@
 import { Delete } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 
 import styles from "./Todolist.module.scss";
 
@@ -20,39 +20,52 @@ interface TodolistPropsType {
     removeTodolist: (todolistId: string) => void;
 }
 
-export const Todolist: React.FC<TodolistPropsType> = ({
+export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     title,
     filter,
     todolistId,
     changeFilter,
     removeTodolist,
-}) => {
-    console.log("rerender todolist");
-
+}) {
     const dispatch = useDispatch();
     const tasks = useSelector<AppRootStateType, TaskType[]>(
         (state) => state.tasks[todolistId]
     );
 
-    const removeTask = (taskId: string, todolistId: string) => {
-        dispatch(tasksActions.removeTask(taskId, todolistId));
-    };
+    const removeTask = useCallback(
+        (taskId: string, todolistId: string) => {
+            dispatch(tasksActions.removeTask(taskId, todolistId));
+        },
+        [dispatch]
+    );
 
-    const addTask = (title: string, todolistId: string) => {
-        dispatch(tasksActions.addTask(title, todolistId));
-    };
+    const addTask = useCallback(
+        (title: string, todolistId: string) => {
+            dispatch(tasksActions.addTask(title, todolistId));
+        },
+        [dispatch]
+    );
 
-    const changeCheckStatus = (taskId: string, todolistId: string) => {
-        dispatch(tasksActions.changeTaskStatus(taskId, todolistId));
-    };
+    const changeCheckStatus = useCallback(
+        (taskId: string, todolistId: string) => {
+            dispatch(tasksActions.changeTaskStatus(taskId, todolistId));
+        },
+        [dispatch]
+    );
 
-    const changeTaskTitle = (
-        newTitle: string,
-        taskId: string,
-        todolistId: string
-    ) => {
-        dispatch(tasksActions.changeTaskTitle(newTitle, taskId, todolistId));
-    };
+    const changeTaskTitle = useCallback(
+        (newTitle: string, taskId: string, todolistId: string) => {
+            dispatch(
+                tasksActions.changeTaskTitle(newTitle, taskId, todolistId)
+            );
+        },
+        [dispatch]
+    );
+
+    const addItem = useCallback(
+        (title: string) => addTask(title, todolistId),
+        [todolistId, addTask]
+    );
 
     let newTasks = tasks;
     if (filter === "active") {
@@ -75,7 +88,7 @@ export const Todolist: React.FC<TodolistPropsType> = ({
                 </IconButton>
             </div>
 
-            <AddItemForm addItem={(title) => addTask(title, todolistId)} />
+            <AddItemForm addItem={addItem} />
 
             <ul className={styles.tasks}>
                 {newTasks?.map((task) => (
@@ -114,4 +127,4 @@ export const Todolist: React.FC<TodolistPropsType> = ({
             </div>
         </div>
     );
-};
+});

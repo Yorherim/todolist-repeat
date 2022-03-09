@@ -9,7 +9,7 @@ import {
     Grid,
     Paper,
 } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v1 } from "uuid";
 import "./App.scss";
@@ -27,23 +27,33 @@ export const todolistId1 = v1();
 export const todolistId2 = v1();
 
 const AppWithRedux: React.FC = () => {
-    console.log("rerender app");
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, TodolistType[]>(
         (state) => state.todolists
     );
 
-    const changeFilter = (newFilter: FilterType, todolistId: string) => {
-        dispatch(todolistsActions.changeTodolistFilter(newFilter, todolistId));
-    };
+    const changeFilter = useCallback(
+        (newFilter: FilterType, todolistId: string) => {
+            dispatch(
+                todolistsActions.changeTodolistFilter(newFilter, todolistId)
+            );
+        },
+        [dispatch]
+    );
 
-    const removeTodolist = (todolistId: string) => {
-        dispatch(todolistsActions.removeTodolist(todolistId));
-    };
+    const removeTodolist = useCallback(
+        (todolistId: string) => {
+            dispatch(todolistsActions.removeTodolist(todolistId));
+        },
+        [dispatch]
+    );
 
-    const addTodolist = (title: string) => {
-        dispatch(todolistsActions.addTodolist(title));
-    };
+    const addTodolist = useCallback(
+        (title: string) => {
+            dispatch(todolistsActions.addTodolist(title));
+        },
+        [dispatch]
+    );
 
     return (
         <>
