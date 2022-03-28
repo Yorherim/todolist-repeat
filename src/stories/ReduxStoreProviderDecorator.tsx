@@ -8,8 +8,8 @@ import { AppRootStateType } from "../state/store";
 import { tasksReducer } from "../state/tasks-reducer";
 import { todolistsReducer } from "../state/todolists-reducer";
 
-const todolistId1 = "todolistId1";
-const todolistId2 = "todolistId2";
+export const todolistId1 = "todolistId1";
+export const todolistId2 = "todolistId2";
 
 const initialGlobalState: AppRootStateType = {
     todolists: [

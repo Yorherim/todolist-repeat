@@ -18,12 +18,12 @@ export default {
 const taskIsDone: TaskType = {
     id: "1",
     title: "buy milk",
-    isDone: false,
+    isDone: true,
 };
 const taskIsNotDone: TaskType = {
     id: "2",
     title: "buy juice",
-    isDone: true,
+    isDone: false,
 };
 
 const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;

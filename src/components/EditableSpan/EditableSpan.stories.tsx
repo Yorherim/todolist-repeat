@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import "../../App.scss";
 
@@ -12,9 +12,7 @@ export default {
     },
 } as ComponentMeta<typeof EditableSpan>;
 
-const Template: ComponentStory<typeof EditableSpan> = (args) => (
-    <EditableSpan {...args} />
-);
+const Template: ComponentStory<typeof EditableSpan> = (args) => <EditableSpan {...args} />;
 
 export const Default = Template.bind({});
 
