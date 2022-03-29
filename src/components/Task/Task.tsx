@@ -3,7 +3,7 @@ import { Checkbox, IconButton } from "@mui/material";
 
 import clsx from "clsx";
 import React, { useCallback } from "react";
-import { TaskType } from "../../state/tasks-reducer";
+import { TaskStatus, TaskType } from "../../api/api";
 
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 
@@ -13,11 +13,7 @@ interface TaskPropsType {
     task: TaskType;
     todolistId: string;
     changeCheckStatus: (taskId: string, todolistId: string) => void;
-    changeTaskTitle: (
-        newTitle: string,
-        taskId: string,
-        todolistId: string
-    ) => void;
+    changeTaskTitle: (newTitle: string, taskId: string, todolistId: string) => void;
     removeTask: (taskId: string, todolistId: string) => void;
 }
 
@@ -36,9 +32,9 @@ export const Task: React.FC<TaskPropsType> = React.memo(function ({
     );
 
     return (
-        <li className={clsx(styles.task, task.isDone && styles.is_done)}>
+        <li className={clsx(styles.task, task.status === TaskStatus.Completed && styles.is_done)}>
             <Checkbox
-                checked={task.isDone}
+                checked={task.status === TaskStatus.Completed}
                 onChange={() => changeCheckStatus(task.id, todolistId)}
             />
             <EditableSpan

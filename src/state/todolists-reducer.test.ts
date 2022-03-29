@@ -1,38 +1,28 @@
 import { v1 } from "uuid";
-import {
-    todolistsActions,
-    todolistsReducer,
-    TodolistType,
-} from "./todolists-reducer";
+import { todolistsActions, todolistsReducer, TodolistStateType } from "./todolists-reducer";
 
 let todolistId1: string;
 let todolistId2: string;
-let state: TodolistType[];
+let state: TodolistStateType[];
 
 beforeEach(() => {
     todolistId1 = v1();
     todolistId2 = v1();
     state = [
-        { id: todolistId1, title: "What to learn", filter: "all" },
-        { id: todolistId2, title: "What to buy", filter: "all" },
+        { id: todolistId1, title: "What to learn", filter: "all", addedDate: "", order: 0 },
+        { id: todolistId2, title: "What to buy", filter: "all", addedDate: "", order: 0 },
     ];
 });
 
 test("correct todolist should be removed", () => {
-    const endState = todolistsReducer(
-        state,
-        todolistsActions.removeTodolist(todolistId1)
-    );
+    const endState = todolistsReducer(state, todolistsActions.removeTodolist(todolistId1));
 
     expect(endState.length).toBe(1);
     expect(endState[0].id).toBe(todolistId2);
 });
 
 test("correct todolist should be added", () => {
-    const endState = todolistsReducer(
-        state,
-        todolistsActions.addTodolist("New Todolist")
-    );
+    const endState = todolistsReducer(state, todolistsActions.addTodolist("New Todolist"));
 
     expect(endState).toHaveLength(3);
     expect(endState[2].title).toBe("New Todolist");

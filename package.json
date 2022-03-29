@@ -60,9 +60,6 @@
             }
         ]
     },
-    "jest": {
-        "testEnvironment": "node"
-    },
     "browserslist": {
         "production": [
             ">0.2%",

@@ -14,18 +14,31 @@ export type TodolistResponseType<D> = {
 };
 type DeleteTodolistResponseType<D> = Omit<TodolistResponseType<D>, "fieldsErrors">;
 
+export enum TaskStatus {
+    New,
+    InProgress,
+    Completed,
+    Draft,
+}
+export enum TaskPriorities {
+    Low,
+    Middle,
+    High,
+    Urgently,
+    Later,
+}
 export type TaskType = {
     description: string;
     title: string;
     completed: boolean;
-    status: number;
-    priority: number;
-    startDate: Date;
-    deadline: Date;
+    status: TaskStatus;
+    priority: TaskPriorities;
+    startDate: string;
+    deadline: string;
     id: string;
     todoListId: string;
     order: number;
-    addedDate: Date;
+    addedDate: string;
 };
 type GetTasksResponseType = {
     items: TaskType[];

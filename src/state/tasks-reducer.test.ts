@@ -1,4 +1,5 @@
 import { v1 } from "uuid";
+import { TaskPriorities, TaskStatus } from "../api/api";
 import { tasksActions, tasksReducer, TasksType } from "./tasks-reducer";
 
 let todolistId1: string;
@@ -18,21 +19,66 @@ beforeEach(() => {
     taskId4 = v1();
     state = {
         [todolistId1]: [
-            { id: taskId1, title: "a", isDone: false },
-            { id: taskId2, title: "b", isDone: false },
+            {
+                id: taskId1,
+                title: "a",
+                status: TaskStatus.New,
+                addedDate: "",
+                description: "",
+                startDate: "",
+                order: 0,
+                deadline: "",
+                completed: false,
+                priority: TaskPriorities.Low,
+                todoListId: todolistId1,
+            },
+            {
+                id: taskId2,
+                title: "b",
+                status: TaskStatus.Completed,
+                addedDate: "",
+                description: "",
+                startDate: "",
+                order: 0,
+                deadline: "",
+                completed: false,
+                priority: TaskPriorities.Low,
+                todoListId: todolistId1,
+            },
         ],
         [todolistId2]: [
-            { id: taskId3, title: "c", isDone: false },
-            { id: taskId4, title: "d", isDone: false },
+            {
+                id: taskId3,
+                title: "c",
+                status: TaskStatus.New,
+                addedDate: "",
+                description: "",
+                startDate: "",
+                order: 0,
+                deadline: "",
+                completed: false,
+                priority: TaskPriorities.Low,
+                todoListId: todolistId2,
+            },
+            {
+                id: taskId4,
+                title: "d",
+                status: TaskStatus.New,
+                addedDate: "",
+                description: "",
+                startDate: "",
+                order: 0,
+                deadline: "",
+                completed: false,
+                priority: TaskPriorities.Low,
+                todoListId: todolistId2,
+            },
         ],
     };
 });
 
 test("correct task should be removed", () => {
-    const endState = tasksReducer(
-        state,
-        tasksActions.removeTask(taskId1, todolistId1)
-    );
+    const endState = tasksReducer(state, tasksActions.removeTask(taskId1, todolistId1));
 
     expect(endState[todolistId1]).toHaveLength(1);
     expect(endState[todolistId2]).toHaveLength(2);
@@ -41,10 +87,7 @@ test("correct task should be removed", () => {
 });
 
 test("correct task should be added", () => {
-    const endState = tasksReducer(
-        state,
-        tasksActions.addTask("new task", todolistId1)
-    );
+    const endState = tasksReducer(state, tasksActions.addTask("new task", todolistId1));
 
     expect(endState[todolistId1]).toHaveLength(3);
     expect(endState[todolistId2]).toHaveLength(2);
@@ -62,11 +105,9 @@ test("correct task should be changed title", () => {
 });
 
 test("correct task should be changed status", () => {
-    const endState = tasksReducer(
-        state,
-        tasksActions.changeTaskStatus(taskId1, todolistId1)
-    );
+    const endState = tasksReducer(state, tasksActions.changeTaskStatus(taskId1, todolistId1));
+    expect(endState[todolistId1][0].status).toBe(TaskStatus.Completed);
 
-    expect(endState[todolistId1][0].isDone).toBeTruthy();
-    expect(endState[todolistId1][1].isDone).toBeFalsy();
+    const endState1 = tasksReducer(state, tasksActions.changeTaskStatus(taskId2, todolistId1));
+    expect(endState1[todolistId1][1].status).toBe(TaskStatus.New);
 });

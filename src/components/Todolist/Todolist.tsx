@@ -9,8 +9,9 @@ import { Task } from "../Task/Task";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppRootStateType } from "../../state/store";
-import { tasksActions, TaskType } from "../../state/tasks-reducer";
+import { tasksActions } from "../../state/tasks-reducer";
 import { FilterType } from "../../state/todolists-reducer";
+import { TaskStatus, TaskType } from "../../api/api";
 
 interface TodolistPropsType {
     title: string;
@@ -28,9 +29,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     removeTodolist,
 }) {
     const dispatch = useDispatch();
-    const tasks = useSelector<AppRootStateType, TaskType[]>(
-        (state) => state.tasks[todolistId]
-    );
+    const tasks = useSelector<AppRootStateType, TaskType[]>((state) => state.tasks[todolistId]);
 
     const removeTask = useCallback(
         (taskId: string, todolistId: string) => {
@@ -55,9 +54,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
 
     const changeTaskTitle = useCallback(
         (newTitle: string, taskId: string, todolistId: string) => {
-            dispatch(
-                tasksActions.changeTaskTitle(newTitle, taskId, todolistId)
-            );
+            dispatch(tasksActions.changeTaskTitle(newTitle, taskId, todolistId));
         },
         [dispatch]
     );
@@ -69,10 +66,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
 
     let newTasks = tasks;
     if (filter === "active") {
-        newTasks = newTasks.filter((task) => !task.isDone);
+        newTasks = newTasks.filter((task) => task.status === TaskStatus.New);
     }
     if (filter === "completed") {
-        newTasks = newTasks.filter((task) => task.isDone);
+        newTasks = newTasks.filter((task) => task.status === TaskStatus.Completed);
     }
 
     return (

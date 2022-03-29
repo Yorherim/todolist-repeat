@@ -18,14 +18,16 @@ import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import { Todolist } from "./components/Todolist/Todolist";
 import { AppRootStateType } from "./state/store";
 
-import { FilterType, todolistsActions, TodolistType } from "./state/todolists-reducer";
+import { FilterType, todolistsActions, TodolistStateType } from "./state/todolists-reducer";
 
 export const todolistId1 = v1();
 export const todolistId2 = v1();
 
 const AppWithRedux: React.FC = () => {
     const dispatch = useDispatch();
-    const todolists = useSelector<AppRootStateType, TodolistType[]>((state) => state.todolists);
+    const todolists = useSelector<AppRootStateType, TodolistStateType[]>(
+        (state) => state.todolists
+    );
 
     useEffect(() => {
         (async function () {
