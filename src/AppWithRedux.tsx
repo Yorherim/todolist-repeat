@@ -9,34 +9,34 @@ import {
     Grid,
     Paper,
 } from "@mui/material";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v1 } from "uuid";
+import Api from "./api/api";
 import "./App.scss";
 import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import { Todolist } from "./components/Todolist/Todolist";
 import { AppRootStateType } from "./state/store";
 
-import {
-    FilterType,
-    todolistsActions,
-    TodolistType,
-} from "./state/todolists-reducer";
+import { FilterType, todolistsActions, TodolistType } from "./state/todolists-reducer";
 
 export const todolistId1 = v1();
 export const todolistId2 = v1();
 
 const AppWithRedux: React.FC = () => {
     const dispatch = useDispatch();
-    const todolists = useSelector<AppRootStateType, TodolistType[]>(
-        (state) => state.todolists
-    );
+    const todolists = useSelector<AppRootStateType, TodolistType[]>((state) => state.todolists);
+
+    useEffect(() => {
+        (async function () {
+            const data = await Api.getTodolists();
+            console.log(data);
+        })();
+    }, []);
 
     const changeFilter = useCallback(
         (newFilter: FilterType, todolistId: string) => {
-            dispatch(
-                todolistsActions.changeTodolistFilter(newFilter, todolistId)
-            );
+            dispatch(todolistsActions.changeTodolistFilter(newFilter, todolistId));
         },
         [dispatch]
     );
@@ -68,11 +68,7 @@ const AppWithRedux: React.FC = () => {
                     >
                         <Menu />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1 }}
-                    >
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
                     <Button color="inherit">Login</Button>
