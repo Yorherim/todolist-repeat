@@ -18,8 +18,11 @@ import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import { Todolist } from "./components/Todolist/Todolist";
 import { AppRootStateType } from "./state/store";
 import {
+    addTodolistTC,
+    changeTodolistTitleTC,
     fetchTodolistsTC,
     FilterType,
+    removeTodolistTC,
     todolistsActions,
     TodolistStateType,
 } from "./state/todolists-reducer";
@@ -43,21 +46,21 @@ const AppWithRedux: React.FC = () => {
 
     const removeTodolist = useCallback(
         (todolistId: string) => {
-            dispatch(todolistsActions.removeTodolist(todolistId));
+            dispatch(removeTodolistTC(todolistId));
         },
         [dispatch]
     );
 
     const addTodolist = useCallback(
         (title: string) => {
-            dispatch(todolistsActions.addTodolist(title));
+            dispatch(addTodolistTC(title));
         },
         [dispatch]
     );
 
     const changeTodolistTitle = useCallback(
         (newTitle: string, todolistId: string) => {
-            dispatch(todolistsActions.changeTodolistTitle(newTitle, todolistId));
+            dispatch(changeTodolistTitleTC(newTitle, todolistId));
         },
         [dispatch]
     );

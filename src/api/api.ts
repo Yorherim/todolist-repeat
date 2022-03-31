@@ -76,9 +76,8 @@ export default class Api {
     static async deleteTodolist(todolistId: string) {
         return await instance.delete<DeleteTodolistResponseType<{}>>(`/todo-lists/${todolistId}`);
     }
-    // ! Протипизировать ответ
     static async updateTodolist(todolistId: string, title: string) {
-        return await instance.put(`/todo-lists/${todolistId}`, { title });
+        return await instance.put<TodolistResponseType<{}>>(`/todo-lists/${todolistId}`, { title });
     }
 
     // Tasks

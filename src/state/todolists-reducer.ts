@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import { v1 } from "uuid";
 import Api, { TodolistType } from "../api/api";
+import { AppRootStateType } from "./store";
 
 export enum TypesOfTodolistsActions {
     ADD_TODOLIST = "ADD_TODOLIST",
@@ -29,11 +30,8 @@ export const todolistsReducer = (
             return state.filter((td) => td.id !== action.todolistId);
         case TypesOfTodolistsActions.ADD_TODOLIST:
             return state.concat({
-                id: action.todolistId,
-                title: action.title,
+                ...action.todolist,
                 filter: "all",
-                addedDate: "",
-                order: 0,
             });
         case TypesOfTodolistsActions.CHANGE_TODOLIST_TITLE:
             return state.map((td) =>
@@ -58,10 +56,9 @@ export const todolistsActions = {
         type: TypesOfTodolistsActions.REMOVE_TODOLIST as const,
         todolistId,
     }),
-    addTodolist: (title: string) => ({
+    addTodolist: (todolist: TodolistType) => ({
         type: TypesOfTodolistsActions.ADD_TODOLIST as const,
-        title,
-        todolistId: v1(),
+        todolist,
     }),
     changeTodolistTitle: (newTitle: string, todolistId: string) => ({
         type: TypesOfTodolistsActions.CHANGE_TODOLIST_TITLE as const,
@@ -84,3 +81,25 @@ export const fetchTodolistsTC = () => async (dispatch: Dispatch) => {
     const { data } = await Api.getTodolists();
     dispatch(todolistsActions.setTodolists(data));
 };
+
+export const removeTodolistTC = (todolistId: string) => async (dispatch: Dispatch) => {
+    const { data } = await Api.deleteTodolist(todolistId);
+    if (data.resultCode === 0) {
+        dispatch(todolistsActions.removeTodolist(todolistId));
+    }
+};
+
+export const addTodolistTC = (title: string) => async (dispatch: Dispatch) => {
+    const { data } = await Api.createTodolist(title);
+    if (data.resultCode === 0) {
+        dispatch(todolistsActions.addTodolist(data.data.item));
+    }
+};
+
+export const changeTodolistTitleTC =
+    (newTitle: string, todolistId: string) => async (dispatch: Dispatch) => {
+        const { data } = await Api.updateTodolist(todolistId, newTitle);
+        if (data.resultCode === 0) {
+            dispatch(todolistsActions.changeTodolistTitle(newTitle, todolistId));
+        }
+    };

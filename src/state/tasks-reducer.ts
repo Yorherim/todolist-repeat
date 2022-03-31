@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import Api, { TaskPriorities, TaskStatus, TaskType, UpdateTaskData } from "../api/api";
+import Api, { TaskStatus, TaskType, UpdateTaskData } from "../api/api";
 import { AppRootStateType } from "./store";
 import { TodolistsActionsTypes, TypesOfTodolistsActions } from "./todolists-reducer";
 
@@ -74,7 +74,7 @@ export const tasksReducer = (
             return newState;
         }
         case TypesOfTodolistsActions.ADD_TODOLIST: {
-            return { ...state, [action.todolistId]: [] };
+            return { ...state, [action.todolist.id]: [] };
         }
         case TypesOfTodolistsActions.SET_TODOLISTS: {
             const newState = { ...state };
@@ -124,6 +124,7 @@ export const fetchTasksTC = (todolistId: string) => async (dispatch: Dispatch) =
     const {
         data: { items },
     } = await Api.getTasks(todolistId);
+    console.log(items);
     dispatch(tasksActions.setTasks(items, todolistId));
 };
 
