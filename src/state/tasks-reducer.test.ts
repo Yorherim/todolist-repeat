@@ -87,11 +87,24 @@ test("correct task should be removed", () => {
 });
 
 test("correct task should be added", () => {
-    const endState = tasksReducer(state, tasksActions.addTask("new task", todolistId1));
+    const newTask = {
+        id: v1(),
+        title: "new task",
+        status: TaskStatus.New,
+        addedDate: "",
+        description: "",
+        startDate: "",
+        order: 0,
+        deadline: "",
+        completed: false,
+        priority: TaskPriorities.Low,
+        todoListId: todolistId2,
+    };
+    const endState = tasksReducer(state, tasksActions.addTask(todolistId1, newTask));
 
     expect(endState[todolistId1]).toHaveLength(3);
     expect(endState[todolistId2]).toHaveLength(2);
-    expect(endState[todolistId1][2].title).toBe("new task");
+    expect(endState[todolistId1][0].title).toBe("new task");
 });
 
 test("correct task should be changed title", () => {
@@ -105,9 +118,25 @@ test("correct task should be changed title", () => {
 });
 
 test("correct task should be changed status", () => {
-    const endState = tasksReducer(state, tasksActions.changeTaskStatus(taskId1, todolistId1));
-    expect(endState[todolistId1][0].status).toBe(TaskStatus.Completed);
+    let status = TaskStatus.New;
+    const endState = tasksReducer(
+        state,
+        tasksActions.changeTaskStatus(taskId1, todolistId1, status)
+    );
+    expect(endState[todolistId1][0].status).toBe(TaskStatus.New);
 
-    const endState1 = tasksReducer(state, tasksActions.changeTaskStatus(taskId2, todolistId1));
-    expect(endState1[todolistId1][1].status).toBe(TaskStatus.New);
+    status = TaskStatus.Completed;
+    const endState1 = tasksReducer(
+        state,
+        tasksActions.changeTaskStatus(taskId2, todolistId1, status)
+    );
+    expect(endState1[todolistId1][1].status).toBe(TaskStatus.Completed);
+});
+
+test("tasks should be set", () => {
+    const endState = tasksReducer(
+        { todolistId1: [] },
+        tasksActions.setTasks(state[todolistId1], todolistId1)
+    );
+    expect(endState[todolistId1]).toHaveLength(2);
 });

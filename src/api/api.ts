@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 export type TodolistType = {
     id: string;
@@ -28,13 +28,13 @@ export enum TaskPriorities {
     Later,
 }
 export type TaskType = {
-    description: string;
+    description: string | null;
     title: string;
     completed: boolean;
     status: TaskStatus;
     priority: TaskPriorities;
-    startDate: string;
-    deadline: string;
+    startDate: string | null;
+    deadline: string | null;
     id: string;
     todoListId: string;
     order: number;
@@ -50,15 +50,10 @@ type TaskResponseType<D> = {
     messages: string[];
     data: D;
 };
-type UpdateTaskData = {
-    title: string;
-    description: string;
-    completed: boolean;
-    status: number;
-    priority: number;
-    startDate: Date;
-    deadline: Date;
-};
+export type UpdateTaskData = Pick<
+    TaskType,
+    "description" | "title" | "completed" | "status" | "priority" | "startDate" | "deadline"
+>;
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1/",
@@ -71,17 +66,15 @@ const instance = axios.create({
 export default class Api {
     // Todolists
     static async getTodolists() {
-        return await instance.get<AxiosResponse<TodolistType[], any>>("/todo-lists");
+        return await instance.get<TodolistType[]>("/todo-lists");
     }
     static async createTodolist(title: string) {
-        return await instance.post<
-            AxiosResponse<TodolistResponseType<{ item: TodolistType }>, any>
-        >("/todo-lists", { title });
+        return await instance.post<TodolistResponseType<{ item: TodolistType }>>("/todo-lists", {
+            title,
+        });
     }
     static async deleteTodolist(todolistId: string) {
-        return await instance.delete<AxiosResponse<DeleteTodolistResponseType<{}>, any>>(
-            `/todo-lists/${todolistId}`
-        );
+        return await instance.delete<DeleteTodolistResponseType<{}>>(`/todo-lists/${todolistId}`);
     }
     // ! Протипизировать ответ
     static async updateTodolist(todolistId: string, title: string) {
@@ -90,24 +83,22 @@ export default class Api {
 
     // Tasks
     static async getTasks(todolistId: string) {
-        return await instance.get<AxiosResponse<GetTasksResponseType, any>>(
-            `/todo-lists/${todolistId}/tasks`
-        );
+        return await instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`);
     }
     static async createTask(todolistId: string, title: string) {
-        return await instance.post<AxiosResponse<TaskResponseType<{ item: TaskType }>, any>>(
+        return await instance.post<TaskResponseType<{ item: TaskType }>>(
             `/todo-lists/${todolistId}/tasks`,
             { title }
         );
     }
     static async updateTask(todolistId: string, taskId: string, updateData: UpdateTaskData) {
-        return await instance.put<AxiosResponse<TaskResponseType<{ item: TaskType }>, any>>(
+        return await instance.put<TaskResponseType<{ item: TaskType }>>(
             `/todo-lists/${todolistId}/tasks/${taskId}`,
             updateData
         );
     }
     static async deleteTask(todolistId: string, taskId: string) {
-        return await instance.delete<AxiosResponse<TaskResponseType<{}>, any>>(
+        return await instance.delete<TaskResponseType<{}>>(
             `/todo-lists/${todolistId}/tasks/${taskId}`
         );
     }

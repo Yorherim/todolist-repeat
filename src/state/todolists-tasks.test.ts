@@ -129,3 +129,11 @@ test("empty array of tasks should be added when todolist created", () => {
     expect(Object.keys(endState)[2]).toBe(newTodolistId);
     expect(endState[newTodolistId]).toEqual([]);
 });
+
+test("array of tasks should be added when todolist created", () => {
+    const endState = tasksReducer(tasksState, todolistsActions.setTodolists(todolistsState));
+
+    expect(Object.keys(endState)).toHaveLength(2);
+    expect(Object.keys(endState)[0]).toBe(todolistId1);
+    expect(Object.keys(endState)[1]).toBe(todolistId2);
+});

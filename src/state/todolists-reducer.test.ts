@@ -49,3 +49,11 @@ test("correct filter of todolist should be changed", () => {
     expect(endState[0].filter).toBe("all");
     expect(endState[1].filter).toBe("completed");
 });
+
+test("todolists should be set", () => {
+    const endState = todolistsReducer([], todolistsActions.setTodolists(state));
+
+    expect(endState).toHaveLength(2);
+    expect(endState[0].id).toBe(todolistId1);
+    expect(endState[1].id).toBe(todolistId2);
+});

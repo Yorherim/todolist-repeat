@@ -1,6 +1,7 @@
 import { tasksReducer } from "./tasks-reducer";
 import { todolistsReducer } from "./todolists-reducer";
-import { combineReducers, createStore, compose } from "redux";
+import { combineReducers, createStore, compose, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 
 declare global {
     interface Window {
@@ -16,4 +17,4 @@ const rootReducer = combineReducers({
     todolists: todolistsReducer,
 });
 
-export const store = createStore(rootReducer, composeEnhancers());
+export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

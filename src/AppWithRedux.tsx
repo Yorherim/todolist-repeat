@@ -1,3 +1,6 @@
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Menu } from "@mui/icons-material";
 import {
     AppBar,
@@ -9,19 +12,17 @@ import {
     Grid,
     Paper,
 } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { v1 } from "uuid";
-import Api from "./api/api";
 import "./App.scss";
+
 import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import { Todolist } from "./components/Todolist/Todolist";
 import { AppRootStateType } from "./state/store";
-
-import { FilterType, todolistsActions, TodolistStateType } from "./state/todolists-reducer";
-
-export const todolistId1 = v1();
-export const todolistId2 = v1();
+import {
+    fetchTodolistsTC,
+    FilterType,
+    todolistsActions,
+    TodolistStateType,
+} from "./state/todolists-reducer";
 
 const AppWithRedux: React.FC = () => {
     const dispatch = useDispatch();
@@ -30,11 +31,8 @@ const AppWithRedux: React.FC = () => {
     );
 
     useEffect(() => {
-        (async function () {
-            const data = await Api.getTodolists();
-            console.log(data);
-        })();
-    }, []);
+        dispatch(fetchTodolistsTC());
+    }, [dispatch]);
 
     const changeFilter = useCallback(
         (newFilter: FilterType, todolistId: string) => {
@@ -53,6 +51,13 @@ const AppWithRedux: React.FC = () => {
     const addTodolist = useCallback(
         (title: string) => {
             dispatch(todolistsActions.addTodolist(title));
+        },
+        [dispatch]
+    );
+
+    const changeTodolistTitle = useCallback(
+        (newTitle: string, todolistId: string) => {
+            dispatch(todolistsActions.changeTodolistTitle(newTitle, todolistId));
         },
         [dispatch]
     );
@@ -91,6 +96,7 @@ const AppWithRedux: React.FC = () => {
                                         todolistId={td.id}
                                         changeFilter={changeFilter}
                                         removeTodolist={removeTodolist}
+                                        changeTodolistTitle={changeTodolistTitle}
                                     />
                                 </Paper>
                             </Grid>

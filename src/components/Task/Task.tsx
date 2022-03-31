@@ -12,7 +12,7 @@ import styles from "./Task.module.scss";
 interface TaskPropsType {
     task: TaskType;
     todolistId: string;
-    changeCheckStatus: (taskId: string, todolistId: string) => void;
+    changeCheckStatus: (taskId: string, todolistId: string, status: TaskStatus) => void;
     changeTaskTitle: (newTitle: string, taskId: string, todolistId: string) => void;
     removeTask: (taskId: string, todolistId: string) => void;
 }
@@ -31,12 +31,14 @@ export const Task: React.FC<TaskPropsType> = React.memo(function ({
         [todolistId, changeTaskTitle]
     );
 
+    const changeStatus = () => {
+        const status = task.status === TaskStatus.Completed ? TaskStatus.New : TaskStatus.Completed;
+        changeCheckStatus(task.id, todolistId, status);
+    };
+
     return (
         <li className={clsx(styles.task, task.status === TaskStatus.Completed && styles.is_done)}>
-            <Checkbox
-                checked={task.status === TaskStatus.Completed}
-                onChange={() => changeCheckStatus(task.id, todolistId)}
-            />
+            <Checkbox checked={task.status === TaskStatus.Completed} onChange={changeStatus} />
             <EditableSpan
                 value={task.title}
                 changeItem={onChangeTitleTaskHandler}

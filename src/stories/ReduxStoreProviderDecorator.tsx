@@ -9,8 +9,8 @@ import { tasksReducer } from "../state/tasks-reducer";
 import { todolistsReducer } from "../state/todolists-reducer";
 import { TaskPriorities, TaskStatus } from "../api/api";
 
-export const todolistId1 = "todolistId1";
-export const todolistId2 = "todolistId2";
+export const todolistId1 = v1();
+export const todolistId2 = v1();
 
 const initialGlobalState: AppRootStateType = {
     todolists: [
