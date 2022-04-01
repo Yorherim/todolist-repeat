@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Menu } from "@mui/icons-material";
 import {
     AppBar,
     Toolbar,
@@ -12,22 +11,22 @@ import {
     Grid,
     Paper,
 } from "@mui/material";
-import "./App.scss";
+import { Menu } from "@mui/icons-material";
 
-import { AddItemForm } from "./components/AddItemForm/AddItemForm";
-import { Todolist } from "./components/Todolist/Todolist";
-import { AppRootStateType } from "./state/store";
+import { AddItemForm } from "../components/AddItemForm/AddItemForm";
+import { Todolist } from "../components/Todolist/Todolist";
+import { AppRootStateType } from "../state/store";
 import {
-    addTodolistTC,
-    changeTodolistTitleTC,
+    TodolistStateType,
     fetchTodolistsTC,
     FilterType,
-    removeTodolistTC,
     todolistsActions,
-    TodolistStateType,
-} from "./state/todolists-reducer";
+    removeTodolistTC,
+    addTodolistTC,
+    changeTodolistTitleTC,
+} from "../state/todolists-reducer";
 
-const AppWithRedux: React.FC = () => {
+export const TodolistsList: React.FC = () => {
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, TodolistStateType[]>(
         (state) => state.todolists
@@ -110,5 +109,3 @@ const AppWithRedux: React.FC = () => {
         </>
     );
 };
-
-export default AppWithRedux;

@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import Api, { TaskStatus, TaskType, UpdateTaskData } from "../api/api";
+import Api, { TaskType, UpdateTaskData } from "../api/api";
 import { AppRootStateType } from "./store";
 import { TodolistsActionsTypes, TypesOfTodolistsActions } from "./todolists-reducer";
 
@@ -10,12 +10,12 @@ enum TypesOfTasksActions {
     CHANGE_TASK_TITLE = "CHANGE_TASK_TITLE",
     CHANGE_TASK_STATUS = "CHANGE_TASK_STATUS",
     SET_TASKS = "SET_TASKS",
+    UPDATE_TASK = "UPDATE_TASK",
 }
 
 export interface TasksType {
     [todolistId: string]: TaskType[];
 }
-
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
 export type TasksActionsTypes =
     | ReturnType<InferValueTypes<typeof tasksActions>>
@@ -28,6 +28,9 @@ export type TasksActionsTypes =
                   | TypesOfTodolistsActions.SET_TODOLISTS;
           }
       >;
+type UpdateDataType = {
+    [key in keyof UpdateTaskData]+?: UpdateTaskData[key];
+};
 
 const initialState = {} as TasksType;
 
@@ -48,18 +51,11 @@ export const tasksReducer = (
                 ...state,
                 [action.todolistId]: [{ ...action.task }, ...state[action.todolistId]],
             };
-        case TypesOfTasksActions.CHANGE_TASK_TITLE:
+        case TypesOfTasksActions.UPDATE_TASK:
             return {
                 ...state,
-                [action.todolistId]: state[action.todolistId].map((td) =>
-                    td.id === action.taskId ? { ...td, title: action.newTitle } : td
-                ),
-            };
-        case TypesOfTasksActions.CHANGE_TASK_STATUS:
-            return {
-                ...state,
-                [action.todolistId]: state[action.todolistId].map((td) =>
-                    td.id === action.taskId ? { ...td, status: action.status } : td
+                [action.todolistId]: state[action.todolistId].map((task) =>
+                    task.id === action.taskId ? { ...task, ...action.updateData } : task
                 ),
             };
         case TypesOfTasksActions.SET_TASKS: {
@@ -77,11 +73,13 @@ export const tasksReducer = (
             return { ...state, [action.todolist.id]: [] };
         }
         case TypesOfTodolistsActions.SET_TODOLISTS: {
-            const newState = { ...state };
-            action.todolists.forEach((td) => {
-                newState[td.id] = [];
-            });
-            return newState;
+            return action.todolists.reduce(
+                (acc, td) => {
+                    acc[td.id] = [];
+                    return acc;
+                },
+                { ...state }
+            );
         }
 
         default:
@@ -100,17 +98,11 @@ export const tasksActions = {
         todolistId,
         task,
     }),
-    changeTaskTitle: (newTitle: string, taskId: string, todolistId: string) => ({
-        type: TypesOfTasksActions.CHANGE_TASK_TITLE as const,
-        newTitle,
+    updateTask: (taskId: string, todolistId: string, updateData: UpdateDataType) => ({
+        type: TypesOfTasksActions.UPDATE_TASK as const,
         taskId,
         todolistId,
-    }),
-    changeTaskStatus: (taskId: string, todolistId: string, status: TaskStatus) => ({
-        type: TypesOfTasksActions.CHANGE_TASK_STATUS as const,
-        taskId,
-        todolistId,
-        status,
+        updateData,
     }),
     setTasks: (tasks: TaskType[], todolistId: string) => ({
         type: TypesOfTasksActions.SET_TASKS as const,
@@ -120,37 +112,30 @@ export const tasksActions = {
 };
 
 // thunks
-export const fetchTasksTC = (todolistId: string) => async (dispatch: Dispatch) => {
-    const {
-        data: { items },
-    } = await Api.getTasks(todolistId);
-    console.log(items);
-    dispatch(tasksActions.setTasks(items, todolistId));
-};
-
-export const deleteTaskTC = (taskId: string, todolistId: string) => async (dispatch: Dispatch) => {
-    await Api.deleteTask(todolistId, taskId);
-    dispatch(tasksActions.removeTask(taskId, todolistId));
-};
-
-export const addTaskTC = (todolistId: string, title: string) => async (dispatch: Dispatch) => {
-    const {
-        data: {
-            data: { item },
-        },
-    } = await Api.createTask(todolistId, title);
-    dispatch(tasksActions.addTask(todolistId, item));
-};
-
+export const fetchTasksTC =
+    (todolistId: string) => async (dispatch: Dispatch<TasksActionsTypes>) => {
+        const {
+            data: { items },
+        } = await Api.getTasks(todolistId);
+        dispatch(tasksActions.setTasks(items, todolistId));
+    };
+export const deleteTaskTC =
+    (taskId: string, todolistId: string) => async (dispatch: Dispatch<TasksActionsTypes>) => {
+        await Api.deleteTask(todolistId, taskId);
+        dispatch(tasksActions.removeTask(taskId, todolistId));
+    };
+export const addTaskTC =
+    (todolistId: string, title: string) => async (dispatch: Dispatch<TasksActionsTypes>) => {
+        const {
+            data: {
+                data: { item },
+            },
+        } = await Api.createTask(todolistId, title);
+        dispatch(tasksActions.addTask(todolistId, item));
+    };
 export const updateTaskTC =
-    (
-        taskId: string,
-        todolistId: string,
-        updateData: {
-            [key in keyof UpdateTaskData]+?: UpdateTaskData[key];
-        }
-    ) =>
-    async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    (taskId: string, todolistId: string, updateData: UpdateDataType) =>
+    async (dispatch: Dispatch<TasksActionsTypes>, getState: () => AppRootStateType) => {
         const tasksTodolist = getState().tasks[todolistId];
         const task = tasksTodolist.find((t) => {
             return t.id === taskId;
@@ -167,12 +152,6 @@ export const updateTaskTC =
                 status: task.status,
                 ...updateData,
             });
-
-            if (updateData.status) {
-                dispatch(tasksActions.changeTaskStatus(taskId, todolistId, updateData.status));
-            }
-            if (updateData.title) {
-                dispatch(tasksActions.changeTaskTitle(updateData.title, taskId, todolistId));
-            }
+            dispatch(tasksActions.updateTask(taskId, todolistId, updateData));
         }
     };

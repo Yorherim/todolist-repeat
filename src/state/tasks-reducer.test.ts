@@ -110,7 +110,7 @@ test("correct task should be added", () => {
 test("correct task should be changed title", () => {
     const endState = tasksReducer(
         state,
-        tasksActions.changeTaskTitle("update task title", taskId1, todolistId1)
+        tasksActions.updateTask(taskId1, todolistId1, { title: "update task title" })
     );
 
     expect(endState[todolistId1][0].title).toBe("update task title");
@@ -119,16 +119,13 @@ test("correct task should be changed title", () => {
 
 test("correct task should be changed status", () => {
     let status = TaskStatus.New;
-    const endState = tasksReducer(
-        state,
-        tasksActions.changeTaskStatus(taskId1, todolistId1, status)
-    );
+    const endState = tasksReducer(state, tasksActions.updateTask(taskId1, todolistId1, { status }));
     expect(endState[todolistId1][0].status).toBe(TaskStatus.New);
 
     status = TaskStatus.Completed;
     const endState1 = tasksReducer(
         state,
-        tasksActions.changeTaskStatus(taskId2, todolistId1, status)
+        tasksActions.updateTask(taskId2, todolistId1, { status })
     );
     expect(endState1[todolistId1][1].status).toBe(TaskStatus.Completed);
 });
