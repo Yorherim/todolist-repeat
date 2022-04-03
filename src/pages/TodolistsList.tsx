@@ -14,7 +14,7 @@ import {
     removeTodolistTC,
     addTodolistTC,
     changeTodolistTitleTC,
-} from "../state/todolists-reducer";
+} from "../state/todolists/todolists-reducer";
 
 export const TodolistsList: React.FC = () => {
     const dispatch = useDispatch();

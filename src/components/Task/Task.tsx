@@ -4,7 +4,7 @@ import { Checkbox, IconButton } from "@mui/material";
 import clsx from "clsx";
 import React, { useCallback } from "react";
 import { TaskStatus } from "../../api/api";
-import { TaskStateType } from "../../state/tasks-reducer";
+import { TaskStateType } from "../../state/tasks/tasks-reducer";
 
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 

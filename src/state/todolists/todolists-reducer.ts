@@ -1,7 +1,7 @@
-import Api, { TodolistType } from "../api/api";
-import { appActions, RequestStatusType } from "./app-reducer";
-import { AppThunk } from "./store";
-import { handleServerAppError, handleServerNetworkError } from "../common/error-utils";
+import Api, { TodolistType } from "../../api/api";
+import { appActions, RequestStatusType } from "../app/app-reducer";
+import { AppThunk } from "../store";
+import { handleServerAppError, handleServerNetworkError } from "../../common/error-utils";
 
 export enum TypesOfTodolistsActions {
     ADD_TODOLIST = "ADD_TODOLIST",

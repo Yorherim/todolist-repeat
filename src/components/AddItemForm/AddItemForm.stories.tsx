@@ -1,6 +1,6 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import "../../App.scss";
+import "../../app/App.scss";
 
 import { AddItemForm } from "./AddItemForm";
 
@@ -12,9 +12,7 @@ export default {
     },
 } as ComponentMeta<typeof AddItemForm>;
 
-const Template: ComponentStory<typeof AddItemForm> = (args) => (
-    <AddItemForm {...args} />
-);
+const Template: ComponentStory<typeof AddItemForm> = (args) => <AddItemForm {...args} />;
 
 export const Default = Template.bind({});
 

@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { TaskPriorities, TaskStatus } from "../api/api";
+import { TaskPriorities, TaskStatus } from "../../api/api";
 import { tasksActions, tasksReducer, TaskStateType, TasksType } from "./tasks-reducer";
 
 let todolistId1: string;

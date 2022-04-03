@@ -1,12 +1,12 @@
-import Api, { TaskType, UpdateTaskData } from "../api/api";
-import { handleServerAppError, handleServerNetworkError } from "../common/error-utils";
-import { appActions, RequestStatusType } from "./app-reducer";
-import { AppRootStateType, AppThunk } from "./store";
+import Api, { TaskType, UpdateTaskData } from "../../api/api";
+import { handleServerAppError, handleServerNetworkError } from "../../common/error-utils";
+import { appActions, RequestStatusType } from "../app/app-reducer";
+import { AppRootStateType, AppThunk } from "../store";
 import {
     todolistsActions,
     TodolistsActionsTypes,
     TypesOfTodolistsActions,
-} from "./todolists-reducer";
+} from "../todolists/todolists-reducer";
 
 enum TypesOfTasksActions {
     ADD_TASK = "ADD_TASK",

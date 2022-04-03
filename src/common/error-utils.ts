@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { appActions, AppActionsTypes } from "../state/app-reducer";
+import { appActions, AppActionsTypes } from "../state/app/app-reducer";
 
 export const handleServerAppError = (messages: string[], dispatch: Dispatch<AppActionsTypes>) => {
     if (messages.length) {

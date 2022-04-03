@@ -25,9 +25,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(function
     };
 
     const enableEditMode = () => {
-        if (!disabled) {
-            setEditMode(true);
-        }
+        if (!disabled) setEditMode(true);
     };
 
     return (

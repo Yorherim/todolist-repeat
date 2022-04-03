@@ -15,11 +15,11 @@ import {
     fetchTasksTC,
     TaskStateType,
     updateTaskTC,
-} from "../../state/tasks-reducer";
-import { FilterType } from "../../state/todolists-reducer";
+} from "../../state/tasks/tasks-reducer";
+import { FilterType } from "../../state/todolists/todolists-reducer";
 import { TaskStatus } from "../../api/api";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
-import { RequestStatusType } from "../../state/app-reducer";
+import { RequestStatusType } from "../../state/app/app-reducer";
 
 interface TodolistPropsType {
     title: string;

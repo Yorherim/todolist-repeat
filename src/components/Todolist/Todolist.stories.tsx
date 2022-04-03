@@ -1,6 +1,6 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import "../../App.scss";
+import "../../app/App.scss";
 
 import { Todolist } from "./Todolist";
 import { ReduxStoreProviderDecorator, todolistId1 } from "../../common/ReduxStoreProviderDecorator";

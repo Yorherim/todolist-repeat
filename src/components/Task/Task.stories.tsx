@@ -1,10 +1,10 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import "../../App.scss";
+import "../../app/App.scss";
 
 import { Task } from "./Task";
 import { TaskPriorities, TaskStatus } from "../../api/api";
-import { TaskStateType } from "../../state/tasks-reducer";
+import { TaskStateType } from "../../state/tasks/tasks-reducer";
 
 export default {
     title: "Project/Task",

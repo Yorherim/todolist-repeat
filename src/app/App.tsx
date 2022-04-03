@@ -15,7 +15,7 @@ import "./App.scss";
 import { TodolistsList } from "../pages/TodolistsList";
 import { useSelector } from "react-redux";
 import { AppRootStateType } from "../state/store";
-import { RequestStatusType } from "../state/app-reducer";
+import { RequestStatusType } from "../state/app/app-reducer";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 
 const App: React.FC = () => {

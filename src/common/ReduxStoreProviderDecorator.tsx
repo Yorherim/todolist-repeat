@@ -2,12 +2,14 @@ import { Provider } from "react-redux";
 import { PartialStoryFn } from "@storybook/csf";
 import { ReactFramework } from "@storybook/react";
 import { v1 } from "uuid";
-import { combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 
 import { AppRootStateType } from "../state/store";
-import { tasksReducer } from "../state/tasks-reducer";
-import { todolistsReducer } from "../state/todolists-reducer";
+import { tasksReducer } from "../state/tasks/tasks-reducer";
+import { todolistsReducer } from "../state/todolists/todolists-reducer";
 import { TaskPriorities, TaskStatus } from "../api/api";
+import { appReducer } from "../state/app/app-reducer";
+import thunk from "redux-thunk";
 
 export const todolistId1 = v1();
 export const todolistId2 = v1();
@@ -36,7 +38,7 @@ const initialGlobalState: AppRootStateType = {
             {
                 id: v1(),
                 title: "HTML&CSS",
-                status: TaskStatus.New,
+                status: TaskStatus.Completed,
                 addedDate: "",
                 description: "",
                 startDate: "",
@@ -102,9 +104,10 @@ const initialGlobalState: AppRootStateType = {
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
+    app: appReducer,
 });
 
-export const storyBookStore = createStore(rootReducer, initialGlobalState);
+export const storyBookStore = createStore(rootReducer, initialGlobalState, applyMiddleware(thunk));
 
 export const ReduxStoreProviderDecorator = (
     story: PartialStoryFn<
