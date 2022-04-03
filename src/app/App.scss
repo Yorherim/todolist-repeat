@@ -1,5 +1,11 @@
 .app-bar {
+    position: relative !important;
     margin-bottom: 20px;
+
+    .linear-progress {
+        position: absolute;
+        bottom: 0;
+    }
 }
 
 .trash {

@@ -1,6 +1,6 @@
 import { v1 } from "uuid";
 import { TaskPriorities, TaskStatus } from "../api/api";
-import { tasksActions, tasksReducer, TasksType } from "./tasks-reducer";
+import { tasksActions, tasksReducer, TaskStateType, TasksType } from "./tasks-reducer";
 
 let todolistId1: string;
 let todolistId2: string;
@@ -31,6 +31,7 @@ beforeEach(() => {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId1,
+                entityStatus: "idle",
             },
             {
                 id: taskId2,
@@ -44,6 +45,7 @@ beforeEach(() => {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId1,
+                entityStatus: "idle",
             },
         ],
         [todolistId2]: [
@@ -59,6 +61,7 @@ beforeEach(() => {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId2,
+                entityStatus: "idle",
             },
             {
                 id: taskId4,
@@ -72,6 +75,7 @@ beforeEach(() => {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId2,
+                entityStatus: "idle",
             },
         ],
     };
@@ -87,7 +91,7 @@ test("correct task should be removed", () => {
 });
 
 test("correct task should be added", () => {
-    const newTask = {
+    const newTask: TaskStateType = {
         id: v1(),
         title: "new task",
         status: TaskStatus.New,
@@ -99,6 +103,7 @@ test("correct task should be added", () => {
         completed: false,
         priority: TaskPriorities.Low,
         todoListId: todolistId2,
+        entityStatus: "idle",
     };
     const endState = tasksReducer(state, tasksActions.addTask(todolistId1, newTask));
 
@@ -136,4 +141,12 @@ test("tasks should be set", () => {
         tasksActions.setTasks(state[todolistId1], todolistId1)
     );
     expect(endState[todolistId1]).toHaveLength(2);
+});
+
+test("task should be change entity status", () => {
+    const endState = tasksReducer(
+        state,
+        tasksActions.changeTaskEntityStatus(taskId1, todolistId1, "loading")
+    );
+    expect(endState[todolistId1][0].entityStatus).toBe("loading");
 });

@@ -14,8 +14,22 @@ export const todolistId2 = v1();
 
 const initialGlobalState: AppRootStateType = {
     todolists: [
-        { id: todolistId1, title: "What to learn", filter: "all", addedDate: "", order: 0 },
-        { id: todolistId2, title: "What to buy", filter: "all", addedDate: "", order: 0 },
+        {
+            id: todolistId1,
+            title: "What to learn",
+            filter: "all",
+            addedDate: "",
+            order: 0,
+            entityStatus: "idle",
+        },
+        {
+            id: todolistId2,
+            title: "What to buy",
+            filter: "all",
+            addedDate: "",
+            order: 0,
+            entityStatus: "idle",
+        },
     ],
     tasks: {
         [todolistId1]: [
@@ -31,6 +45,7 @@ const initialGlobalState: AppRootStateType = {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId1,
+                entityStatus: "idle",
             },
             {
                 id: v1(),
@@ -44,6 +59,7 @@ const initialGlobalState: AppRootStateType = {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId1,
+                entityStatus: "idle",
             },
         ],
         [todolistId2]: [
@@ -59,6 +75,7 @@ const initialGlobalState: AppRootStateType = {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId2,
+                entityStatus: "idle",
             },
             {
                 id: v1(),
@@ -72,8 +89,13 @@ const initialGlobalState: AppRootStateType = {
                 completed: false,
                 priority: TaskPriorities.Low,
                 todoListId: todolistId2,
+                entityStatus: "idle",
             },
         ],
+    },
+    app: {
+        status: "idle",
+        error: null,
     },
 };
 

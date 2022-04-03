@@ -3,7 +3,8 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import "../../App.scss";
 
 import { Task } from "./Task";
-import { TaskPriorities, TaskStatus, TaskType } from "../../api/api";
+import { TaskPriorities, TaskStatus } from "../../api/api";
+import { TaskStateType } from "../../state/tasks-reducer";
 
 export default {
     title: "Project/Task",
@@ -15,7 +16,7 @@ export default {
     },
 } as ComponentMeta<typeof Task>;
 
-const taskIsDone: TaskType = {
+const taskIsDone: TaskStateType = {
     id: "1",
     title: "buy milk",
     status: TaskStatus.Completed,
@@ -27,8 +28,9 @@ const taskIsDone: TaskType = {
     completed: false,
     priority: TaskPriorities.Low,
     todoListId: "todolistId",
+    entityStatus: "idle",
 };
-const taskIsNotDone: TaskType = {
+const taskIsNotDone: TaskStateType = {
     id: "2",
     title: "buy juice",
     status: TaskStatus.New,
@@ -40,6 +42,7 @@ const taskIsNotDone: TaskType = {
     completed: false,
     priority: TaskPriorities.Low,
     todoListId: "todolistId",
+    entityStatus: "idle",
 };
 
 const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;

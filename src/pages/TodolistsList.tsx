@@ -1,17 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-    AppBar,
-    Toolbar,
-    IconButton,
-    Typography,
-    Button,
-    Container,
-    Grid,
-    Paper,
-} from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import { Container, Grid, Paper } from "@mui/material";
 
 import { AddItemForm } from "../components/AddItemForm/AddItemForm";
 import { Todolist } from "../components/Todolist/Todolist";
@@ -66,27 +56,8 @@ export const TodolistsList: React.FC = () => {
 
     return (
         <>
-            <AppBar position="static" className="app-bar">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <Menu />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
-                    </Typography>
-                    <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-
             <Container fixed>
                 <AddItemForm addItem={addTodolist} className="input-todolist" />
-
                 <Grid container spacing={5}>
                     {todolists.map((td) => {
                         return (
@@ -95,6 +66,7 @@ export const TodolistsList: React.FC = () => {
                                     <Todolist
                                         title={td.title}
                                         filter={td.filter}
+                                        entityStatus={td.entityStatus}
                                         todolistId={td.id}
                                         changeFilter={changeFilter}
                                         removeTodolist={removeTodolist}

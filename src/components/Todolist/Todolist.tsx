@@ -9,14 +9,22 @@ import styles from "./Todolist.module.scss";
 import { AddItemForm } from "../AddItemForm/AddItemForm";
 import { Task } from "../Task/Task";
 import { AppRootStateType } from "../../state/store";
-import { addTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../state/tasks-reducer";
+import {
+    addTaskTC,
+    deleteTaskTC,
+    fetchTasksTC,
+    TaskStateType,
+    updateTaskTC,
+} from "../../state/tasks-reducer";
 import { FilterType } from "../../state/todolists-reducer";
-import { TaskStatus, TaskType } from "../../api/api";
+import { TaskStatus } from "../../api/api";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
+import { RequestStatusType } from "../../state/app-reducer";
 
 interface TodolistPropsType {
     title: string;
     filter: FilterType;
+    entityStatus: RequestStatusType;
     todolistId: string;
     changeFilter: (filter: FilterType, todolistId: string) => void;
     removeTodolist: (todolistId: string) => void;
@@ -26,13 +34,16 @@ interface TodolistPropsType {
 export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     title,
     filter,
+    entityStatus,
     todolistId,
     changeFilter,
     removeTodolist,
     changeTodolistTitle,
 }) {
     const dispatch = useDispatch();
-    const tasks = useSelector<AppRootStateType, TaskType[]>((state) => state.tasks[todolistId]);
+    const tasks = useSelector<AppRootStateType, TaskStateType[]>(
+        (state) => state.tasks[todolistId]
+    );
 
     useEffect(() => {
         dispatch(fetchTasksTC(todolistId));
@@ -82,17 +93,23 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     return (
         <div className={styles.todolist}>
             <div className={styles.todolist_title}>
-                <EditableSpan value={title} changeItem={changeTodolistTitle} itemId={todolistId} />
+                <EditableSpan
+                    value={title}
+                    changeItem={changeTodolistTitle}
+                    itemId={todolistId}
+                    disabled={entityStatus === "loading"}
+                />
                 <IconButton
                     aria-label="delete"
                     onClick={() => removeTodolist(todolistId)}
                     className={clsx(styles.button, "trash")}
+                    disabled={entityStatus === "loading"}
                 >
                     <Delete />
                 </IconButton>
             </div>
 
-            <AddItemForm addItem={addItem} />
+            <AddItemForm addItem={addItem} disabled={entityStatus === "loading"} />
 
             <ul className={styles.tasks}>
                 {newTasks?.map((task) => (

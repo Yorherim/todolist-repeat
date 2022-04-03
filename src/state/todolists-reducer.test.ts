@@ -9,8 +9,22 @@ beforeEach(() => {
     todolistId1 = v1();
     todolistId2 = v1();
     state = [
-        { id: todolistId1, title: "What to learn", filter: "all", addedDate: "", order: 0 },
-        { id: todolistId2, title: "What to buy", filter: "all", addedDate: "", order: 0 },
+        {
+            id: todolistId1,
+            title: "What to learn",
+            filter: "all",
+            addedDate: "",
+            order: 0,
+            entityStatus: "idle",
+        },
+        {
+            id: todolistId2,
+            title: "What to buy",
+            filter: "all",
+            addedDate: "",
+            order: 0,
+            entityStatus: "idle",
+        },
     ];
 });
 
@@ -23,10 +37,11 @@ test("correct todolist should be removed", () => {
 
 test("correct todolist should be added", () => {
     const newTodolistId = v1();
-    const newTodolist = {
+    const newTodolist: TodolistStateType = {
         id: newTodolistId,
         title: "new Todolist",
         filter: "all",
+        entityStatus: "idle",
         addedDate: "",
         order: 0,
     };
@@ -64,4 +79,13 @@ test("todolists should be set", () => {
     expect(endState).toHaveLength(2);
     expect(endState[0].id).toBe(todolistId1);
     expect(endState[1].id).toBe(todolistId2);
+});
+
+test("todolists should be change entity status", () => {
+    const endState = todolistsReducer(
+        state,
+        todolistsActions.changeTodolistEntityStatus(todolistId1, "loading")
+    );
+
+    expect(endState[0].entityStatus).toBe("loading");
 });
