@@ -98,7 +98,9 @@ const initialGlobalState: AppRootStateType = {
     app: {
         status: "idle",
         error: null,
+        initialized: false,
     },
+    auth: { isLoggedIn: false },
 };
 
 const rootReducer = combineReducers({

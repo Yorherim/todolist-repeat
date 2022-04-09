@@ -1,6 +1,8 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
     Grid,
@@ -13,29 +15,42 @@ import {
     Button,
 } from "@mui/material";
 
+import { AuthStateType, loginTC } from "../state/auth/authReducer";
+import { AppRootStateType } from "../state/store";
+
 export const LoginPage: React.FC = () => {
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector<AppRootStateType, AuthStateType["isLoggedIn"]>(
+        (state) => state.auth.isLoggedIn
+    );
+
     const formik = useFormik({
         initialValues: {
             email: "",
             password: "",
+            checkbox: false,
         },
         validationSchema: Yup.object({
             email: Yup.string().email("Invalid email address").required("Required"),
             password: Yup.string()
                 .min(2, "Password must be more 2 characters")
                 .required("Required"),
+            checkbox: Yup.boolean(),
         }),
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values));
+            formik.resetForm();
         },
     });
 
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         formik.handleSubmit();
-        formik.resetForm();
     };
 
+    if (isLoggedIn) {
+        return <Navigate to="/" />;
+    }
     return (
         <Grid container justifyContent={"center"}>
             <Grid item justifyContent={"center"}>
@@ -86,7 +101,11 @@ export const LoginPage: React.FC = () => {
                                 </div>
                             ) : null}
 
-                            <FormControlLabel label={"Remember me"} control={<Checkbox />} />
+                            <FormControlLabel
+                                id="checkbox"
+                                label={"Remember me"}
+                                control={<Checkbox />}
+                            />
                             <Button type={"submit"} variant={"contained"} color={"primary"}>
                                 Login
                             </Button>

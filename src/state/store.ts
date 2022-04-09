@@ -3,6 +3,7 @@ import { TodolistsActionsTypes, todolistsReducer } from "./todolists/todolists-r
 import { combineReducers, createStore, compose, applyMiddleware } from "redux";
 import thunk, { ThunkAction } from "redux-thunk";
 import { AppActionsTypes, appReducer } from "./app/app-reducer";
+import { AuthActionsTypes, authReducer } from "./auth/authReducer";
 
 declare global {
     interface Window {
@@ -10,7 +11,11 @@ declare global {
     }
 }
 export type AppRootStateType = ReturnType<typeof rootReducer>;
-type AppRootActionsType = TasksActionsTypes | TodolistsActionsTypes | AppActionsTypes;
+type AppRootActionsType =
+    | TasksActionsTypes
+    | TodolistsActionsTypes
+    | AppActionsTypes
+    | AuthActionsTypes;
 export type AppThunk<ReturnType = void> = ThunkAction<
     ReturnType,
     AppRootStateType,
@@ -24,6 +29,7 @@ const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
     app: appReducer,
+    auth: authReducer,
 });
 
 export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

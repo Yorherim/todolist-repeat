@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AuthData } from "../state/auth/authReducer";
 
 export type TodolistType = {
     id: string;
@@ -55,6 +56,28 @@ export type UpdateTaskData = Pick<
     "description" | "title" | "completed" | "status" | "priority" | "startDate" | "deadline"
 >;
 
+type LoginResponseType = {
+    resultCode: number;
+    messages: string[];
+    data: {
+        userId: number;
+    };
+};
+type LogoutResponseType = {
+    resultCode: number;
+    messages: string[];
+    data: {};
+};
+type AuthMeResponseType = {
+    resultCode: number;
+    messages: string[];
+    data: {
+        id: number;
+        email: string;
+        login: string;
+    };
+};
+
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1/",
     withCredentials: true,
@@ -100,5 +123,21 @@ export default class Api {
         return await instance.delete<TaskResponseType<{}>>(
             `/todo-lists/${todolistId}/tasks/${taskId}`
         );
+    }
+
+    // Auth
+    static async login({ email, password, rememberMe, captcha }: AuthData) {
+        return await instance.post<LoginResponseType>(`/auth/login`, {
+            email,
+            password,
+            rememberMe,
+            captcha: captcha ? captcha : false,
+        });
+    }
+    static async logout() {
+        return await instance.delete<LogoutResponseType>(`/auth/login`);
+    }
+    static async authMe() {
+        return await instance.get<AuthMeResponseType>(`/auth/me`);
     }
 }

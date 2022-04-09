@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
     LinearProgress,
@@ -8,21 +8,40 @@ import {
     IconButton,
     Toolbar,
     Typography,
+    CircularProgress,
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
+
 import "./App.scss";
 
 import { TodolistsListPage } from "../pages/TodolistsListPage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppRootStateType } from "../state/store";
-import { RequestStatusType } from "../state/app/app-reducer";
+import { initializeAppTC, RequestStatusType } from "../state/app/app-reducer";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { Route, Routes } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
+import { logoutTC } from "../state/auth/authReducer";
 
 const App: React.FC = () => {
+    const dispatch = useDispatch();
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status);
+    const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.initialized);
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
 
+    useEffect(() => {
+        dispatch(initializeAppTC());
+    }, [dispatch]);
+
+    const logout = () => dispatch(logoutTC());
+
+    if (!isInitialized) {
+        return (
+            <Box sx={{ display: "flex" }} className={"circularProgress"}>
+                <CircularProgress />
+            </Box>
+        );
+    }
     return (
         <>
             <AppBar position="static" className="app-bar">
@@ -39,7 +58,11 @@ const App: React.FC = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && (
+                        <Button color="inherit" onClick={logout}>
+                            Log out
+                        </Button>
+                    )}
                 </Toolbar>
                 {status === "loading" && (
                     <Box sx={{ width: "100%" }} className={"linear-progress"}>

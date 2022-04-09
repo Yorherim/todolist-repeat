@@ -15,16 +15,23 @@ import {
     addTodolistTC,
     changeTodolistTitleTC,
 } from "../state/todolists/todolists-reducer";
+import { AuthStateType } from "../state/auth/authReducer";
+import { Navigate } from "react-router-dom";
 
 export const TodolistsListPage: React.FC = () => {
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, TodolistStateType[]>(
         (state) => state.todolists
     );
+    const isLoggedIn = useSelector<AppRootStateType, AuthStateType["isLoggedIn"]>(
+        (state) => state.auth.isLoggedIn
+    );
 
     useEffect(() => {
-        dispatch(fetchTodolistsTC());
-    }, [dispatch]);
+        if (isLoggedIn) {
+            dispatch(fetchTodolistsTC());
+        }
+    }, [dispatch, isLoggedIn]);
 
     const changeFilter = useCallback(
         (newFilter: FilterType, todolistId: string) => {
@@ -54,6 +61,9 @@ export const TodolistsListPage: React.FC = () => {
         [dispatch]
     );
 
+    if (!isLoggedIn) {
+        return <Navigate to="/auth" />;
+    }
     return (
         <>
             <Container fixed>
