@@ -114,9 +114,10 @@ export const removeTodolistTC =
             } else {
                 handleServerAppError(data.messages, dispatch);
             }
-            dispatch(todolistsActions.changeTodolistEntityStatus(todolistId, "idle"));
         } catch (error) {
             handleServerNetworkError(error, dispatch);
+        } finally {
+            dispatch(todolistsActions.changeTodolistEntityStatus(todolistId, "idle"));
         }
     };
 

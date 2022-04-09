@@ -11,7 +11,7 @@ type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
 export type AppActionsTypes = ReturnType<InferValueTypes<typeof appActions>>;
 
 const initialState: AppStateType = {
-    status: "loading",
+    status: "idle",
     error: null,
 };
 

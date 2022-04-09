@@ -16,7 +16,7 @@ import {
     changeTodolistTitleTC,
 } from "../state/todolists/todolists-reducer";
 
-export const TodolistsList: React.FC = () => {
+export const TodolistsListPage: React.FC = () => {
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, TodolistStateType[]>(
         (state) => state.todolists

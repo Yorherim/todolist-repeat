@@ -40,6 +40,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(function
                     multiline
                     inputProps={{ maxLength: 100 }}
                     disabled={disabled}
+                    className={styles.textField}
                     autoFocus
                 />
             ) : (

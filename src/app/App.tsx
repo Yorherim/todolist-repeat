@@ -12,11 +12,13 @@ import {
 import { Menu } from "@mui/icons-material";
 import "./App.scss";
 
-import { TodolistsList } from "../pages/TodolistsList";
+import { TodolistsListPage } from "../pages/TodolistsListPage";
 import { useSelector } from "react-redux";
 import { AppRootStateType } from "../state/store";
 import { RequestStatusType } from "../state/app/app-reducer";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
+import { Route, Routes } from "react-router-dom";
+import { LoginPage } from "../pages/LoginPage";
 
 const App: React.FC = () => {
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status);
@@ -47,7 +49,11 @@ const App: React.FC = () => {
             </AppBar>
             <ErrorSnackbar />
 
-            <TodolistsList />
+            <Routes>
+                <Route path="/" element={<TodolistsListPage />} />
+                <Route path="/auth" element={<LoginPage />} />
+                <Route path="*" element={<h1>404: PAGE NOT FOUND</h1>} />
+            </Routes>
         </>
     );
 };
