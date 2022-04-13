@@ -1,6 +1,6 @@
 import Api, { TaskType, UpdateTaskData } from "../../api/api";
 import { handleServerAppError, handleServerNetworkError } from "../../common/error-utils";
-import { appActions, RequestStatusType } from "../app/app-reducer";
+import { RequestStatusType, setLoadingStatus } from "../app/app-reducer";
 import { AppRootStateType, AppThunk } from "../store";
 import {
     todolistsActions,
@@ -146,12 +146,12 @@ export const fetchTasksTC =
     (todolistId: string): AppThunk =>
     async (dispatch) => {
         try {
-            dispatch(appActions.setLoadingStatus("loading"));
+            dispatch(setLoadingStatus({ status: "loading" }));
             const {
                 data: { items },
             } = await Api.getTasks(todolistId);
             dispatch(tasksActions.setTasks(items, todolistId));
-            dispatch(appActions.setLoadingStatus("succeeded"));
+            dispatch(setLoadingStatus({ status: "succeeded" }));
         } catch (error) {
             handleServerNetworkError(error, dispatch);
         }
@@ -161,11 +161,11 @@ export const deleteTaskTC =
     (taskId: string, todolistId: string): AppThunk =>
     async (dispatch) => {
         try {
-            dispatch(appActions.setLoadingStatus("loading"));
+            dispatch(setLoadingStatus({ status: "loading" }));
             dispatch(tasksActions.changeTaskEntityStatus(taskId, todolistId, "loading"));
             await Api.deleteTask(todolistId, taskId);
             dispatch(tasksActions.removeTask(taskId, todolistId));
-            dispatch(appActions.setLoadingStatus("succeeded"));
+            dispatch(setLoadingStatus({ status: "succeeded" }));
             dispatch(tasksActions.changeTaskEntityStatus(taskId, todolistId, "idle"));
         } catch (error) {
             handleServerNetworkError(error, dispatch);
@@ -177,12 +177,12 @@ export const addTaskTC =
     (todolistId: string, title: string): AppThunk =>
     async (dispatch) => {
         try {
-            dispatch(appActions.setLoadingStatus("loading"));
+            dispatch(setLoadingStatus({ status: "loading" }));
             dispatch(todolistsActions.changeTodolistEntityStatus(todolistId, "loading"));
             const { data } = await Api.createTask(todolistId, title);
             if (data.resultCode === 0) {
                 dispatch(tasksActions.addTask(todolistId, data.data.item));
-                dispatch(appActions.setLoadingStatus("succeeded"));
+                dispatch(setLoadingStatus({ status: "succeeded" }));
             } else {
                 handleServerAppError(data.messages, dispatch);
             }
@@ -196,7 +196,7 @@ export const updateTaskTC =
     (taskId: string, todolistId: string, updateData: UpdateDataType): AppThunk =>
     async (dispatch, getState: () => AppRootStateType) => {
         try {
-            dispatch(appActions.setLoadingStatus("loading"));
+            dispatch(setLoadingStatus({ status: "loading" }));
             dispatch(tasksActions.changeTaskEntityStatus(taskId, todolistId, "loading"));
             const tasksTodolist = getState().tasks[todolistId];
             const task = tasksTodolist.find((t) => {
@@ -216,7 +216,7 @@ export const updateTaskTC =
                 });
                 dispatch(tasksActions.updateTask(taskId, todolistId, updateData));
             }
-            dispatch(appActions.setLoadingStatus("succeeded"));
+            dispatch(setLoadingStatus({ status: "succeeded" }));
             dispatch(tasksActions.changeTaskEntityStatus(taskId, todolistId, "idle"));
         } catch (error) {
             handleServerNetworkError(error, dispatch);

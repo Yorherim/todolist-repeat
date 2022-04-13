@@ -1,57 +1,42 @@
-import Api from "../../api/api";
-import { appActions } from "../app/app-reducer";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import Api, { AuthData } from "../../api/api";
+
 import { AppThunk } from "../store";
 import { handleServerAppError, handleServerNetworkError } from "../../common/error-utils";
+import { setLoadingStatus } from "../app/app-reducer";
 
-enum TypesAuthActions {
-    SET_LOGGED_IN = "SET_LOGGED_IN",
-}
-export type AuthStateType = {
+export type AuthInitialStateType = {
     isLoggedIn: boolean;
 };
-export type AuthData = {
-    email: string;
-    password: string;
-    rememberMe?: boolean;
-    captcha?: boolean;
-};
-
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
-export type AuthActionsTypes = ReturnType<InferValueTypes<typeof authActions>>;
+export type AuthActionsTypes = ReturnType<InferValueTypes<typeof slice.actions>>;
 
-const initialState: AuthStateType = {
-    isLoggedIn: false,
-};
+const slice = createSlice({
+    name: "auth",
+    initialState: {
+        isLoggedIn: false,
+    } as AuthInitialStateType,
+    reducers: {
+        setIsLoggedIn(state, action: PayloadAction<{ value: boolean }>) {
+            state.isLoggedIn = action.payload.value;
+        },
+    },
+});
 
-export const authReducer = (
-    state: AuthStateType = initialState,
-    action: AuthActionsTypes
-): AuthStateType => {
-    switch (action.type) {
-        case TypesAuthActions.SET_LOGGED_IN:
-            return { ...state, isLoggedIn: action.value };
-        default:
-            return state;
-    }
-};
-
-export const authActions = {
-    setIsLoggedIn: (value: boolean) => ({
-        type: TypesAuthActions.SET_LOGGED_IN as const,
-        value,
-    }),
-};
+export const authReducer = slice.reducer;
+export const { setIsLoggedIn } = slice.actions;
 
 // thunks
 export const loginTC =
     (authData: AuthData): AppThunk =>
     async (dispatch) => {
         try {
-            dispatch(appActions.setLoadingStatus("loading"));
+            dispatch(setLoadingStatus({ status: "loading" }));
             const { data } = await Api.login(authData);
             if (data.resultCode === 0) {
-                dispatch(authActions.setIsLoggedIn(true));
-                dispatch(appActions.setLoadingStatus("succeeded"));
+                dispatch(setIsLoggedIn({ value: true }));
+                dispatch(setLoadingStatus({ status: "succeeded" }));
             } else {
                 handleServerAppError(data.messages, dispatch);
             }
@@ -62,11 +47,11 @@ export const loginTC =
 
 export const logoutTC = (): AppThunk => async (dispatch) => {
     try {
-        dispatch(appActions.setLoadingStatus("loading"));
+        dispatch(setLoadingStatus({ status: "loading" }));
         const { data } = await Api.logout();
         if (data.resultCode === 0) {
-            dispatch(authActions.setIsLoggedIn(false));
-            dispatch(appActions.setLoadingStatus("succeeded"));
+            dispatch(setIsLoggedIn({ value: false }));
+            dispatch(setLoadingStatus({ status: "succeeded" }));
         } else {
             handleServerAppError(data.messages, dispatch);
         }

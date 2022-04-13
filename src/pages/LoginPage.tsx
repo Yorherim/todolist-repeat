@@ -15,14 +15,12 @@ import {
     Button,
 } from "@mui/material";
 
-import { AuthStateType, loginTC } from "../state/auth/authReducer";
+import { loginTC } from "../state/auth/authReducer";
 import { AppRootStateType } from "../state/store";
 
 export const LoginPage: React.FC = () => {
     const dispatch = useDispatch();
-    const isLoggedIn = useSelector<AppRootStateType, AuthStateType["isLoggedIn"]>(
-        (state) => state.auth.isLoggedIn
-    );
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
 
     const formik = useFormik({
         initialValues: {

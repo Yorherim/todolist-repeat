@@ -15,7 +15,6 @@ import {
     addTodolistTC,
     changeTodolistTitleTC,
 } from "../state/todolists/todolists-reducer";
-import { AuthStateType } from "../state/auth/authReducer";
 import { Navigate } from "react-router-dom";
 
 export const TodolistsListPage: React.FC = () => {
@@ -23,9 +22,7 @@ export const TodolistsListPage: React.FC = () => {
     const todolists = useSelector<AppRootStateType, TodolistStateType[]>(
         (state) => state.todolists
     );
-    const isLoggedIn = useSelector<AppRootStateType, AuthStateType["isLoggedIn"]>(
-        (state) => state.auth.isLoggedIn
-    );
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
 
     useEffect(() => {
         if (isLoggedIn) {

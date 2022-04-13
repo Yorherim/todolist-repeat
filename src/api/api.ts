@@ -1,5 +1,4 @@
 import axios from "axios";
-import { AuthData } from "../state/auth/authReducer";
 
 export type TodolistType = {
     id: string;
@@ -76,6 +75,12 @@ type AuthMeResponseType = {
         email: string;
         login: string;
     };
+};
+export type AuthData = {
+    email: string;
+    password: string;
+    rememberMe?: boolean;
+    captcha?: boolean;
 };
 
 const instance = axios.create({
