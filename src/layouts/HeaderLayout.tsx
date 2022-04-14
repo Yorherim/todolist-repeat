@@ -2,16 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-    AppBar,
-    Toolbar,
-    IconButton,
-    Typography,
-    Button,
-    Box,
-    LinearProgress,
-} from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import { AppBar, Toolbar, Typography, Button, Box, LinearProgress } from "@mui/material";
 
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { AppRootStateType } from "../state/store";
@@ -29,17 +20,8 @@ export const HeaderLayout: React.FC = () => {
         <>
             <AppBar position="static" className="app-bar">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <Menu />
-                    </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
+                        Todo App
                     </Typography>
                     {isLoggedIn && (
                         <Button color="inherit" onClick={logout}>

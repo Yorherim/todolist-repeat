@@ -10,10 +10,10 @@ import {
     TodolistStateType,
     fetchTodolistsTC,
     FilterType,
-    todolistsActions,
     removeTodolistTC,
     addTodolistTC,
     changeTodolistTitleTC,
+    changeTodolistFilter,
 } from "../state/todolists/todolists-reducer";
 import { Navigate } from "react-router-dom";
 
@@ -31,8 +31,8 @@ export const TodolistsListPage: React.FC = () => {
     }, [dispatch, isLoggedIn]);
 
     const changeFilter = useCallback(
-        (newFilter: FilterType, todolistId: string) => {
-            dispatch(todolistsActions.changeTodolistFilter(newFilter, todolistId));
+        (filter: FilterType, todolistId: string) => {
+            dispatch(changeTodolistFilter({ todolistId, filter }));
         },
         [dispatch]
     );

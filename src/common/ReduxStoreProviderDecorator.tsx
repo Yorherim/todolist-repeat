@@ -1,7 +1,7 @@
 import { Provider } from "react-redux";
 import { PartialStoryFn } from "@storybook/csf";
 import { ReactFramework } from "@storybook/react";
-import { v1 } from "uuid";
+import { nanoid } from "@reduxjs/toolkit";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 
 import { AppRootStateType } from "../state/store";
@@ -11,8 +11,8 @@ import { TaskPriorities, TaskStatus } from "../api/api";
 import { appReducer } from "../state/app/app-reducer";
 import thunk from "redux-thunk";
 
-export const todolistId1 = v1();
-export const todolistId2 = v1();
+export const todolistId1 = nanoid();
+export const todolistId2 = nanoid();
 
 const initialGlobalState: AppRootStateType = {
     todolists: [
@@ -36,7 +36,7 @@ const initialGlobalState: AppRootStateType = {
     tasks: {
         [todolistId1]: [
             {
-                id: v1(),
+                id: nanoid(),
                 title: "HTML&CSS",
                 status: TaskStatus.Completed,
                 addedDate: "",
@@ -50,7 +50,7 @@ const initialGlobalState: AppRootStateType = {
                 entityStatus: "idle",
             },
             {
-                id: v1(),
+                id: nanoid(),
                 title: "JS",
                 status: TaskStatus.New,
                 addedDate: "",
@@ -66,7 +66,7 @@ const initialGlobalState: AppRootStateType = {
         ],
         [todolistId2]: [
             {
-                id: v1(),
+                id: nanoid(),
                 title: "Milk",
                 status: TaskStatus.New,
                 addedDate: "",
@@ -80,7 +80,7 @@ const initialGlobalState: AppRootStateType = {
                 entityStatus: "idle",
             },
             {
-                id: v1(),
+                id: nanoid(),
                 title: "React Book",
                 status: TaskStatus.New,
                 addedDate: "",
