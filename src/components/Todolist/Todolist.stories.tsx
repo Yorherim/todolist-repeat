@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import "../../app/App.scss";
 
 import { Todolist } from "./Todolist";
-import { ReduxStoreProviderDecorator, todolistId1 } from "../../common/ReduxStoreProviderDecorator";
+import { ReduxStoreProviderDecorator, todolistId1 } from "../../utils/ReduxStoreProviderDecorator";
 
 export default {
     title: "Project/Todolist",

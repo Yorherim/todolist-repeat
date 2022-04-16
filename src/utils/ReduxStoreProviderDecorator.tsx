@@ -6,10 +6,10 @@ import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 
 import { RootReducerType } from "../state/store";
-import { tasksReducer } from "../state/tasks/tasks-reducer";
-import { todolistsReducer } from "../state/todolists/todolists-reducer";
-import { appReducer } from "../state/app/app-reducer";
-import { authReducer } from "../state/auth/authReducer";
+import { tasksReducer } from "../state/tasks/tasks-slice";
+import { todolistsReducer } from "../state/todolists/todolists-slice";
+import { appReducer } from "../state/app/app-slice";
+import { authReducer } from "../state/auth/auth-slice";
 import { MemoryRouter } from "react-router-dom";
 
 export const todolistId1 = nanoid();

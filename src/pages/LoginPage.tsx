@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
     Grid,
@@ -15,12 +15,12 @@ import {
     Button,
 } from "@mui/material";
 
-import { loginTC } from "../state/auth/authReducer";
-import { AppRootStateType } from "../state/store";
+import { authActions, authSelectors } from "../state/auth";
+import { useActions } from "../hooks/useActions";
 
 export const LoginPage: React.FC = () => {
-    const dispatch = useDispatch();
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
+    const { loginTC } = useActions(authActions);
+    const isLoggedIn = useSelector(authSelectors.getAuthIsLoggedIn);
 
     const formik = useFormik({
         initialValues: {
@@ -36,7 +36,7 @@ export const LoginPage: React.FC = () => {
             checkbox: Yup.boolean(),
         }),
         onSubmit: (values) => {
-            dispatch(loginTC(values));
+            loginTC(values);
             formik.resetForm();
         },
     });

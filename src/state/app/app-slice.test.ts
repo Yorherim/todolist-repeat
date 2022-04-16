@@ -1,17 +1,12 @@
-import {
-    appReducer,
-    AppStateType,
-    initializeAppTC,
-    setError,
-    setLoadingStatus,
-} from "./app-reducer";
+import { initializeAppTC } from "./app-actions";
+import { appReducer, AppStateType, setError, setLoadingStatus } from "./app-slice";
 
 let state: AppStateType;
 
 beforeEach(() => {
     state = {
         error: null,
-        status: "idle",
+        loadingStatus: "idle",
         initialized: false,
     };
 });
@@ -23,7 +18,7 @@ test("app should set correct error", () => {
 
 test("app should set correct loading status", () => {
     const endState = appReducer(state, setLoadingStatus({ status: "loading" }));
-    expect(endState.status).toBe("loading");
+    expect(endState.loadingStatus).toBe("loading");
 });
 
 test("app should initializeded", () => {

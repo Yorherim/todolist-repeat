@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
-import { AppActionsTypes, setError, setLoadingStatus } from "../state/app/app-reducer";
+import { setError, setLoadingStatus } from "../state/app/app-slice";
 
-export const handleServerAppError = (messages: string[], dispatch: Dispatch<AppActionsTypes>) => {
+export const handleServerAppError = (messages: string[], dispatch: Dispatch) => {
     if (messages.length) {
         dispatch(setError({ error: messages[0] }));
     } else {
@@ -10,10 +10,7 @@ export const handleServerAppError = (messages: string[], dispatch: Dispatch<AppA
     dispatch(setLoadingStatus({ status: "failed" }));
 };
 
-export const handleServerNetworkError = (
-    error: Error | unknown,
-    dispatch: Dispatch<AppActionsTypes>
-) => {
+export const handleServerNetworkError = (error: Error | unknown, dispatch: Dispatch) => {
     if (error instanceof Error) {
         dispatch(setError({ error: error.message }));
         dispatch(setLoadingStatus({ status: "failed" }));

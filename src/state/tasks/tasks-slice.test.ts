@@ -2,16 +2,13 @@ import { nanoid } from "@reduxjs/toolkit";
 
 import { TaskPriorities, TaskStatus } from "../../api/api";
 import {
-    addTaskTC,
     changeTaskEntityStatus,
-    deleteTaskTC,
-    fetchTasksTC,
     tasksReducer,
     TaskStateType,
     TasksType,
-    updateTaskTC,
     UpdateTaskType,
-} from "./tasks-reducer";
+} from "./tasks-slice";
+import { addTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "./tasks-actions";
 
 let todolistId1: string;
 let todolistId2: string;

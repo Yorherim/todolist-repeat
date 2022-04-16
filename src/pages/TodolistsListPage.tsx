@@ -1,61 +1,59 @@
 import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 import { Container, Grid, Paper } from "@mui/material";
 
 import { AddItemForm } from "../components/AddItemForm/AddItemForm";
 import { Todolist } from "../components/Todolist/Todolist";
-import { AppRootStateType } from "../state/store";
-import {
-    TodolistStateType,
-    fetchTodolistsTC,
-    FilterType,
-    removeTodolistTC,
-    addTodolistTC,
-    changeTodolistTitleTC,
-    changeTodolistFilter,
-} from "../state/todolists/todolists-reducer";
-import { Navigate } from "react-router-dom";
+import { FilterType } from "../state/todolists/todolists-slice";
+import { authSelectors } from "../state/auth";
+import { todolistsActions, todolistsSelectors } from "../state/todolists";
+import { useActions } from "../hooks/useActions";
 
 export const TodolistsListPage: React.FC = () => {
-    const dispatch = useDispatch();
-    const todolists = useSelector<AppRootStateType, TodolistStateType[]>(
-        (state) => state.todolists
-    );
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
+    const {
+        fetchTodolistsTC,
+        removeTodolistTC,
+        addTodolistTC,
+        changeTodolistTitleTC,
+        changeTodolistFilter,
+    } = useActions(todolistsActions);
+    const todolists = useSelector(todolistsSelectors.getTodolists);
+    const isLoggedIn = useSelector(authSelectors.getAuthIsLoggedIn);
 
     useEffect(() => {
         if (isLoggedIn) {
-            dispatch(fetchTodolistsTC());
+            fetchTodolistsTC();
         }
-    }, [dispatch, isLoggedIn]);
+    }, [isLoggedIn, fetchTodolistsTC]);
 
     const changeFilter = useCallback(
         (filter: FilterType, todolistId: string) => {
-            dispatch(changeTodolistFilter({ todolistId, filter }));
+            changeTodolistFilter({ todolistId, filter });
         },
-        [dispatch]
+        [changeTodolistFilter]
     );
 
     const removeTodolist = useCallback(
         (todolistId: string) => {
-            dispatch(removeTodolistTC(todolistId));
+            removeTodolistTC(todolistId);
         },
-        [dispatch]
+        [removeTodolistTC]
     );
 
     const addTodolist = useCallback(
         (title: string) => {
-            dispatch(addTodolistTC(title));
+            addTodolistTC(title);
         },
-        [dispatch]
+        [addTodolistTC]
     );
 
     const changeTodolistTitle = useCallback(
         (newTitle: string, todolistId: string) => {
-            dispatch(changeTodolistTitleTC({ todolistId, newTitle }));
+            changeTodolistTitleTC({ todolistId, newTitle });
         },
-        [dispatch]
+        [changeTodolistTitleTC]
     );
 
     if (!isLoggedIn) {

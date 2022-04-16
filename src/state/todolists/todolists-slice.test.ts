@@ -1,14 +1,16 @@
 import { nanoid } from "@reduxjs/toolkit";
 import {
-    addTodolistTC,
     changeTodolistEntityStatus,
     changeTodolistFilter,
+    todolistsReducer,
+    TodolistStateType,
+} from "./todolists-slice";
+import {
+    addTodolistTC,
     changeTodolistTitleTC,
     fetchTodolistsTC,
     removeTodolistTC,
-    todolistsReducer,
-    TodolistStateType,
-} from "./todolists-reducer";
+} from "./todolists-actions";
 
 let todolistId1: string;
 let todolistId2: string;

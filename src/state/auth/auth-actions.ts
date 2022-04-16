@@ -1,11 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import Api, { AuthData } from "../../api/api";
-import { handleServerAppError, handleServerNetworkError } from "../../common/error-utils";
-import { setLoadingStatus } from "../app/app-reducer";
-
-type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
-export type AuthActionsTypes = ReturnType<InferValueTypes<typeof authSlice.actions>>;
+import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+import { setLoadingStatus } from "../app/app-slice";
 
 export const loginTC = createAsyncThunk("auth/login", async (authData: AuthData, thunkAPI) => {
     thunkAPI.dispatch(setLoadingStatus({ status: "loading" }));
@@ -38,26 +34,3 @@ export const logoutTC = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
         return thunkAPI.rejectWithValue(null);
     }
 });
-
-export const authSlice = createSlice({
-    name: "auth",
-    initialState: {
-        isLoggedIn: false,
-    },
-    reducers: {
-        setIsLoggedIn(state, action: PayloadAction<{ value: boolean }>) {
-            state.isLoggedIn = action.payload.value;
-        },
-    },
-    extraReducers: (builder) => {
-        builder.addCase(loginTC.fulfilled, (state, action) => {
-            state.isLoggedIn = true;
-        });
-        builder.addCase(logoutTC.fulfilled, (state, action) => {
-            state.isLoggedIn = false;
-        });
-    },
-});
-
-export const authReducer = authSlice.reducer;
-export const { setIsLoggedIn } = authSlice.actions;

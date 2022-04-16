@@ -4,7 +4,7 @@ import "../../app/App.scss";
 
 import { Task } from "./Task";
 import { TaskPriorities, TaskStatus } from "../../api/api";
-import { TaskStateType } from "../../state/tasks/tasks-reducer";
+import { TaskStateType } from "../../state/tasks/tasks-slice";
 
 export default {
     title: "Project/Task",

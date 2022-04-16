@@ -1,23 +1,24 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 
 import { Box, CircularProgress } from "@mui/material";
 import "./App.scss";
 
 import { TodolistsListPage } from "../pages/TodolistsListPage";
-import { AppRootStateType } from "../state/store";
-import { initializeAppTC } from "../state/app/app-reducer";
 import { LoginPage } from "../pages/LoginPage";
 import { HeaderLayout } from "../layouts/HeaderLayout";
+import { getAppInitialized } from "../state/app/app-selectors";
+import { useActions } from "../hooks/useActions";
+import { appActions } from "../state/app";
 
 const App: React.FC = () => {
-    const dispatch = useDispatch();
-    const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.initialized);
+    const { initializeAppTC } = useActions(appActions);
+    const isInitialized = useSelector(getAppInitialized);
 
     useEffect(() => {
-        dispatch(initializeAppTC());
-    }, [dispatch]);
+        initializeAppTC();
+    }, [initializeAppTC]);
 
     if (!isInitialized) {
         return (

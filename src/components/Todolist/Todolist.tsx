@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { Delete } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
@@ -8,18 +8,13 @@ import styles from "./Todolist.module.scss";
 
 import { AddItemForm } from "../AddItemForm/AddItemForm";
 import { Task } from "../Task/Task";
-import { AppRootStateType } from "../../state/store";
-import {
-    addTaskTC,
-    deleteTaskTC,
-    fetchTasksTC,
-    TaskStateType,
-    updateTaskTC,
-} from "../../state/tasks/tasks-reducer";
-import { FilterType } from "../../state/todolists/todolists-reducer";
+import { FilterType } from "../../state/todolists/todolists-slice";
 import { TaskStatus, UpdateTaskData } from "../../api/api";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
-import { RequestStatusType } from "../../state/app/app-reducer";
+import { RequestStatusType } from "../../state/app/app-slice";
+import { getTasksByTodolistId } from "../../state/tasks/tasks-selectors";
+import { useActions } from "../../hooks/useActions";
+import { tasksActions } from "../../state/tasks";
 
 interface TodolistPropsType {
     title: string;
@@ -40,43 +35,41 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     removeTodolist,
     changeTodolistTitle,
 }) {
-    const dispatch = useDispatch();
-    const tasks = useSelector<AppRootStateType, TaskStateType[]>(
-        (state) => state.tasks[todolistId]
-    );
+    const { fetchTasksTC, deleteTaskTC, addTaskTC, updateTaskTC } = useActions(tasksActions);
+    const tasks = useSelector(getTasksByTodolistId(todolistId));
 
     useEffect(() => {
-        dispatch(fetchTasksTC(todolistId));
-    }, [dispatch, todolistId]);
+        fetchTasksTC(todolistId);
+    }, [todolistId, fetchTasksTC]);
 
     const removeTask = useCallback(
         (taskId: string, todolistId: string) => {
-            dispatch(deleteTaskTC({ taskId, todolistId }));
+            deleteTaskTC({ taskId, todolistId });
         },
-        [dispatch]
+        [deleteTaskTC]
     );
 
     const addTask = useCallback(
         (title: string, todolistId: string) => {
-            dispatch(addTaskTC({ todolistId, title }));
+            addTaskTC({ todolistId, title });
         },
-        [dispatch]
+        [addTaskTC]
     );
 
     const changeCheckStatus = useCallback(
         (taskId: string, todolistId: string, status: TaskStatus) => {
             const updateData: Partial<UpdateTaskData> = { status };
-            dispatch(updateTaskTC({ taskId, todolistId, updateData }));
+            updateTaskTC({ taskId, todolistId, updateData });
         },
-        [dispatch]
+        [updateTaskTC]
     );
 
     const changeTaskTitle = useCallback(
         (newTitle: string, taskId: string, todolistId: string) => {
             const updateData: Partial<UpdateTaskData> = { title: newTitle };
-            dispatch(updateTaskTC({ taskId, todolistId, updateData }));
+            updateTaskTC({ taskId, todolistId, updateData });
         },
-        [dispatch]
+        [updateTaskTC]
     );
 
     const addItem = useCallback(

@@ -1,20 +1,19 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { AppBar, Toolbar, Typography, Button, Box, LinearProgress } from "@mui/material";
 
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
-import { AppRootStateType } from "../state/store";
-import { RequestStatusType } from "../state/app/app-reducer";
-import { logoutTC } from "../state/auth/authReducer";
+import { getAppLoadingStatus } from "../state/app/app-selectors";
+import { getAuthIsLoggedIn } from "../state/auth/auth-selectors";
+import { useActions } from "../hooks/useActions";
+import { authActions } from "../state/auth";
 
 export const HeaderLayout: React.FC = () => {
-    const dispatch = useDispatch();
-    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status);
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
-
-    const logout = () => dispatch(logoutTC());
+    const { logoutTC } = useActions(authActions);
+    const status = useSelector(getAppLoadingStatus);
+    const isLoggedIn = useSelector(getAuthIsLoggedIn);
 
     return (
         <>
@@ -24,7 +23,7 @@ export const HeaderLayout: React.FC = () => {
                         Todo App
                     </Typography>
                     {isLoggedIn && (
-                        <Button color="inherit" onClick={logout}>
+                        <Button color="inherit" onClick={() => logoutTC}>
                             Log out
                         </Button>
                     )}

@@ -1,4 +1,4 @@
-import { authSlice, authReducer, setIsLoggedIn } from "./authReducer";
+import { authSlice, authReducer, setIsLoggedIn } from "./auth-slice";
 
 let state: ReturnType<typeof authSlice.getInitialState>;
 

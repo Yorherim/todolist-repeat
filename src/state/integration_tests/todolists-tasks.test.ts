@@ -1,14 +1,10 @@
-import {
-    addTodolistTC,
-    fetchTodolistsTC,
-    removeTodolistTC,
-} from "./../todolists/todolists-reducer";
+import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "../todolists/todolists-actions";
 import { nanoid } from "nanoid";
 
 import { TaskPriorities, TaskStatus } from "../../api/api";
 import { AppRootStateType } from "../store";
-import { tasksReducer } from "../tasks/tasks-reducer";
-import { TodolistStateType } from "../todolists/todolists-reducer";
+import { tasksReducer } from "../tasks/tasks-slice";
+import { TodolistStateType } from "../todolists/todolists-slice";
 
 let todolistId1: string;
 let todolistId2: string;
