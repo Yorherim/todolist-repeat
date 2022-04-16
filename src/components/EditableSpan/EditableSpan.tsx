@@ -38,7 +38,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(function
                     onChange={(e) => setValueInput(e.currentTarget.value)}
                     onBlur={changeItemValue}
                     multiline
-                    inputProps={{ maxLength: 100 }}
+                    inputProps={{ maxLength: 30 }}
                     disabled={disabled}
                     className={styles.textField}
                     autoFocus

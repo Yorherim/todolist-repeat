@@ -17,7 +17,7 @@ import {
     updateTaskTC,
 } from "../../state/tasks/tasks-reducer";
 import { FilterType } from "../../state/todolists/todolists-reducer";
-import { TaskStatus } from "../../api/api";
+import { TaskStatus, UpdateTaskData } from "../../api/api";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 import { RequestStatusType } from "../../state/app/app-reducer";
 
@@ -51,28 +51,30 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
 
     const removeTask = useCallback(
         (taskId: string, todolistId: string) => {
-            dispatch(deleteTaskTC(taskId, todolistId));
+            dispatch(deleteTaskTC({ taskId, todolistId }));
         },
         [dispatch]
     );
 
     const addTask = useCallback(
         (title: string, todolistId: string) => {
-            dispatch(addTaskTC(todolistId, title));
+            dispatch(addTaskTC({ todolistId, title }));
         },
         [dispatch]
     );
 
     const changeCheckStatus = useCallback(
         (taskId: string, todolistId: string, status: TaskStatus) => {
-            dispatch(updateTaskTC(taskId, todolistId, { status }));
+            const updateData: Partial<UpdateTaskData> = { status };
+            dispatch(updateTaskTC({ taskId, todolistId, updateData }));
         },
         [dispatch]
     );
 
     const changeTaskTitle = useCallback(
         (newTitle: string, taskId: string, todolistId: string) => {
-            dispatch(updateTaskTC(taskId, todolistId, { title: newTitle }));
+            const updateData: Partial<UpdateTaskData> = { title: newTitle };
+            dispatch(updateTaskTC({ taskId, todolistId, updateData }));
         },
         [dispatch]
     );

@@ -1,11 +1,11 @@
 import { nanoid } from "@reduxjs/toolkit";
 import {
-    addTodolist,
+    addTodolistTC,
     changeTodolistEntityStatus,
     changeTodolistFilter,
-    changeTodolistTitle,
-    removeTodolist,
-    setTodolists,
+    changeTodolistTitleTC,
+    fetchTodolistsTC,
+    removeTodolistTC,
     todolistsReducer,
     TodolistStateType,
 } from "./todolists-reducer";
@@ -38,7 +38,10 @@ beforeEach(() => {
 });
 
 test("correct todolist should be removed", () => {
-    const endState = todolistsReducer(state, removeTodolist({ todolistId: todolistId1 }));
+    const endState = todolistsReducer(
+        state,
+        removeTodolistTC.fulfilled({ todolistId: todolistId1 }, "", todolistId1)
+    );
 
     expect(endState.length).toBe(1);
     expect(endState[0].id).toBe(todolistId2);
@@ -54,19 +57,20 @@ test("correct todolist should be added", () => {
         addedDate: "",
         order: 0,
     };
-    const endState = todolistsReducer(state, addTodolist({ todolist: newTodolist }));
+    const endState = todolistsReducer(
+        state,
+        addTodolistTC.fulfilled({ todolist: newTodolist }, "", newTodolist.title)
+    );
 
     expect(endState).toHaveLength(3);
-    expect(endState[2].title).toBe("new Todolist");
-    expect(endState[2].id).toBe(newTodolistId);
-    expect(endState[2].filter).toBe("all");
+    expect(endState[0].title).toBe("new Todolist");
+    expect(endState[0].id).toBe(newTodolistId);
+    expect(endState[0].filter).toBe("all");
 });
 
 test("correct todolist should change its name", () => {
-    const endState = todolistsReducer(
-        state,
-        changeTodolistTitle({ todolistId: todolistId2, newTitle: "New Todolist" })
-    );
+    const args = { todolistId: todolistId2, newTitle: "New Todolist" };
+    const endState = todolistsReducer(state, changeTodolistTitleTC.fulfilled(args, "", args));
 
     expect(endState[0].title).toBe("What to learn");
     expect(endState[1].title).toBe("New Todolist");
@@ -83,7 +87,7 @@ test("correct filter of todolist should be changed", () => {
 });
 
 test("todolists should be set", () => {
-    const endState = todolistsReducer([], setTodolists({ todolists: state }));
+    const endState = todolistsReducer([], fetchTodolistsTC.fulfilled({ todolists: state }, ""));
 
     expect(endState).toHaveLength(2);
     expect(endState[0].id).toBe(todolistId1);

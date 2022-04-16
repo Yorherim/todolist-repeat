@@ -1,23 +1,14 @@
-import { TasksActionsTypes, tasksReducer } from "./tasks/tasks-reducer";
-import { TodolistsActionsTypes, todolistsReducer } from "./todolists/todolists-reducer";
+import { tasksReducer } from "./tasks/tasks-reducer";
+import { todolistsReducer } from "./todolists/todolists-reducer";
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import thunk, { ThunkAction } from "redux-thunk";
-import { AppActionsTypes, appReducer } from "./app/app-reducer";
-import { AuthActionsTypes, authReducer } from "./auth/authReducer";
+import thunk from "redux-thunk";
 
-export type AppRootStateType = ReturnType<typeof rootReducer>;
-type AppRootActionsType =
-    | TasksActionsTypes
-    | TodolistsActionsTypes
-    | AppActionsTypes
-    | AuthActionsTypes;
-export type AppThunk<ReturnType = void> = ThunkAction<
-    ReturnType,
-    AppRootStateType,
-    unknown,
-    AppRootActionsType
->;
+import { appReducer } from "./app/app-reducer";
+import { authReducer } from "./auth/authReducer";
+
+export type RootReducerType = typeof rootReducer;
+export type AppRootStateType = ReturnType<RootReducerType>;
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,

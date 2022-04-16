@@ -1,14 +1,16 @@
 import { nanoid } from "@reduxjs/toolkit";
+
 import { TaskPriorities, TaskStatus } from "../../api/api";
 import {
-    addTask,
+    addTaskTC,
     changeTaskEntityStatus,
-    removeTask,
-    setTasks,
+    deleteTaskTC,
+    fetchTasksTC,
     tasksReducer,
     TaskStateType,
     TasksType,
-    updateTask,
+    updateTaskTC,
+    UpdateTaskType,
 } from "./tasks-reducer";
 
 let todolistId1: string;
@@ -91,7 +93,8 @@ beforeEach(() => {
 });
 
 test("correct task should be removed", () => {
-    const endState = tasksReducer(state, removeTask({ todolistId: todolistId1, taskId: taskId1 }));
+    const args = { todolistId: todolistId1, taskId: taskId1 };
+    const endState = tasksReducer(state, deleteTaskTC.fulfilled(args, "", args));
 
     expect(endState[todolistId1]).toHaveLength(1);
     expect(endState[todolistId2]).toHaveLength(2);
@@ -115,22 +118,26 @@ test("correct task should be added", () => {
         entityStatus: "idle",
     };
 
-    const endState = tasksReducer(state, addTask({ todolistId: todolistId1, task: newTask }));
+    const endState = tasksReducer(
+        state,
+        addTaskTC.fulfilled({ todolistId: todolistId1, task: newTask }, "", {
+            todolistId: todolistId1,
+            title: "new task",
+        })
+    );
 
     expect(endState[todolistId1]).toHaveLength(3);
     expect(endState[todolistId2]).toHaveLength(2);
-    expect(endState[todolistId1][2].title).toBe("new task");
+    expect(endState[todolistId1][0].title).toBe("new task");
 });
 
 test("correct task should be changed title", () => {
-    const endState = tasksReducer(
-        state,
-        updateTask({
-            todolistId: todolistId1,
-            taskId: taskId1,
-            updateData: { title: "update task title" },
-        })
-    );
+    const updateData: UpdateTaskType = {
+        todolistId: todolistId1,
+        taskId: taskId1,
+        updateData: { title: "update task title" },
+    };
+    const endState = tasksReducer(state, updateTaskTC.fulfilled(updateData, "", updateData));
 
     expect(endState[todolistId1][0].title).toBe("update task title");
     expect(endState[todolistId1][1].title).toBe("b");
@@ -139,8 +146,13 @@ test("correct task should be changed title", () => {
 test("tasks should be set", () => {
     const endState = tasksReducer(
         { todolistId1: [] },
-        setTasks({ todolistId: todolistId1, tasks: state[todolistId1] })
+        fetchTasksTC.fulfilled(
+            { todolistId: todolistId1, tasks: state[todolistId1] },
+            "",
+            todolistId1
+        )
     );
+
     expect(endState[todolistId1]).toHaveLength(2);
 });
 

@@ -1,8 +1,7 @@
 import Api from "../../api/api";
 import { setIsLoggedIn } from "../auth/authReducer";
-import { AppThunk } from "../store";
 import { handleServerNetworkError } from "../../common/error-utils";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 export type AppStateType = {
@@ -12,6 +11,21 @@ export type AppStateType = {
 };
 type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never;
 export type AppActionsTypes = ReturnType<InferValueTypes<typeof slice.actions>>;
+
+export const initializeAppTC = createAsyncThunk(
+    "app/initializeApp",
+    async (_, { dispatch, rejectWithValue }) => {
+        try {
+            const { data } = await Api.authMe();
+            if (data.resultCode === 0) {
+                dispatch(setIsLoggedIn({ value: true }));
+            }
+        } catch (error) {
+            handleServerNetworkError(error, dispatch);
+            return rejectWithValue(null);
+        }
+    }
+);
 
 const slice = createSlice({
     name: "app",
@@ -27,23 +41,13 @@ const slice = createSlice({
         setError(state, action: PayloadAction<{ error: string | null }>) {
             state.error = action.payload.error;
         },
-        setInitialized(state, action: PayloadAction<{ value: boolean }>) {
-            state.initialized = action.payload.value;
-        },
+    },
+    extraReducers: (build) => {
+        build.addCase(initializeAppTC.fulfilled, (state, action) => {
+            state.initialized = true;
+        });
     },
 });
 
 export const appReducer = slice.reducer;
-export const { setLoadingStatus, setError, setInitialized } = slice.actions;
-
-export const initializeAppTC = (): AppThunk => async (dispatch) => {
-    try {
-        const { data } = await Api.authMe();
-        if (data.resultCode === 0) {
-            dispatch(setIsLoggedIn({ value: true }));
-        }
-        dispatch(setInitialized({ value: true }));
-    } catch (error) {
-        handleServerNetworkError(error, dispatch);
-    }
-};
+export const { setLoadingStatus, setError } = slice.actions;

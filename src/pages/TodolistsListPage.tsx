@@ -53,7 +53,7 @@ export const TodolistsListPage: React.FC = () => {
 
     const changeTodolistTitle = useCallback(
         (newTitle: string, todolistId: string) => {
-            dispatch(changeTodolistTitleTC(newTitle, todolistId));
+            dispatch(changeTodolistTitleTC({ todolistId, newTitle }));
         },
         [dispatch]
     );

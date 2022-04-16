@@ -57,6 +57,7 @@ export type UpdateTaskData = Pick<
 
 type LoginResponseType = {
     resultCode: number;
+    fieldsErrors: string[];
     messages: string[];
     data: {
         userId: number;

@@ -1,6 +1,6 @@
-import { AuthInitialStateType, authReducer, setIsLoggedIn } from "./authReducer";
+import { authSlice, authReducer, setIsLoggedIn } from "./authReducer";
 
-let state: AuthInitialStateType;
+let state: ReturnType<typeof authSlice.getInitialState>;
 
 beforeEach(() => {
     state = {

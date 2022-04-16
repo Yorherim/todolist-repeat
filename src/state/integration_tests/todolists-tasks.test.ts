@@ -1,14 +1,14 @@
+import {
+    addTodolistTC,
+    fetchTodolistsTC,
+    removeTodolistTC,
+} from "./../todolists/todolists-reducer";
 import { nanoid } from "nanoid";
 
 import { TaskPriorities, TaskStatus } from "../../api/api";
 import { AppRootStateType } from "../store";
 import { tasksReducer } from "../tasks/tasks-reducer";
-import {
-    addTodolist,
-    removeTodolist,
-    setTodolists,
-    TodolistStateType,
-} from "../todolists/todolists-reducer";
+import { TodolistStateType } from "../todolists/todolists-reducer";
 
 let todolistId1: string;
 let todolistId2: string;
@@ -111,7 +111,10 @@ beforeEach(() => {
 });
 
 test("correct tasks should be removed when todolist removed too", () => {
-    const endState = tasksReducer(state.tasks, removeTodolist({ todolistId: todolistId1 }));
+    const endState = tasksReducer(
+        state.tasks,
+        removeTodolistTC.fulfilled({ todolistId: todolistId1 }, "", todolistId1)
+    );
 
     expect(Object.keys(endState)).toHaveLength(1);
     expect(Object.keys(endState)[0]).toBe(todolistId2);
@@ -159,7 +162,10 @@ test("empty array of tasks should be added when todolist created", () => {
         order: 0,
         entityStatus: "idle",
     };
-    const endState = tasksReducer(state.tasks, addTodolist({ todolist: newTodolist }));
+    const endState = tasksReducer(
+        state.tasks,
+        addTodolistTC.fulfilled({ todolist: newTodolist }, "", newTodolist.title)
+    );
 
     expect(Object.keys(endState)).toHaveLength(3);
     expect(Object.keys(endState)[2]).toBe(todolsitId);
@@ -167,7 +173,10 @@ test("empty array of tasks should be added when todolist created", () => {
 });
 
 test("empty array of tasks should be added when todolists set", () => {
-    const endState = tasksReducer({}, setTodolists({ todolists: state.todolists }));
+    const endState = tasksReducer(
+        {},
+        fetchTodolistsTC.fulfilled({ todolists: state.todolists }, "")
+    );
 
     expect(Object.keys(endState)).toHaveLength(2);
     expect(Object.keys(endState)[0]).toBe(todolistId1);

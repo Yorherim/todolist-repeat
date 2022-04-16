@@ -1,8 +1,8 @@
 import {
     appReducer,
     AppStateType,
+    initializeAppTC,
     setError,
-    setInitialized,
     setLoadingStatus,
 } from "./app-reducer";
 
@@ -27,6 +27,6 @@ test("app should set correct loading status", () => {
 });
 
 test("app should initializeded", () => {
-    const endState = appReducer(state, setInitialized({ value: true }));
+    const endState = appReducer(state, initializeAppTC.fulfilled(undefined, ""));
     expect(endState.initialized).toBe(true);
 });
