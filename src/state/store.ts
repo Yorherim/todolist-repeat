@@ -1,6 +1,7 @@
 import { TasksActionsTypes, tasksReducer } from "./tasks/tasks-reducer";
 import { TodolistsActionsTypes, todolistsReducer } from "./todolists/todolists-reducer";
 import { combineReducers, createStore, compose, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
 import thunk, { ThunkAction } from "redux-thunk";
 import { AppActionsTypes, appReducer } from "./app/app-reducer";
 import { AuthActionsTypes, authReducer } from "./auth/authReducer";
@@ -31,5 +32,9 @@ const rootReducer = combineReducers({
     app: appReducer,
     auth: authReducer,
 });
+const sagaMiddleware = createSagaMiddleware();
 
-export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+export const store = createStore(
+    rootReducer,
+    composeEnhancers(applyMiddleware(thunk, sagaMiddleware))
+);
