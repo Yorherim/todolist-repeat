@@ -3,8 +3,9 @@ import { TodolistsActionsTypes, todolistsReducer } from "./todolists/todolists-r
 import { combineReducers, createStore, compose, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import thunk, { ThunkAction } from "redux-thunk";
-import { AppActionsTypes, appReducer } from "./app/app-reducer";
+import { AppActionsTypes, appReducer, initializeAppSaga } from "./app/app-reducer";
 import { AuthActionsTypes, authReducer } from "./auth/authReducer";
+import { put, takeEvery } from "redux-saga/effects";
 
 declare global {
     interface Window {
@@ -38,3 +39,9 @@ export const store = createStore(
     rootReducer,
     composeEnhancers(applyMiddleware(thunk, sagaMiddleware))
 );
+
+sagaMiddleware.run(rootWatcher);
+
+function* rootWatcher() {
+    yield takeEvery("INITIALIZE_APP", initializeAppSaga);
+}

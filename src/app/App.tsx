@@ -17,7 +17,7 @@ import "./App.scss";
 import { TodolistsListPage } from "../pages/TodolistsListPage";
 import { useDispatch, useSelector } from "react-redux";
 import { AppRootStateType } from "../state/store";
-import { initializeAppTC, RequestStatusType } from "../state/app/app-reducer";
+import { initializeApp, initializeAppSaga, RequestStatusType } from "../state/app/app-reducer";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { Route, Routes } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
@@ -30,7 +30,7 @@ const App: React.FC = () => {
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
 
     useEffect(() => {
-        dispatch(initializeAppTC());
+        dispatch(initializeApp());
     }, [dispatch]);
 
     const logout = () => dispatch(logoutTC());

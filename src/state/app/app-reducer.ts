@@ -1,3 +1,4 @@
+import { put, call } from "redux-saga/effects";
 import Api from "../../api/api";
 import { authActions } from "../auth/authReducer";
 import { AppThunk } from "../store";
@@ -54,14 +55,15 @@ export const appActions = {
     }),
 };
 
-export const initializeAppTC = (): AppThunk => async (dispatch) => {
+export function* initializeAppSaga() {
     try {
-        const { data } = await Api.authMe();
+        const { data } = yield call(Api.authMe);
         if (data.resultCode === 0) {
-            dispatch(authActions.setIsLoggedIn(true));
+            put(authActions.setIsLoggedIn(true));
         }
-        dispatch(appActions.setInitialized(true));
+        yield put(appActions.setInitialized(true));
     } catch (error) {
-        handleServerNetworkError(error, dispatch);
+        handleServerNetworkError(error, put);
     }
-};
+}
+export const initializeApp = () => ({ type: "INITIALIZE_APP" });
