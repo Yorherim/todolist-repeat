@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { AuthData } from "../state/auth/authReducer";
 
 export type TodolistType = {
@@ -41,7 +41,7 @@ export type TaskType = {
     order: number;
     addedDate: string;
 };
-type GetTasksResponseType = {
+export type GetTasksResponseType = {
     items: TaskType[];
     totalCount: number;
     error: string;
@@ -104,7 +104,7 @@ export default class Api {
     }
 
     // Tasks
-    static async getTasks(todolistId: string) {
+    static async getTasks(todolistId: string): Promise<AxiosResponse<GetTasksResponseType, any>> {
         return await instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`);
     }
     static async createTask(todolistId: string, title: string) {

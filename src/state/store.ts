@@ -1,11 +1,13 @@
 import { TasksActionsTypes, tasksReducer } from "./tasks/tasks-reducer";
+import { tasksWatcherSaga } from "./tasks/tasks.saga";
 import { TodolistsActionsTypes, todolistsReducer } from "./todolists/todolists-reducer";
 import { combineReducers, createStore, compose, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import thunk, { ThunkAction } from "redux-thunk";
-import { AppActionsTypes, appReducer, initializeAppSaga } from "./app/app-reducer";
+import { AppActionsTypes, appReducer } from "./app/app-reducer";
+import { appWatcherSaga } from "./app/app.saga";
 import { AuthActionsTypes, authReducer } from "./auth/authReducer";
-import { put, takeEvery } from "redux-saga/effects";
+import { all } from "redux-saga/effects";
 
 declare global {
     interface Window {
@@ -43,5 +45,5 @@ export const store = createStore(
 sagaMiddleware.run(rootWatcher);
 
 function* rootWatcher() {
-    yield takeEvery("INITIALIZE_APP", initializeAppSaga);
+    yield all([appWatcherSaga(), tasksWatcherSaga()]);
 }

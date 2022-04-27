@@ -1,7 +1,3 @@
-import { put, call } from "redux-saga/effects";
-import Api from "../../api/api";
-import { authActions } from "../auth/authReducer";
-import { AppThunk } from "../store";
 import { handleServerAppError, handleServerNetworkError } from "../../common/error-utils";
 
 enum TypesAppActions {
@@ -54,16 +50,3 @@ export const appActions = {
         value,
     }),
 };
-
-export function* initializeAppSaga() {
-    try {
-        const { data } = yield call(Api.authMe);
-        if (data.resultCode === 0) {
-            put(authActions.setIsLoggedIn(true));
-        }
-        yield put(appActions.setInitialized(true));
-    } catch (error) {
-        handleServerNetworkError(error, put);
-    }
-}
-export const initializeApp = () => ({ type: "INITIALIZE_APP" });

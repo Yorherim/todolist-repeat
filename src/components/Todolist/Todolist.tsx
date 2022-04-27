@@ -9,17 +9,18 @@ import styles from "./Todolist.module.scss";
 import { AddItemForm } from "../AddItemForm/AddItemForm";
 import { Task } from "../Task/Task";
 import { AppRootStateType } from "../../state/store";
-import {
-    addTaskTC,
-    deleteTaskTC,
-    fetchTasksTC,
-    TaskStateType,
-    updateTaskTC,
-} from "../../state/tasks/tasks-reducer";
+import { TaskStateType } from "../../state/tasks/tasks-reducer";
+
 import { FilterType } from "../../state/todolists/todolists-reducer";
 import { TaskStatus } from "../../api/api";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 import { RequestStatusType } from "../../state/app/app-reducer";
+import {
+    addTaskActionActivator,
+    deleteTask,
+    fetchTasks,
+    updateTask,
+} from "../../state/tasks/tasks.saga";
 
 interface TodolistPropsType {
     title: string;
@@ -46,33 +47,33 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     );
 
     useEffect(() => {
-        dispatch(fetchTasksTC(todolistId));
+        dispatch(fetchTasks(todolistId));
     }, [dispatch, todolistId]);
 
     const removeTask = useCallback(
         (taskId: string, todolistId: string) => {
-            dispatch(deleteTaskTC(taskId, todolistId));
+            dispatch(deleteTask(taskId, todolistId));
         },
         [dispatch]
     );
 
     const addTask = useCallback(
         (title: string, todolistId: string) => {
-            dispatch(addTaskTC(todolistId, title));
+            dispatch(addTaskActionActivator(todolistId, title));
         },
         [dispatch]
     );
 
     const changeCheckStatus = useCallback(
         (taskId: string, todolistId: string, status: TaskStatus) => {
-            dispatch(updateTaskTC(taskId, todolistId, { status }));
+            dispatch(updateTask(taskId, todolistId, { status }));
         },
         [dispatch]
     );
 
     const changeTaskTitle = useCallback(
         (newTitle: string, taskId: string, todolistId: string) => {
-            dispatch(updateTaskTC(taskId, todolistId, { title: newTitle }));
+            dispatch(updateTask(taskId, todolistId, { title: newTitle }));
         },
         [dispatch]
     );
