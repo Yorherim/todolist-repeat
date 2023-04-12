@@ -23,7 +23,7 @@ export const HeaderLayout: React.FC = () => {
                         Todo App
                     </Typography>
                     {isLoggedIn && (
-                        <Button color="inherit" onClick={() => logoutTC}>
+                        <Button color="inherit" onClick={() => logoutTC()}>
                             Log out
                         </Button>
                     )}
