@@ -93,6 +93,5 @@
         "puppeteer": "^13.5.1",
         "sass": "^1.49.0",
         "start-server-and-test": "^1.14.0"
-    },
-    "proxy": "*"
+    }
 }
