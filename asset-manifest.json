@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/Yorherim/todolist-repeat/static/css/main.960a7af6.chunk.css",
+    "main.js": "/Yorherim/todolist-repeat/static/js/main.92ee526b.chunk.js",
+    "main.js.map": "/Yorherim/todolist-repeat/static/js/main.92ee526b.chunk.js.map",
+    "runtime-main.js": "/Yorherim/todolist-repeat/static/js/runtime-main.3e6925ea.js",
+    "runtime-main.js.map": "/Yorherim/todolist-repeat/static/js/runtime-main.3e6925ea.js.map",
+    "static/js/2.953a66e2.chunk.js": "/Yorherim/todolist-repeat/static/js/2.953a66e2.chunk.js",
+    "static/js/2.953a66e2.chunk.js.map": "/Yorherim/todolist-repeat/static/js/2.953a66e2.chunk.js.map",
+    "index.html": "/Yorherim/todolist-repeat/index.html",
+    "static/css/main.960a7af6.chunk.css.map": "/Yorherim/todolist-repeat/static/css/main.960a7af6.chunk.css.map",
+    "static/js/2.953a66e2.chunk.js.LICENSE.txt": "/Yorherim/todolist-repeat/static/js/2.953a66e2.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3e6925ea.js",
+    "static/js/2.953a66e2.chunk.js",
+    "static/css/main.960a7af6.chunk.css",
+    "static/js/main.92ee526b.chunk.js"
+  ]
+}
