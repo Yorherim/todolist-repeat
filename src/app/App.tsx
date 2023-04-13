@@ -13,31 +13,31 @@ import { useActions } from "../hooks/useActions";
 import { appActions } from "../state/app";
 
 const App: React.FC = () => {
-    const { initializeAppTC } = useActions(appActions);
-    const isInitialized = useSelector(getAppInitialized);
+  const { initializeAppTC } = useActions(appActions);
+  const isInitialized = useSelector(getAppInitialized);
 
-    useEffect(() => {
-        initializeAppTC();
-    }, [initializeAppTC]);
+  useEffect(() => {
+    initializeAppTC();
+  }, [initializeAppTC]);
 
-    if (!isInitialized) {
-        return (
-            <Box sx={{ display: "flex" }} className={"circularProgress"}>
-                <CircularProgress />
-            </Box>
-        );
-    }
+  if (!isInitialized) {
     return (
-        <>
-            <Routes>
-                <Route path="/" element={<HeaderLayout />}>
-                    <Route index element={<TodolistsListPage />} />
-                    <Route path="auth" element={<LoginPage />} />
-                    <Route path="*" element={<h1>404: PAGE NOT FOUND</h1>} />
-                </Route>
-            </Routes>
-        </>
+      <Box sx={{ display: "flex" }} className={"circularProgress"}>
+        <CircularProgress />
+      </Box>
     );
+  }
+  return (
+    <>
+      <Routes>
+        <Route path="/todolist-repeat/" element={<HeaderLayout />}>
+          <Route index element={<TodolistsListPage />} />
+          <Route path="auth" element={<LoginPage />} />
+          <Route path="*" element={<h1>404: PAGE NOT FOUND</h1>} />
+        </Route>
+      </Routes>
+    </>
+  );
 };
 
 export default App;
