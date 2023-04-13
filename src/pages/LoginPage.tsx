@@ -47,7 +47,7 @@ export const LoginPage: React.FC = () => {
   };
 
   if (isLoggedIn) {
-    return <Navigate to="/" />;
+    return <Navigate to="/todolist-repeat/" />;
   }
   return (
     <Grid container justifyContent={"center"}>
