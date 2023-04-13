@@ -45,7 +45,9 @@ export const tasksSlice = createSlice({
         });
         builder.addCase(fetchTodolistsTC.fulfilled, (state, action) => {
             action.payload.todolists.forEach((tl) => {
-                state[tl.id] = [];
+                if (!state[tl.id]) {
+                    state[tl.id] = [];
+                }
             });
         });
 

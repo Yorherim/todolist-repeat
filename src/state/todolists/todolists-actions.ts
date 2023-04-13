@@ -3,6 +3,7 @@ import { setLoadingStatus } from "../app/app-slice";
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { changeTodolistEntityStatus } from "./todolists-slice";
+import {fetchTasksTC} from "../tasks/tasks-actions";
 
 export const fetchTodolistsTC = createAsyncThunk(
     "todolists/fetchTodolists",
@@ -10,7 +11,13 @@ export const fetchTodolistsTC = createAsyncThunk(
         try {
             dispatch(setLoadingStatus({ status: "loading" }));
             const { data } = await Api.getTodolists();
+            for (let i = 0; i < data.length; i++) {
+                console.log('wtf')
+                const todolistId = data[i].id
+                dispatch(fetchTasksTC(todolistId))
+            }
             dispatch(setLoadingStatus({ status: "succeeded" }));
+
             return { todolists: data };
         } catch (error) {
             handleServerNetworkError(error, dispatch);

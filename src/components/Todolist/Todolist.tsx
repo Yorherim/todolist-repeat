@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {useCallback, useEffect} from "react";
 import clsx from "clsx";
 import { useSelector } from "react-redux";
 
@@ -35,12 +35,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(function ({
     removeTodolist,
     changeTodolistTitle,
 }) {
-    const { fetchTasksTC, deleteTaskTC, addTaskTC, updateTaskTC } = useActions(tasksActions);
+    const { deleteTaskTC, addTaskTC, updateTaskTC } = useActions(tasksActions);
     const tasks = useSelector(getTasksByTodolistId(todolistId));
 
-    useEffect(() => {
-        fetchTasksTC(todolistId);
-    }, [todolistId, fetchTasksTC]);
+    console.log(entityStatus)
 
     const removeTask = useCallback(
         (taskId: string, todolistId: string) => {
